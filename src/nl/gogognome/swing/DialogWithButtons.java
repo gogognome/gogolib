@@ -1,0 +1,343 @@
+/*
+ * $Id: DialogWithButtons.java,v 1.1 2006-11-20 18:41:08 sanderk Exp $
+ *
+ * Copyright (C) 2005 Sander Kooijmans
+ *
+ */
+
+package nl.gogognome.swing;
+
+import java.awt.*;
+import java.awt.event.*;
+
+import javax.swing.*;
+import javax.swing.text.JTextComponent;
+
+import nl.gogognome.swing.WidgetFactory;
+import nl.gogognome.text.TextResource;
+
+/**
+ * This abstract class implements the framework for a dialog with one or more buttons.
+ * Subclasses may use the protected methods and should generally override the
+ * methods <tt>handleCancel()</tt> and <tt>handleButton()</tt>.
+ */
+public abstract class DialogWithButtons implements ActionListener, KeyListener, FocusListener 
+{
+	/** The string id for the OK button. */
+	public final static String[] BT_OK = new String[] {"gen.ok"};
+	
+	/** The string ids for the OK and Cancel buttons. */
+	public final static String[] BT_OK_CANCEL = new String[] { "gen.ok", "gen.cancel" };
+	
+	/** 
+	 * The bounds of the parent frame or dialog at the moment this dialog
+	 * was created. 
+	 */
+	private Rectangle parentBounds;
+	
+	/** The dialog shown to the user. */
+	private JDialog dialog;
+
+	/** The component supplied by the subclass. */
+	private Component component;
+
+	/** The buttons. */
+	private JButton[] buttons;
+	
+	/** 
+	 * After the dialog has been hidden, this field contains the number of the
+	 * button that was pressed or -1 if none of the buttons was pressed.
+	 */
+	private int selectedButton;
+		
+	/**
+	 * Creates a dialog with one or more buttons.
+	 * @param frame the frame that owns this dialog. 
+	 * @param titleId the id of the title string
+	 * @param buttonIds the ids of the buttons.
+	 */
+	protected DialogWithButtons( Frame frame, String titleId, String[] buttonIds ) 
+	{
+		initDialog( new JDialog( frame,
+		    TextResource.getInstance().getString(titleId), true), buttonIds,
+			frame.getBounds() );
+	}
+
+	/**
+	 * Creates a dialog with one or more buttons.
+	 * @param dialog the dialog that owns this dialog. 
+	 * @param titleId the id of the title string
+	 * @param buttonIds the ids of the buttons.
+	 */
+	protected DialogWithButtons( Dialog dialog, String titleId, String[] buttonIds ) 
+	{
+		initDialog( new JDialog( dialog, 
+		    TextResource.getInstance().getString(titleId), true), buttonIds,
+			dialog.getBounds() );
+	}
+
+	/**
+	 * Initializes the dialog. The buttons are added to the dialog and the dialog is
+	 * centered in its parent dialog or frame.
+	 * 
+	 * @param dialog the dialog to be initialized.
+	 * @param buttonIds the ids of the button labels.
+	 * @param parentBounds the bounds of the parent dialog or window.
+	 */
+	private void initDialog( JDialog dialog, String buttonIds[], Rectangle parentBounds ) {
+		this.dialog = dialog;
+		this.parentBounds = parentBounds; 
+		buttons = new JButton[buttonIds.length]; 
+		for (int i=0; i<buttonIds.length; i++) 
+		{
+			buttons[i] = WidgetFactory.getInstance().createButton(buttonIds[i]);
+			buttons[i].addActionListener(this);
+		}
+		selectedButton = -1;
+	}
+	
+	/**
+	 * This method is called when the subclass has initiazlized its contents.
+	 * @param c the component containing the contents.
+	 */
+	final protected void componentInitialized( Component c ) 
+	{
+		component = c;
+		dialog.getContentPane().add(component, BorderLayout.CENTER);
+
+		// The buttons are added to a Panel, which has a FlowLayout by default.
+		Panel p = new Panel();
+		for (int i=0; i<buttons.length; i++) 
+		{
+			p.add(buttons[i]);
+		}
+		
+		dialog.getContentPane().add(p, BorderLayout.SOUTH);
+		
+		dialog.setResizable(false);
+
+		dialog.addWindowListener( new WindowAdapter() {
+			public void windowClosing(WindowEvent e) { handleCancel(); } }
+		);
+		
+		addListeners(dialog);
+	}
+	
+	/** 
+	 * Adds key listeners to the specified component and all of its sub-components.
+	 * @param c the component
+	 */
+	private void addListeners( Component c ) 
+	{
+		c.addKeyListener(this);
+		if (c instanceof JTextField) 
+		{
+			c.addFocusListener(this);
+		}
+		if (c instanceof Container) 
+		{
+			Container container = (Container)c;
+			Component[] components = container.getComponents();
+			for (int i=0; i<components.length; i++) 
+			{
+				addListeners(components[i]);
+			}
+		}
+	}
+
+	/**
+	 * Shows the dialog.
+	 * If the user accepts the changes, then the database will be updated.
+	 */
+	final public void showDialog() 
+	{
+		dialog.pack();
+		Dimension d = dialog.getPreferredSize();
+		dialog.setLocation( parentBounds.x + (parentBounds.width-d.width)/2,
+			parentBounds.y + (parentBounds.height-d.height)/2 );
+		dialog.show();	
+	}
+
+	/**
+	 * Handles the cancel event. In this particular implementation, this method is
+	 * called when the dialog is closed not by pressing one of the buttons.
+	 */	
+	protected void handleCancel() 
+	{
+		hideDialog();
+	}
+
+	/**
+	 * Handles the button-pressed event. This method is called when one of the buttons
+	 * has been pressed by the user. The current implementation ignores the event.
+	 * Subclasses will typically override this method.
+	 * @param index the index of the button (as specified by the <tt>buttonIds</tt>
+	 *        passed to the constructor. 
+	 */
+	protected void handleButton( int index ) 
+	{
+		hideDialog(); 
+	}
+	
+	/**
+	 * Gets the button that was pressed by the user.
+	 * 
+	 * @return the button that was pressed by the user (as an index in the
+	 *         <tt>buttonIds</tt> passed to the constructor) or <tt>-1</tt>
+	 *         if none of the buttons was selected (but e.g., the user pressed escape).
+	 */
+	final public int getSelectedButton() 
+	{
+		return selectedButton;
+	}
+	
+	/** Hides the dialog. */
+	final protected void hideDialog() 
+	{
+		dialog.dispose();
+	}
+	
+	/**
+	 * This method should be called after <tt>componentInitialized()</tt> has been called,
+	 * to determine whether this dialog is resizable by the user.
+	 * 
+	 * @param resizable <tt>true</tt> if the user can resize this dialog;
+	 *        <tt>false</tt> otherwise.
+	 */
+	final protected void setResizable( boolean resizable ) 
+	{
+		dialog.setResizable(resizable);
+	}
+	
+	/** 
+	 * Shows an error message dialog.
+	 * 
+	 * @param titleId the id of the title.
+	 * @param messageId the id of the message.
+	 */
+	final protected void showErrorMessage( String titleId, String messageId ) 
+	{
+		new MessageDialog( dialog, titleId, 
+			TextResource.getInstance().getString(messageId));
+	}
+
+	/**
+	 * Handles the button pressed event. This method is introduced to make sure
+	 * that <tt>selectedButton</tt> is set when <tt>handleButtonPressed()</tt>
+	 * is called. When <tt>handleButtonPressed()</tt> is overriden, 
+	 * <tt>selectedButton</tt> still gets the correct value.
+	 *  
+	 * @param index the index of the button (as specified by the <tt>buttonIds</tt>
+	 *        passed to the constructor. 
+	 */
+	private void buttonPressed( int index ) 
+	{
+		selectedButton = index;
+		handleButton(index);	
+	}
+	
+	/**
+	 * This method is called when an action occurs. This event is generated by
+	 * the OK or Cancel button.
+	 * @param e the event.
+	 */
+	final public void actionPerformed(ActionEvent e) 
+	{
+		Object source = e.getSource();
+		for (int i=0; i<buttons.length; i++) 
+		{
+			if (buttons[i] == source) // used == intentionally 
+			{ 
+				buttonPressed(i);
+				break;
+			}
+		}
+	}
+	
+	/**
+	 * This method is called when a key is pressed.
+	 * @param e the key event.
+	 */
+	public void keyPressed(KeyEvent e) 
+	{
+		switch(e.getKeyCode()) 
+		{
+			case KeyEvent.VK_ENTER:
+				Component c = dialog.getFocusOwner();
+				if (c instanceof JButton) 
+				{
+					actionPerformed( new ActionEvent(c, 0, null) );
+				} else 
+				{
+					buttonPressed(0);
+				}
+				break;
+				
+			case KeyEvent.VK_ESCAPE:
+				handleCancel();
+				break;
+				
+			default:
+				// ignore other keys
+				break;
+		}
+	}
+
+	/**
+	 * This method is called when a key is released.
+	 * @param e the key event.
+	 */
+	public void keyReleased(KeyEvent e) 
+	{
+		// ignore this event
+	}
+
+	/**
+	 * This method is called when a key is typed.
+	 * @param e the key event.
+	 */
+	public void keyTyped(KeyEvent e) 
+	{
+		// ignore this event
+	}
+	
+	/**
+	 * This method is called when a field gains focus.
+	 * @param event the event.
+	 */
+	final public void focusGained(FocusEvent event) 
+	{
+		Object source = event.getSource();
+		if (source instanceof JTextComponent) 
+		{
+			((JTextComponent)source).selectAll();
+		}
+	}
+
+	/**
+	 * This method is called when a field loses focus.
+	 * @param event the event.
+	 */
+	final public void focusLost(FocusEvent event) 
+	{
+		Object source = event.getSource();
+		if (source instanceof JTextComponent) 
+		{
+			((JTextComponent)source).select(0, 0);
+		}
+	}
+	
+	/** Validates the dialog and all of its subcomponents. */ 
+	final protected void validateDialog() 
+	{
+		dialog.validate();
+	}
+	
+	/**
+	 * Requests focus for the dialog.
+	 */
+	public void requestFocus()
+	{
+	    dialog.requestFocus();
+	}
+}
