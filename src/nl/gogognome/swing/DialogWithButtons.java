@@ -1,5 +1,5 @@
 /*
- * $Id: DialogWithButtons.java,v 1.1 2006-11-20 18:41:08 sanderk Exp $
+ * $Id: DialogWithButtons.java,v 1.2 2006-11-30 20:13:48 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -111,6 +111,9 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
 		{
 			p.add(buttons[i]);
 		}
+		if (buttons.length > 0) {
+		    dialog.getRootPane().setDefaultButton(buttons[0]);
+		}
 		
 		dialog.getContentPane().add(p, BorderLayout.SOUTH);
 		
@@ -151,11 +154,22 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
 	 */
 	final public void showDialog() 
 	{
+	    // Determine the currently focused component so the focus can be
+	    // returned to this component after the dialog has been shown.
+	    final Component focusedComponent = 
+	        KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
+	 
+	    // Show the dialog.
 		dialog.pack();
 		Dimension d = dialog.getPreferredSize();
 		dialog.setLocation( parentBounds.x + (parentBounds.width-d.width)/2,
 			parentBounds.y + (parentBounds.height-d.height)/2 );
-		dialog.show();	
+		dialog.show();
+		
+		// Give focus back to the component that had focus before this dialog was shown.
+		if (focusedComponent != null) {
+		    focusedComponent.requestFocus();
+		}
 	}
 
 	/**
@@ -262,17 +276,16 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
 	{
 		switch(e.getKeyCode()) 
 		{
-			case KeyEvent.VK_ENTER:
-				Component c = dialog.getFocusOwner();
-				if (c instanceof JButton) 
-				{
-					actionPerformed( new ActionEvent(c, 0, null) );
-				} else 
-				{
-					buttonPressed(0);
-				}
-				break;
-				
+        case KeyEvent.VK_ENTER:
+            Component c = dialog.getFocusOwner();
+        	if (c instanceof JButton) {
+        	    JButton b;
+        	    actionPerformed(new ActionEvent(c, 0, null));
+        	} else {
+        	    buttonPressed(0);
+        	}
+        	break;
+		
 			case KeyEvent.VK_ESCAPE:
 				handleCancel();
 				break;

@@ -1,5 +1,5 @@
 /*
- * $Id: WidgetFactory.java,v 1.1 2006-11-20 18:41:08 sanderk Exp $
+ * $Id: WidgetFactory.java,v 1.2 2006-11-30 20:13:48 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -49,21 +49,66 @@ public class WidgetFactory
 	}
 	
 	/**
+	 * Creates an <code>Action</code> for the specified identifier.
+	 * @param id the identifier
+	 * @return the <code>Action</code> or <code>null</code> if the specified
+	 *          identifier does not occur in the resources.
+	 */
+	public Action createAction(String id) {
+    
+	    String name = textResource.getString(id);
+	    
+	    ImageIcon icon = null;
+	    String s = textResource.getString(id + ".icon");
+	    if (s != null) {
+	        icon = new ImageIcon(s);
+	    }
+
+	    AbstractAction action;
+	    if (name != null) {
+	        if (icon != null) {
+	            action = new ActionWrapper(name, icon);
+	        } else {
+	            action = new ActionWrapper(name);
+	        }
+	    } else {
+	        action = new ActionWrapper();
+	    }
+
+	    s = textResource.getString(id + ".accelerator"); 
+	    KeyStroke accelerator = s != null ? KeyStroke.getKeyStroke(s) : null;
+	    if (accelerator != null) {
+	        action.putValue(Action.ACCELERATOR_KEY, accelerator);
+	    }
+	    
+	    s = textResource.getString(id + ".mnemonic");
+	    int mnemonic = getMnemonic(id);
+	    if (mnemonic != -1) {
+	        action.putValue(Action.MNEMONIC_KEY, new Integer(mnemonic));
+	    }
+
+	    s = textResource.getString(id + ".tooltip");
+	    if (s != null) {
+	        action.putValue(Action.SHORT_DESCRIPTION, s);
+	    }
+
+	    s = textResource.getString(id + ".contexthelp");
+	    if (s != null) {
+	        action.putValue(Action.LONG_DESCRIPTION, s);
+	    }
+	    
+	    return action;
+	}
+	
+	/**
 	 * Creates a button.
-	 * @param id the id of the button's text.
+	 * @param id the id of the button's description in the resources.
 	 * @return the button.
 	 */	
-	public JButton createButton( String id ) 
-	{
-		JButton button = new JButton( textResource.getString(id) );
-		button.setActionCommand(id);
-		int mnemonic = getMnemonic(id);
-		if (mnemonic != -1)
-		{
-			button.setMnemonic(mnemonic);
-		}
-	   
-		return button;
+	public JButton createButton( String id ) {
+	    Action action = createAction(id);
+	    
+		return new JButton(action);
 	}
 
 	/**
@@ -72,8 +117,7 @@ public class WidgetFactory
 	 * @param id the id of the text.
 	 * @return the label.
 	 */	
-	public JLabel createLabel(String id) 
-	{
+	public JLabel createLabel(String id) {
 	    JLabel label = new JLabel(textResource.getString(id));
 		return label;
 	}
@@ -84,8 +128,7 @@ public class WidgetFactory
 	 * 
 	 * @return the text field.
 	 */	
-	public JTextField createTextField() 
-	{
+	public JTextField createTextField() {
 		JTextField textField = new JTextField();
 		return textField;
 	}
