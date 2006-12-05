@@ -1,5 +1,5 @@
 /*
- * $Id: DialogWithButtons.java,v 1.2 2006-11-30 20:13:48 sanderk Exp $
+ * $Id: DialogWithButtons.java,v 1.3 2006-12-05 19:53:02 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -103,7 +103,11 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
 	final protected void componentInitialized( Component c ) 
 	{
 		component = c;
-		dialog.getContentPane().add(component, BorderLayout.CENTER);
+		GridBagLayout gbl = new GridBagLayout();
+        JPanel panel = new JPanel(gbl);
+        SwingUtils.setPanelGBConstraints(gbl, c, 0, 0);
+        panel.add(component);
+		dialog.getContentPane().add(panel, BorderLayout.CENTER);
 
 		// The buttons are added to a Panel, which has a FlowLayout by default.
 		Panel p = new Panel();
