@@ -1,13 +1,11 @@
 /*
- * $Id: SwingUtils.java,v 1.1 2006-12-05 19:53:03 sanderk Exp $
+ * $Id: SwingUtils.java,v 1.2 2006-12-07 20:17:59 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
 package nl.gogognome.swing;
 
-import java.awt.Component;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 /**
@@ -18,8 +16,8 @@ import java.awt.Insets;
  */
 public class SwingUtils {
 
-    public static void setGBConstraints(GridBagLayout gbl,
-            Component c, int gridx, int gridy, 
+    public static GridBagConstraints createGBConstraints(
+            int gridx, int gridy, 
             int gridwidth, int gridheight, double weightx, double weighty, 
             int anchor, int fill, Insets insets) {
         GridBagConstraints gbc = new GridBagConstraints();
@@ -32,52 +30,52 @@ public class SwingUtils {
         gbc.anchor = anchor;
         gbc.fill = fill;
         gbc.insets = insets;
-        gbl.setConstraints(c, gbc);
+        return gbc;
     }
 
-    public static void setGBConstraints(GridBagLayout gbl,
-            Component c, int gridx, int gridy, 
+    public static GridBagConstraints createGBConstraints(
+            int gridx, int gridy, 
             int gridwidth, int gridheight, double weightx, double weighty, 
             int anchor, int fill, int top, int left, int bottom, int right) {
         
-        setGBConstraints(gbl, c, gridx, gridy, gridwidth, gridheight, weightx, 
+        return createGBConstraints(gridx, gridy, gridwidth, gridheight, weightx, 
                 weighty, anchor, fill, new Insets(top, left, bottom, right));
     }
 
-    public static void setGBConstraints(GridBagLayout gbl,
-            Component c, int gridx, int gridy) {
+    public static GridBagConstraints createGBConstraints(
+            int gridx, int gridy) {
         
-        setGBConstraints(gbl, c, gridx, gridy, 1, 1, 1.0, 
+        return createGBConstraints(gridx, gridy, 1, 1, 1.0, 
                 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, 
                 0, 0, 0, 0);
     }
 
-    public static void setGBConstraints(GridBagLayout gbl,
-            Component c, int gridx, int gridy, int gridwidth, int gridheight) {
+    public static GridBagConstraints createGBConstraints(
+            int gridx, int gridy, int gridwidth, int gridheight) {
         
-        setGBConstraints(gbl, c, gridx, gridy, gridwidth, gridheight, 1.0, 
+        return createGBConstraints(gridx, gridy, gridwidth, gridheight, 1.0, 
                 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, 
                 0, 0, 0, 0);
     }
     
     
-    public static void setTextFieldGBConstraints(GridBagLayout gbl,
-            Component c, int gridx, int gridy) {
-        setGBConstraints(gbl, c, gridx, gridy, 1, 1, 1.0, 0.0, 
+    public static GridBagConstraints createTextFieldGBConstraints(
+            int gridx, int gridy) {
+        return createGBConstraints(gridx, gridy, 1, 1, 1.0, 0.0, 
                 GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
                 0, 0, 0, 0);
     }
 
-    public static void setLabelGBConstraints(GridBagLayout gbl,
-            Component c, int gridx, int gridy) {
-        setGBConstraints(gbl, c, gridx, gridy, 1, 1, 0.0, 0.0, 
+    public static GridBagConstraints createLabelGBConstraints(
+            int gridx, int gridy) {
+        return createGBConstraints(gridx, gridy, 1, 1, 0.0, 0.0, 
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 0, 0, 0, 10);
     }
 
-    public static void setPanelGBConstraints(GridBagLayout gbl,
-            Component c, int gridx, int gridy) {
-        setGBConstraints(gbl, c, gridx, gridy, 1, 1, 1.0, 1.0, 
+    public static GridBagConstraints createPanelGBConstraints(
+            int gridx, int gridy) {
+        return createGBConstraints(gridx, gridy, 1, 1, 1.0, 1.0, 
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 10, 10, 10, 10);
     }
