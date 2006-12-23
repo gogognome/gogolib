@@ -86,4 +86,14 @@ public class MessageDialog extends DialogWithButtons
 		componentInitialized(new JLabel(message));
 		super.showDialog();
 	}
+
+	/**
+	 * Shows a message dialog.
+	 * @param owner the owner of this dialog.
+	 * @param titleId the id of the title string.
+	 * @param message the message to be shown to the user.
+	 */
+	public static void showMessage(Frame owner, String titleId, String message) {
+	    new MessageDialog(owner, titleId, message);
+	}
 }
