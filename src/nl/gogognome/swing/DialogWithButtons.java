@@ -1,5 +1,5 @@
 /*
- * $Id: DialogWithButtons.java,v 1.4 2006-12-07 20:17:59 sanderk Exp $
+ * $Id: DialogWithButtons.java,v 1.5 2006-12-23 19:04:48 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -355,5 +355,15 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
 	public void requestFocus()
 	{
 	    dialog.requestFocus();
+	}
+	
+	/** 
+	 * Causes this dialog to be sized to fit the preferred size and layouts of 
+	 * its subcomponents. If the dialog and/or its owner are not yet displayable, 
+	 * both are made displayable before calculating the preferred size. 
+	 * The dialog will be validated after the preferredSize is calculated.
+	 */
+	public void pack() {
+	    dialog.pack();
 	}
 }
