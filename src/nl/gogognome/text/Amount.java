@@ -1,5 +1,5 @@
 /*
- * $Id: Amount.java,v 1.1 2006-11-20 18:41:08 sanderk Exp $
+ * $Id: Amount.java,v 1.2 2006-12-23 19:05:21 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -112,6 +112,10 @@ public class Amount
     public Amount divide(int val)
     {
         return new Amount(this.amount.divide(new BigInteger(Integer.toString(val))), currency);
+    }
+    
+    public Amount multiply(int val) {
+        return new Amount(this.amount.multiply(new BigInteger(Integer.toString(val))), currency);
     }
     
     public Amount negate()
