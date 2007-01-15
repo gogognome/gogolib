@@ -1,5 +1,5 @@
 /*
- * $Id: WidgetFactory.java,v 1.2 2006-11-30 20:13:48 sanderk Exp $
+ * $Id: WidgetFactory.java,v 1.3 2007-01-15 18:33:31 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -9,6 +9,7 @@ package nl.gogognome.swing;
 
 import java.awt.event.*;
 import java.lang.reflect.Field;
+import java.net.URL;
 
 import javax.swing.*;
 
@@ -54,18 +55,13 @@ public class WidgetFactory
 	 * @return the <code>Action</code> or <code>null</code> if the specified
 	 *          identifier does not occur in the resources.
 	 */
-	public Action createAction(String id) {
+	public ActionWrapper createAction(String id) {
     
 	    String name = textResource.getString(id);
 	    
-	    ImageIcon icon = null;
-	    String s = textResource.getString(id + ".icon");
-	    if (s != null) {
-	        icon = new ImageIcon(s);
-	    }
-
-	    AbstractAction action;
+	    ActionWrapper action;
 	    if (name != null) {
+		    Icon icon = createIcon(id + ".icon16");
 	        if (icon != null) {
 	            action = new ActionWrapper(name, icon);
 	        } else {
@@ -75,7 +71,7 @@ public class WidgetFactory
 	        action = new ActionWrapper();
 	    }
 
-	    s = textResource.getString(id + ".accelerator"); 
+	    String s = textResource.getString(id + ".accelerator"); 
 	    KeyStroke accelerator = s != null ? KeyStroke.getKeyStroke(s) : null;
 	    if (accelerator != null) {
 	        action.putValue(Action.ACCELERATOR_KEY, accelerator);
@@ -235,6 +231,26 @@ public class WidgetFactory
             result.addItem(textResource.getString(ids[i]));
         }
         return result;
+    }
+    
+    public Icon createIcon(String id) {
+        TextResource tr = TextResource.getInstance();
+        String iconResourceName = tr.getString(id);
+        if (iconResourceName == null) {
+            return null;
+        }
+        
+        URL iconUrl = WidgetFactory.class.getResource(iconResourceName);
+        if (iconUrl == null) {
+            return null;
+        }
+        
+        String description = tr.getString(id + ".description");
+        if (description != null) {
+            return new ImageIcon(iconUrl, description);
+        } else {
+            return new ImageIcon(iconUrl);
+        }
     }
     
     /**
