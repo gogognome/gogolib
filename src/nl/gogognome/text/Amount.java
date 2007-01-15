@@ -1,5 +1,5 @@
 /*
- * $Id: Amount.java,v 1.2 2006-12-23 19:05:21 sanderk Exp $
+ * $Id: Amount.java,v 1.3 2007-01-15 18:33:42 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -151,6 +151,14 @@ public class Amount
     public boolean isNegative()
     {
         return amount.signum() == -1;
+    }
+
+    /** 
+     * Checks whether this amount is zero.
+     * @return <code>true</code> if this amount is zero; <code>false</code> otherwise  
+     */
+    public boolean isZero() {
+        return amount.signum() == 0;
     }
     
     /**
