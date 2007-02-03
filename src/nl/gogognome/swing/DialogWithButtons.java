@@ -1,5 +1,5 @@
 /*
- * $Id: DialogWithButtons.java,v 1.5 2006-12-23 19:04:48 sanderk Exp $
+ * $Id: DialogWithButtons.java,v 1.6 2007-02-03 14:21:17 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -115,7 +115,7 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
 			p.add(buttons[i]);
 		}
 		if (buttons.length > 0) {
-		    dialog.getRootPane().setDefaultButton(buttons[0]);
+			setDefaultButton(buttons[0]);
 		}
 		
 		dialog.getContentPane().add(p, BorderLayout.SOUTH);
@@ -127,6 +127,22 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
 		);
 		
 		addListeners(dialog);
+	}
+
+	/**
+	 * Sets the default button of this dialog.
+	 * @param button the default button of this dialog
+	 */
+	public void setDefaultButton(JButton button) {
+	    dialog.getRootPane().setDefaultButton(button);
+	}
+	
+	/**
+	 * Gets the default button of this dialog.
+	 * @return the default button
+	 */
+	public JButton getDefaultButton() {
+	    return dialog.getRootPane().getDefaultButton();
 	}
 	
 	/** 
