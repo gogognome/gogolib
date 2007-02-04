@@ -2,10 +2,12 @@
 
 	<!-- set global properties for this build -->
 	<property name="srcdir" value="src" />
+	<property name="testsrcdir" value="test" />
 	<property name="resourcedir" value="resources" />
 	<property name="generateddir" value="generated" />
 	<property name="classdir" value="${generateddir}/classes" />
 	<property name="distdir" value="${generateddir}/dist" />
+	<property name="libdir" value="lib" />
 	<property name="productname" value="gogolib" />
 	
 	<target name="init" description="initialisation used by other targets">
@@ -48,4 +50,24 @@
 		<delete dir="${generateddir}"/>
 	</target>
 
+	<target name="test" depends="compile" description="runs unit tests">
+		<javac srcdir="${testsrcdir}" classpath="${classpath}:${libdir}/junit.jar" destdir="${classdir}" debug="true" />
+		
+		<junit printsummary="yes" haltonfailure="yes">
+		  <classpath>
+		    <pathelement location="${classdir}"/>
+		    <pathelement location="${libdir}/junit.jar"/>
+		    <pathelement path="${java.class.path}"/>
+		  </classpath>
+
+		  <formatter type="plain"/>
+
+		  <batchtest fork="yes" todir="${generateddir}">
+		    <fileset dir="${srcdir}">
+		      <include name="**/*Test*.java"/>
+		    </fileset>
+		  </batchtest>
+		</junit>
+	</target>
+	
 </project>
