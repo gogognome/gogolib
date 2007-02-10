@@ -1,5 +1,5 @@
 /*
- * $Id: TextResource.java,v 1.2 2007-02-04 16:40:34 sanderk Exp $
+ * $Id: TextResource.java,v 1.3 2007-02-10 16:28:07 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -140,13 +140,4 @@ public class TextResource {
 	    return sdf.format(date);
 	}
 	
-	/**
-	 * Formats a date.
-	 * @param formatId the id of the string resource that describes the format of the date
-	 * @param date the date to be formatted
-	 * @return the formatted date
-	 */
-	public String formatDate(String formatId, nl.gogognome.util.Date date) {
-	    return formatDate(formatId, date.getJavaUtilDate());
-	}
 }
