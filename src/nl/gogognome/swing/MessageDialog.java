@@ -3,6 +3,7 @@ package nl.gogognome.swing;
 import java.awt.*;
 
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 
 /**
@@ -79,11 +80,22 @@ public class MessageDialog extends DialogWithButtons
     
 	/**
 	 * Shows the dialog.
-	 * @param message the message to be shown.
+	 * @param message the message to be shown. The sequence of the characters
+	 *        '\\' and 'n' indicate a line break.
 	 */	
-	private void showDialog( String message ) 
-	{
-		componentInitialized(new JLabel(message));
+	private void showDialog( String message ) {
+	    String[] lines = message.split("\\n");
+	    Component messageComponent;
+	    if (lines.length > 1) {
+		    JPanel panel = new JPanel(new GridLayout(lines.length, 1));
+		    for (int i = 0; i < lines.length; i++) {
+                panel.add(new JLabel(lines[i]));
+            }
+	        messageComponent = panel;
+	    } else {
+	        messageComponent = new JLabel(message); 
+	    }
+		componentInitialized(messageComponent);
 		super.showDialog();
 	}
 
