@@ -1,5 +1,5 @@
 /*
- * $Id: Amount.java,v 1.3 2007-01-15 18:33:42 sanderk Exp $
+ * $Id: Amount.java,v 1.4 2007-04-02 17:33:42 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -170,5 +170,25 @@ public class Amount
     public String toString()
     {
         return amount.toString();
+    }
+    
+    /**
+     * Checks whether this instance is equal to another instance.
+     * @param o the other instance
+     * @return <code>true</code> if this instance is equal to <code>o</code>;
+     *          <code>false</code> otherwise
+     */
+    public boolean equals(Object o) {
+        if (o instanceof Amount) {
+            Amount that = (Amount) o;
+            return this.currency.equals(that.currency) &&
+            	this.amount.equals(that.amount);
+        } else {
+            return false;
+        }
+    }
+    
+    public int hashCode() {
+        return currency.hashCode() + amount.hashCode();
     }
 }
