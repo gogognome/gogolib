@@ -1,5 +1,5 @@
 /*
- * $Id: DateUtil.java,v 1.1 2007-02-10 16:28:07 sanderk Exp $
+ * $Id: DateUtil.java,v 1.2 2007-04-07 15:24:51 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -16,7 +16,7 @@ import java.util.Date;
 public class DateUtil {
 
     /** Calendar used to perform conversions. */
-    public static Calendar calendar = Calendar.getInstance();
+    private static Calendar calendar = Calendar.getInstance();
     
     /**
      * Compares two dates up to the day of year, ignoring their time within
@@ -51,6 +51,19 @@ public class DateUtil {
 		    }
 		    
 		    return 0;
+        }
+    }
+    
+    /**
+     * Gets a field of the date.
+     * @param date the date
+     * @param field the field (the same value as for <code>Calendar.get(int)</code>)
+     * @return the value of the field
+     */
+    public static int getField(Date date, int field) {
+        synchronized(calendar) {
+            calendar.setTime(date);
+            return calendar.get(field);
         }
     }
 }
