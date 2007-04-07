@@ -1,5 +1,5 @@
 /*
- * $Id: DialogWithButtons.java,v 1.6 2007-02-03 14:21:17 sanderk Exp $
+ * $Id: DialogWithButtons.java,v 1.7 2007-04-07 15:25:03 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -298,7 +298,6 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
         case KeyEvent.VK_ENTER:
             Component c = dialog.getFocusOwner();
         	if (c instanceof JButton) {
-        	    JButton b;
         	    actionPerformed(new ActionEvent(c, 0, null));
         	} else {
         	    buttonPressed(0);
