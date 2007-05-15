@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTabbedPane.java,v 1.1 2007-04-07 15:23:47 sanderk Exp $
+ * $Id: ViewTabbedPane.java,v 1.2 2007-05-15 17:44:13 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -7,6 +7,7 @@ package nl.gogognome.framework;
 
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -26,7 +27,7 @@ public class ViewTabbedPane extends JTabbedPane {
      * Adds a view to the tabbed pane.
      * @param view the view to be added
      */
-    public void addView(final View view) {
+    public void openView(final View view) {
         Action closeAction = new AbstractAction() {
             public void actionPerformed(ActionEvent event) {
                 remove(view);
@@ -43,7 +44,7 @@ public class ViewTabbedPane extends JTabbedPane {
      * Removes a view from the tabbed pane.
      * @param view the view to be removed
      */
-    public void removeView(View view) {
+    public void closeView(View view) {
         if (views.contains(view)) {
             view.onClose();
             remove(view);
@@ -63,5 +64,15 @@ public class ViewTabbedPane extends JTabbedPane {
                 return;
             }
         }
+    }
+    
+    /** Closes all views in the tabbed pane. */
+    public void closeAllViews() {
+        for (Iterator iter = views.iterator(); iter.hasNext();) {
+            View view = (View) iter.next();
+            view.onClose();
+            remove(view);
+        }
+        views.clear();
     }
 }

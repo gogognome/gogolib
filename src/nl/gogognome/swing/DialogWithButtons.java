@@ -1,5 +1,5 @@
 /*
- * $Id: DialogWithButtons.java,v 1.7 2007-04-07 15:25:03 sanderk Exp $
+ * $Id: DialogWithButtons.java,v 1.8 2007-05-15 17:44:13 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -187,7 +187,11 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
 		
 		// Give focus back to the component that had focus before this dialog was shown.
 		if (focusedComponent != null) {
-		    focusedComponent.requestFocus();
+		    SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+        		    focusedComponent.requestFocus();
+                }
+		    });
 		}
 	}
 
