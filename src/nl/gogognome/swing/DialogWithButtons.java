@@ -1,5 +1,5 @@
 /*
- * $Id: DialogWithButtons.java,v 1.8 2007-05-15 17:44:13 sanderk Exp $
+ * $Id: DialogWithButtons.java,v 1.9 2007-05-21 15:57:29 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -90,7 +90,7 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
 		buttons = new JButton[buttonIds.length]; 
 		for (int i=0; i<buttonIds.length; i++) 
 		{
-			buttons[i] = WidgetFactory.getInstance().createButton(buttonIds[i]);
+			buttons[i] = WidgetFactory.getInstance().createButton(buttonIds[i], null);
 			buttons[i].addActionListener(this);
 		}
 		selectedButton = -1;

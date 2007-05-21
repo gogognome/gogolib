@@ -1,5 +1,5 @@
 /*
- * $Id: WidgetFactory.java,v 1.3 2007-01-15 18:33:31 sanderk Exp $
+ * $Id: WidgetFactory.java,v 1.4 2007-05-21 15:57:29 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -99,12 +99,14 @@ public class WidgetFactory
 	/**
 	 * Creates a button.
 	 * @param id the id of the button's description in the resources.
+	 * @action the action to be performed when the button is pressed
 	 * @return the button.
 	 */	
-	public JButton createButton( String id ) {
-	    Action action = createAction(id);
+	public JButton createButton(String id, Action action) {
+	    ActionWrapper actionWrapper = createAction(id);
+	    actionWrapper.setAction(action);
 	    
-		return new JButton(action);
+		return new JButton(actionWrapper);
 	}
 
 	/**
