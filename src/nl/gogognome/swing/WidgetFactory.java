@@ -1,5 +1,5 @@
 /*
- * $Id: WidgetFactory.java,v 1.4 2007-05-21 15:57:29 sanderk Exp $
+ * $Id: WidgetFactory.java,v 1.5 2007-06-03 11:09:32 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -21,8 +21,7 @@ import nl.gogognome.text.TextResource;
  *  
  * @author kooijmas
  */
-public class WidgetFactory 
-{
+public class WidgetFactory {
 	
 	/** The singleton instance of this class. */
 	private static WidgetFactory instance;

@@ -1,9 +1,12 @@
 /*
- * $Id: View.java,v 1.1 2007-04-07 15:23:47 sanderk Exp $
+ * $Id: View.java,v 1.2 2007-06-03 11:09:32 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
 package nl.gogognome.framework;
+
+import java.awt.Dialog;
+import java.awt.Frame;
 
 import javax.swing.Action;
 import javax.swing.JPanel;
@@ -20,6 +23,12 @@ public abstract class View extends JPanel {
      * is shown. The view can use it let itself be closed.
      */
     protected Action closeAction;
+    
+    /** The parent frame that contains this view. */
+    private Frame parentFrame;
+    
+    /** The parent dialog that contains this view. */
+    private Dialog parentDialog;
     
     /**
      * Gets the title of the view.
@@ -40,5 +49,21 @@ public abstract class View extends JPanel {
      */
     public void setCloseAction(Action closeAction) {
         this.closeAction = closeAction;
+    }
+    
+    public void setParentFrame(Frame frame) {
+        parentFrame = frame;
+    }
+
+    public Frame getParentFrame() {
+        return parentFrame;
+    }
+    
+    public void setParentDialog(Dialog dialog) {
+        parentDialog = dialog;
+    }
+
+    public Dialog getParentDialog() {
+        return parentDialog;
     }
 }
