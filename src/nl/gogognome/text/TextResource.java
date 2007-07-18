@@ -1,5 +1,5 @@
 /*
- * $Id: TextResource.java,v 1.3 2007-02-10 16:28:07 sanderk Exp $
+ * $Id: TextResource.java,v 1.4 2007-07-18 19:54:24 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -128,6 +128,18 @@ public class TextResource {
 	    return result;
 	}
 	
+	public String getString(String id, Object argument) {
+	    return getString(id, new Object[] { argument } );
+	}
+	
+	public String getString(String id, int argument) {
+	    return getString(id, Integer.toString(argument));
+	}
+
+	public String getString(String id, float argument) {
+	    return getString(id, new Float(argument));
+	}
+
 	/**
 	 * Formats a date.
 	 * @param formatId the id of the string resource that describes the format of the date
