@@ -1,5 +1,5 @@
 /*
- * $Id: DateSelectionBean.java,v 1.2 2007-05-15 17:43:47 sanderk Exp $
+ * $Id: DateSelectionBean.java,v 1.3 2007-07-29 12:34:14 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -53,6 +53,8 @@ public class DateSelectionBean extends JPanel {
     public DateSelectionBean(DateModel dateModel) {
         this.dateModel = dateModel;
 
+        setOpaque(false);
+        
         dateFormat = new SimpleDateFormat(TextResource.getInstance().getString("gen.dateFormat"));
         dateFormat.setLenient(false);
         
