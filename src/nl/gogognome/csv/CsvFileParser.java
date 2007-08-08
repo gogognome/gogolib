@@ -1,5 +1,5 @@
 /*
- * $Id: CsvFileParser.java,v 1.1 2007-07-21 15:38:42 sanderk Exp $
+ * $Id: CsvFileParser.java,v 1.2 2007-08-08 18:58:07 sanderk Exp $
  *
  * Copyright (C) 2007 Sander Kooijmans
  */
@@ -65,6 +65,21 @@ public class CsvFileParser {
         }
         
         return (String[][]) rows.toArray(new String[rows.size()][]);
+    }
+    
+    /**
+     * Gets the formatted values from the CSV file.
+     * @param pattern the pattern applied to the values of each line
+     * @return the formatted values.
+     * @throws IOException if a problem occurs while reading the CSV fie
+     */
+    public String[] getFormattedValues(String pattern) throws IOException {
+        String[][] values = getValues();
+        String[] result = new String[values.length];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = composeValue(pattern, values[i]);
+        }
+        return result;
     }
     
     /**
