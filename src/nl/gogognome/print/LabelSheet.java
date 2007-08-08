@@ -1,5 +1,5 @@
 /*
- * $Id: LabelPaper.java,v 1.1 2007-08-02 20:01:52 sanderk Exp $
+ * $Id: LabelSheet.java,v 1.1 2007-08-08 18:57:09 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -8,12 +8,12 @@
 package nl.gogognome.print;
 
 /**
- * A <code>LabelPaper</code> represents a piece of paper with labels. It holds
+ * A <code>LabelSheetr</code> represents a sheet with labels. It holds
  * the number of rows and columns of labels and it can even indicate per label whether it is
- * available or not for printing.  
+ * available or not for printing.
  */
 
-public interface LabelPaper {
+public interface LabelSheet {
 
     /**
      * Gets the number of rows of labels.
@@ -36,8 +36,8 @@ public interface LabelPaper {
     public boolean isLabelAvailble(int row, int column);
     
     /**
-     * Returns the number of available labels on this paper. 
-     * @return the number of available labels on this paper
+     * Returns the number of available labels on this sheet. 
+     * @return the number of available labels on this sheet
      */
     public int getNrAvailableLabels();
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: LabelPrinter.java,v 1.2 2007-08-02 20:01:52 sanderk Exp $
+ * $Id: LabelPrinter.java,v 1.3 2007-08-08 18:57:09 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -38,7 +38,7 @@ public class LabelPrinter {
      *        labels available or otherwise not all labels will be printed
      * @throws PrinterException if a problem occurs while printing
      */
-    public static void printLabels(Label[] labels, LabelPaper[] labelPapers) throws PrinterException {
+    public static void printLabels(Label[] labels, LabelSheet[] labelPapers) throws PrinterException {
         PrinterJob printerJob = PrinterJob.getPrinterJob();
         
         Book book = new Book();
@@ -57,9 +57,9 @@ public class LabelPrinter {
         private Label[] labels;
 
         /** The papers on which to print the labels. */
-        private LabelPaper[] labelPapers;
+        private LabelSheet[] labelPapers;
 
-        public PrintableImpl(Label[] labels, LabelPaper[] labelPapers) {
+        public PrintableImpl(Label[] labels, LabelSheet[] labelPapers) {
             this.labels = labels;
             this.labelPapers = labelPapers;
         }
@@ -73,7 +73,6 @@ public class LabelPrinter {
             }
             
             Graphics2D g2d = (Graphics2D) g;
-            g2d.setPaint(Color.black);
             g2d.setClip(null);
             
             Paper paper = format.getPaper();
@@ -92,11 +91,13 @@ public class LabelPrinter {
             }
             double labelWidth = paperWidth / labelPapers[pageIndex].getNrColumns();
             double labelHeight = paperHeight / labelPapers[pageIndex].getNrRows();
-            for (int y=0; y<labelPapers[pageIndex].getNrRows(); y++) {
-                for (int x=0; x<labelPapers[pageIndex].getNrColumns(); x++) {
+            for (int y=0; labelIndex < labels.length && y<labelPapers[pageIndex].getNrRows(); y++) {
+                for (int x=0; labelIndex < labels.length && x<labelPapers[pageIndex].getNrColumns(); x++) {
                     double labelX = labelWidth * x;
                     double labelY = labelHeight* y;
-//                    g2d.drawRect((int)labelX, (int)labelY, (int)labelWidth, (int)labelHeight);
+                    g2d.setPaint(Color.RED);
+                    g2d.drawRect((int)labelX, (int)labelY, (int)labelWidth, (int)labelHeight);
+                    g2d.setPaint(Color.BLACK);
                     
                     if (labelPapers[pageIndex].isLabelAvailble(y, x)) {
                         labels[labelIndex].printLabel(g2d, labelX, labelY, labelWidth, labelHeight, format, pageIndex);
