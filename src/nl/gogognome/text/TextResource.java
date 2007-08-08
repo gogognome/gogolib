@@ -1,5 +1,5 @@
 /*
- * $Id: TextResource.java,v 1.4 2007-07-18 19:54:24 sanderk Exp $
+ * $Id: TextResource.java,v 1.5 2007-08-08 18:58:47 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -25,7 +25,7 @@ public class TextResource {
 	private static TextResource instance;
 	
 	/** Contains the string resources of the user interface. */
-	private ResourceBundle stringResources;
+	private ResourceBundle[] stringResources;
 	
 	/** The locale used to obtain resources and format currencies and dates. */
 	private Locale locale = Locale.getDefault();
@@ -50,10 +50,19 @@ public class TextResource {
 	}
 	
 	/** Private constructor to enforce usage of <tt>getInstance()</tt>. */
-	private TextResource() 
-	{
-		stringResources = ResourceBundle.getBundle("stringresources");
+	private TextResource() {
+        loadResources();
 	}
+
+    /**
+     * Loads the resources.
+     */
+    private void loadResources() {
+        stringResources = new ResourceBundle[2];
+        stringResources[0] = ResourceBundle.getBundle("stringresources");
+        stringResources[1] = ResourceBundle.getBundle("gogolibstrings");
+    }
+    
 
 	/**
 	 * Sets the locale for the string resources.
@@ -63,7 +72,7 @@ public class TextResource {
 	{
 	    this.locale = locale;
 	    this.amountFormat = new AmountFormat(locale);
-	    stringResources = ResourceBundle.getBundle("stringresources", locale);
+	    loadResources();
 	}
 	
 	/**
@@ -84,25 +93,22 @@ public class TextResource {
 	{
 	    return amountFormat;
 	}
-	
+
 	/**
 	 * Gets a string from the resources.
 	 * @param id the id of the string
 	 * @return the string from the resources or <code>null</code> if no string was
 	 *         found in the resources.
 	 */
-	public String getString(String id)
-	{
-	    String result;
-	    try
-	    {
-	        result = stringResources.getString(id);
-	    }
-	    catch (MissingResourceException e)
-	    {
-	        result = null;
-	    }
-	    return result;
+	public String getString(String id) {
+        String result = null;
+        for (int i=0; result == null && i<stringResources.length; i++) {
+            try {
+                result = stringResources[i].getString(id);
+            } catch (MissingResourceException e) {
+            }
+        }
+        return result;
 	}
 
 	/**
@@ -116,15 +122,12 @@ public class TextResource {
 	public String getString(String id, Object[] arguments)
 	{
 	    String result;
-	    try
-	    {
-	        String s = stringResources.getString(id);
-	        result = MessageFormat.format(s, arguments);
-	    }
-	    catch (MissingResourceException e)
-	    {
-	        result = null;
-	    }
+        String s = getString(id);
+        if (s != null) {
+            result = MessageFormat.format(s, arguments);
+        } else {
+            result = null;
+        }
 	    return result;
 	}
 	
