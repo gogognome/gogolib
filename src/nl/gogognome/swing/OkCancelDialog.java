@@ -14,6 +14,9 @@ import java.awt.*;
  */
 public abstract class OkCancelDialog extends DialogWithButtons {
 
+    /** Indicates whether the dialog was exited with the Ok button. */
+    private boolean exitedWithOk;
+    
 	/**
 	 * Creates a dialog with one or more buttons.
 	 * @param frame the frame that owns this dialog. 
@@ -46,6 +49,7 @@ public abstract class OkCancelDialog extends DialogWithButtons {
 	{
 		if (index == 0) 
 		{
+            exitedWithOk = true;
 			handleOk();
 		} 
 		else 
@@ -58,4 +62,13 @@ public abstract class OkCancelDialog extends DialogWithButtons {
 	 * Handles the OK event.
 	 */
 	protected abstract void handleOk();
+    
+    /**
+     * Checks whether the dialog was exited with the Ok button.
+     * @return <code>true</code> if the dialog was exited with the Ok button;
+     *         <code>false</code> oterhwise
+     */
+    public boolean isExitedWithOk() {
+        return exitedWithOk;
+    }
 }
