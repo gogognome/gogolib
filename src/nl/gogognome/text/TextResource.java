@@ -1,5 +1,5 @@
 /*
- * $Id: TextResource.java,v 1.5 2007-08-08 18:58:47 sanderk Exp $
+ * $Id: TextResource.java,v 1.6 2007-08-18 10:48:04 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -59,8 +59,8 @@ public class TextResource {
      */
     private void loadResources() {
         stringResources = new ResourceBundle[2];
-        stringResources[0] = ResourceBundle.getBundle("stringresources");
-        stringResources[1] = ResourceBundle.getBundle("gogolibstrings");
+        stringResources[0] = ResourceBundle.getBundle("stringresources", locale);
+        stringResources[1] = ResourceBundle.getBundle("gogolibstrings", locale);
     }
     
 
