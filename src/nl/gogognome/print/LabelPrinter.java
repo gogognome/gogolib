@@ -1,5 +1,5 @@
 /*
- * $Id: LabelPrinter.java,v 1.3 2007-08-08 18:57:09 sanderk Exp $
+ * $Id: LabelPrinter.java,v 1.4 2007-08-18 10:48:48 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -25,6 +25,9 @@ import java.awt.print.PrinterJob;
  */
 public class LabelPrinter {
 
+    /** Indicates whether debug functionality of this class is enabled. */
+    private final static boolean DEBUG = false;
+    
     /**
      * Private constructor, because this class only has static methods.
      */
@@ -95,8 +98,10 @@ public class LabelPrinter {
                 for (int x=0; labelIndex < labels.length && x<labelPapers[pageIndex].getNrColumns(); x++) {
                     double labelX = labelWidth * x;
                     double labelY = labelHeight* y;
-                    g2d.setPaint(Color.RED);
-                    g2d.drawRect((int)labelX, (int)labelY, (int)labelWidth, (int)labelHeight);
+                    if (DEBUG) {
+                        g2d.setPaint(Color.RED);
+                        g2d.drawRect((int)labelX, (int)labelY, (int)labelWidth, (int)labelHeight);
+                    }
                     g2d.setPaint(Color.BLACK);
                     
                     if (labelPapers[pageIndex].isLabelAvailble(y, x)) {
