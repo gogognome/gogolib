@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTabbedPane.java,v 1.3 2007-06-03 11:09:32 sanderk Exp $
+ * $Id: ViewTabbedPane.java,v 1.4 2007-09-02 19:49:04 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -60,7 +60,7 @@ public class ViewTabbedPane extends JTabbedPane {
      */
     public void closeView(View view) {
         if (views.contains(view)) {
-            view.onClose();
+            view.doClose();
             remove(view);
             views.remove(view);
         }
@@ -84,9 +84,36 @@ public class ViewTabbedPane extends JTabbedPane {
     public void closeAllViews() {
         for (Iterator iter = views.iterator(); iter.hasNext();) {
             View view = (View) iter.next();
-            view.onClose();
+            view.doClose();
             remove(view);
         }
         views.clear();
+    }
+
+    /**
+     * Checks whether the specified view is present in this tabbed pane.
+     * @param view the view
+     * @return <code>true</code> if the specified view is present;
+     *         <code>false</code> otherwise
+     */
+    public boolean hasView(View view) {
+        int count = getTabCount();
+        for (int i=0; i<count; i++) {
+            if (getComponentAt(i).equals(view)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * This method can be called by the UI when the user closes the tab.
+     * @param index index of the tab to be closed
+     */
+    public void remove(int index) {
+        View view = (View)getComponentAt(index); 
+        view.doClose();
+        views.remove(view);
+        super.remove(index);
     }
 }
