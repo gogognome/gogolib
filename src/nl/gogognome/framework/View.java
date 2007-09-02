@@ -1,5 +1,5 @@
 /*
- * $Id: View.java,v 1.2 2007-06-03 11:09:32 sanderk Exp $
+ * $Id: View.java,v 1.3 2007-09-02 18:23:48 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -7,6 +7,7 @@ package nl.gogognome.framework;
 
 import java.awt.Dialog;
 import java.awt.Frame;
+import java.util.ArrayList;
 
 import javax.swing.Action;
 import javax.swing.JPanel;
@@ -18,6 +19,9 @@ import javax.swing.JPanel;
  */
 public abstract class View extends JPanel {
 
+    /** The subscribed listeners. */
+    private ArrayList listeners = new ArrayList();
+    
     /** 
      * This action closes the view. The action will be set before the view
      * is shown. The view can use it let itself be closed.
@@ -65,5 +69,24 @@ public abstract class View extends JPanel {
 
     public Dialog getParentDialog() {
         return parentDialog;
+    }
+    
+    public void addViewListener(ViewListener listener) {
+        listeners.add(listener);
+    }
+    
+    public void removeViewListener(ViewListener listener) {
+        listeners.remove(listener);
+    }
+    
+    /**
+     * Closes the view and notifies listeners.
+     */
+    void doClose() {
+        onClose();
+        ViewListener[] tempListeners = (ViewListener[]) listeners.toArray(new ViewListener[listeners.size()]);
+        for (int i = 0; i < tempListeners.length; i++) {
+            tempListeners[i].onViewClosed(this);
+        }
     }
 }
