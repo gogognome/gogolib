@@ -1,5 +1,5 @@
 /*
- * $Id: View.java,v 1.3 2007-09-02 18:23:48 sanderk Exp $
+ * $Id: View.java,v 1.4 2007-09-02 19:49:38 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -10,6 +10,7 @@ import java.awt.Frame;
 import java.util.ArrayList;
 
 import javax.swing.Action;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 /**
@@ -39,6 +40,15 @@ public abstract class View extends JPanel {
      * @return the title of the view
      */
     public abstract String getTitle();
+    
+    /**
+     * Gets the default button of this view.
+     * @return the default button of this view or <code>null</code> if this view
+     *         has no default button
+     */
+    public JButton getDefaultButton() {
+        return null;
+    }
     
     /** This method is called before the view is shown. It initializes the view. */
     public abstract void onInit();
