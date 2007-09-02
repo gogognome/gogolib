@@ -1,5 +1,5 @@
 /*
- * $Id: WidgetFactory.java,v 1.5 2007-06-03 11:09:32 sanderk Exp $
+ * $Id: WidgetFactory.java,v 1.6 2007-09-02 19:47:27 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -140,6 +140,7 @@ public class WidgetFactory {
 	public JTextField createTextField( int columns ) 
 	{
 		JTextField textField = new JTextField(columns);
+        textField.setFocusable(true);
 		return textField;
 	}
 	
