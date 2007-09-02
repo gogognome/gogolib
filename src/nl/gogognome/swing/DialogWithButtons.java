@@ -1,5 +1,5 @@
 /*
- * $Id: DialogWithButtons.java,v 1.9 2007-05-21 15:57:29 sanderk Exp $
+ * $Id: DialogWithButtons.java,v 1.10 2007-09-02 19:48:19 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -103,6 +103,7 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
 	final protected void componentInitialized( Component c ) 
 	{
 		component = c;
+        
 		GridBagLayout gbl = new GridBagLayout();
         JPanel panel = new JPanel(gbl);
         panel.add(component, SwingUtils.createPanelGBConstraints(0, 0));
@@ -169,7 +170,6 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
 
 	/**
 	 * Shows the dialog.
-	 * If the user accepts the changes, then the database will be updated.
 	 */
 	final public void showDialog() 
 	{
@@ -183,7 +183,7 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
 		Dimension d = dialog.getPreferredSize();
 		dialog.setLocation( parentBounds.x + (parentBounds.width-d.width)/2,
 			parentBounds.y + (parentBounds.height-d.height)/2 );
-		dialog.show();
+		dialog.setVisible(true);
 		
 		// Give focus back to the component that had focus before this dialog was shown.
 		if (focusedComponent != null) {
@@ -229,8 +229,7 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
 	}
 	
 	/** Hides the dialog. */
-	final protected void hideDialog() 
-	{
+	final protected void hideDialog() {
 		dialog.dispose();
 	}
 	
