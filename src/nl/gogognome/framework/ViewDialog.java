@@ -1,5 +1,5 @@
 /*
- * $Id: ViewDialog.java,v 1.2 2007-09-02 19:50:14 sanderk Exp $
+ * $Id: ViewDialog.java,v 1.3 2007-09-04 19:00:29 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -123,7 +123,7 @@ public class ViewDialog {
         };
         
         view.setCloseAction(closeAction);
-        view.onInit();
+        view.doInit();
         dialog.getContentPane().add(view, BorderLayout.CENTER);
         
         JButton defaultButton = view.getDefaultButton();

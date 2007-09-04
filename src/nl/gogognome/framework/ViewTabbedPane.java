@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTabbedPane.java,v 1.4 2007-09-02 19:49:04 sanderk Exp $
+ * $Id: ViewTabbedPane.java,v 1.5 2007-09-04 19:00:28 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -49,7 +49,7 @@ public class ViewTabbedPane extends JTabbedPane {
         
         view.setCloseAction(closeAction);
         view.setParentFrame(parentFrame);
-        view.onInit();
+        view.doInit();
         addTab(view.getTitle(), view);
         views.add(view);
     }

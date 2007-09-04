@@ -1,5 +1,5 @@
 /*
- * $Id: View.java,v 1.4 2007-09-02 19:49:38 sanderk Exp $
+ * $Id: View.java,v 1.5 2007-09-04 19:00:29 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -98,5 +98,10 @@ public abstract class View extends JPanel {
         for (int i = 0; i < tempListeners.length; i++) {
             tempListeners[i].onViewClosed(this);
         }
+    }
+    
+    /** Initializes the view. */
+    void doInit() {
+        onInit();
     }
 }
