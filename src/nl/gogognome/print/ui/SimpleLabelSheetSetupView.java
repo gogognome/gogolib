@@ -1,5 +1,5 @@
 /*
- * $Id: SimpleLabelSheetSetupDialog.java,v 1.1 2007-08-08 18:57:48 sanderk Exp $
+ * $Id: SimpleLabelSheetSetupView.java,v 1.1 2007-09-04 19:01:08 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -12,7 +12,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -32,20 +31,20 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
+import nl.gogognome.framework.View;
 import nl.gogognome.print.Label;
 import nl.gogognome.print.LabelSheet;
 import nl.gogognome.print.SimpleLabelSheet;
 import nl.gogognome.swing.ActionWrapper;
-import nl.gogognome.swing.OkCancelDialog;
 import nl.gogognome.swing.SwingUtils;
 import nl.gogognome.swing.WidgetFactory;
 import nl.gogognome.text.TextResource;
 
 /**
- * This class implements a dialog for setting up <code>SimpleLabelSheet</code>s 
- * to print labels. 
+ * This class implements a view for setting up <code>SimpleLabelSheet</code>s 
+ * to print labels.
  */
-public class SimpleLabelSheetSetupDialog extends OkCancelDialog {
+public class SimpleLabelSheetSetupView extends View {
 
     /** The labels to be printed. */
     private Label[] labels;
@@ -83,21 +82,39 @@ public class SimpleLabelSheetSetupDialog extends OkCancelDialog {
      */
     private int currentSheet = 0;
     
+    private String idOkButton;
+    private String idCancelButton;
+    
+    /** Contains the identifier of the button that was used to close this view. */
+    private String idPressedButton;
+    
     /**
      * Constructor.
      * @param frame the parent of this dialog
      * @param labels the labels to be printed
+     * @param idOkButton the identifier of the OK button
+     * @param idCancelButton the identifier of the cancel button
      */
-    public SimpleLabelSheetSetupDialog(Frame frame, Label[] labels) {
-        super(frame, "simplelabelsheetsetupdialog.title");
-        
+    public SimpleLabelSheetSetupView(Label[] labels, String idOkButton, String idCancelButton) {
+        this.idOkButton = idOkButton;
+        this.idCancelButton = idCancelButton;
         setSheets(labels);
-        componentInitialized(createPanel());
     }
-    
+
+    public String getTitle() {
+        return TextResource.getInstance().getString("simplelabelsheetsetupdialog.title");
+    }
+
+    public void onClose() {
+    }
+
+    public void onInit() {
+        initLabelSheets();
+        add(createPanel());
+    }
+
     private void setSheets(Label[] labels) {
         this.labels = labels;
-        initLabelSheets();
     }
     
     /**
@@ -163,11 +180,31 @@ public class SimpleLabelSheetSetupDialog extends OkCancelDialog {
         JPanel sheetPanelWithButtons = new JPanel(new BorderLayout());
         sheetPanelWithButtons.add(sheetPanel, BorderLayout.CENTER);
         sheetPanelWithButtons.add(buttonPanel, BorderLayout.SOUTH);
+
+        // Create panel with ok and cancel buttons
+        buttonPanel = new JPanel(new FlowLayout());
+        JButton okButton = wf.createButton(idOkButton, new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                idPressedButton = idOkButton;
+                resulingLabelSheets = (LabelSheet[]) labelSheets.toArray(new LabelSheet[labelSheets.size()]);
+                closeAction.actionPerformed(e);
+            }
+        });
+        buttonPanel.add(okButton);
+        JButton cancelButton = wf.createButton(idCancelButton, new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                idPressedButton = idCancelButton;
+                closeAction.actionPerformed(e);
+            }
+        });
+        buttonPanel.add(cancelButton);
         
         mainPanel.add(statisticsPanel, 
             SwingUtils.createPanelGBConstraints(0, 0));
         mainPanel.add(sheetPanelWithButtons, 
             SwingUtils.createPanelGBConstraints(0, 1));
+        mainPanel.add(buttonPanel, 
+            SwingUtils.createPanelGBConstraints(0, 2));
         
         return mainPanel;
     }
@@ -226,11 +263,17 @@ public class SimpleLabelSheetSetupDialog extends OkCancelDialog {
         }
 
         // Check whether the sheets contain sufficient available labels.
-        
-        
         lbNrSheets.setText(TextResource.getInstance().getString("simplelabelsheetsetupdialog.lbNrSheets", labelSheets.size()));
         btPreviousSheet.setEnabled(currentSheet > 0);
         btNextSheet.setEnabled(currentSheet+1 < labelSheets.size());
+    }
+    
+    /**
+     * Gets the identifier of the button that was used to close this view.
+     * @return the identifier of the button
+     */
+    public String getIdPressedButton() {
+        return idPressedButton;
     }
     
     /**
@@ -241,11 +284,6 @@ public class SimpleLabelSheetSetupDialog extends OkCancelDialog {
      */
     public LabelSheet[] getResultingLabelSheets() {
         return resulingLabelSheets;
-    }
-    
-    protected void handleOk() {
-        resulingLabelSheets = (LabelSheet[]) labelSheets.toArray(new LabelSheet[labelSheets.size()]);
-        hideDialog();
     }
 
     private class ToggleLabelAction extends AbstractAction {
@@ -340,4 +378,5 @@ public class SimpleLabelSheetSetupDialog extends OkCancelDialog {
             return DIMENSION;
         }
     }
+
 }
