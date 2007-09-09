@@ -5,6 +5,8 @@ import java.awt.*;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import nl.gogognome.framework.View;
+
 
 /**
  * This class implements dialog used to show a message to the user. 
@@ -77,7 +79,25 @@ public class MessageDialog extends DialogWithButtons
         this(owner, titleId, t.getMessage(), BT_OK);
         t.printStackTrace();
     }
-    
+
+    /**
+     * Constructor.
+     * 
+     * @param owner the owner of this dialog.
+     * @param titleId the id of the title string.
+     * @param message the message to be shown to the user.
+     * @param buttonIds the ids of the buttons.
+     * @return the dialog that was shown. Use the returned dialog to find out which button was
+     *         used to close the dialog
+     */
+    public static MessageDialog showMessage(View owner, String titleId, String message, String[] buttonIds) {
+        if (owner.getParentDialog() != null) {
+            return new MessageDialog(owner.getParentDialog(), titleId, message, buttonIds);
+        } else {
+            return new MessageDialog(owner.getParentFrame(), titleId, message, buttonIds);
+        }
+    }
+
 	/**
 	 * Shows the dialog.
 	 * @param message the message to be shown. The sequence of the characters
