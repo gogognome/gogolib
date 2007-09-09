@@ -1,5 +1,5 @@
 /*
- * $Id: DefaultLookAndFeel.java,v 1.1 2007-07-26 19:07:57 sanderk Exp $
+ * $Id: DefaultLookAndFeel.java,v 1.2 2007-09-09 19:33:07 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -7,8 +7,12 @@
 
 package nl.gogognome.swing.plaf;
 
+import javax.swing.JTextField;
 import javax.swing.UIDefaults;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.basic.BasicLookAndFeel;
+import javax.swing.plaf.basic.BasicTextFieldUI;
 
 /**
  * This class implements the default look and feel for the
@@ -18,6 +22,15 @@ public class DefaultLookAndFeel extends BasicLookAndFeel {
 
     private static final long serialVersionUID = 1L;
 
+    public static void useDefaultLookAndFeel() {
+//        try {
+//            UIManager.setLookAndFeel(new DefaultLookAndFeel());
+//        } catch (UnsupportedLookAndFeelException e) {
+//            e.printStackTrace();
+//            // Don't let application crash because of an unsupported look and feel.
+//        }
+    }
+    
     /* (non-Javadoc)
      * @see javax.swing.LookAndFeel#getDescription()
      */
@@ -60,6 +73,7 @@ public class DefaultLookAndFeel extends BasicLookAndFeel {
      */
     public UIDefaults getDefaults() {
         UIDefaults defaults = super.getDefaults();
+        defaults.put("TextFieldUI", DefaultTextFieldUI.class.getName());
         defaults.put("TabbedPaneUI", DefaultTabbedPaneUI.class.getName());
         return defaults;
     }
