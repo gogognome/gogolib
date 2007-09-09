@@ -1,26 +1,27 @@
 /*
- * $Id: DateSelectionBean.java,v 1.3 2007-07-29 12:34:14 sanderk Exp $
+ * $Id: DateSelectionBean.java,v 1.4 2007-09-09 19:32:00 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
 package nl.gogognome.beans;
 
-import java.awt.Color;
-import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.swing.InputVerifier;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.LineBorder;
-import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import nl.gogognome.framework.models.AbstractModel;
 import nl.gogognome.framework.models.DateModel;
 import nl.gogognome.framework.models.ModelChangeListener;
+import nl.gogognome.swing.SwingUtils;
 import nl.gogognome.text.TextResource;
 import nl.gogognome.util.DateUtil;
 
@@ -58,7 +59,7 @@ public class DateSelectionBean extends JPanel {
         dateFormat = new SimpleDateFormat(TextResource.getInstance().getString("gen.dateFormat"));
         dateFormat.setLenient(false);
         
-        setLayout(new FlowLayout());
+        setLayout(new GridBagLayout());
         
         tfDate = new JTextField(10);
 
@@ -72,23 +73,14 @@ public class DateSelectionBean extends JPanel {
         };
         dateModel.addModelChangeListener(dateModelChangeListener);
         
-        documentListener = new DocumentListener() {
-
-            public void changedUpdate(DocumentEvent evt) {
-                parseUserInput();
+        tfDate.setInputVerifier(new InputVerifier() {
+            public boolean verify(JComponent input) {
+                return parseInput(tfDate.getText());
             }
-
-            public void insertUpdate(DocumentEvent evt) {
-                parseUserInput();
-            }
-
-            public void removeUpdate(DocumentEvent evt) {
-                parseUserInput();
-            }
-        };
-        
-        tfDate.getDocument().addDocumentListener(documentListener);
-        add(tfDate);
+        });
+        add(tfDate, SwingUtils.createGBConstraints(0,0, 1, 1, 1.0, 0.0, 
+            GridBagConstraints.WEST, GridBagConstraints.NONE,
+            0, 0, 0, 0));
     }
 
     /**
@@ -119,21 +111,25 @@ public class DateSelectionBean extends JPanel {
     /**
      * Parses the date that is entered by the user. If the entered text is a valid
      * date, then the date model is updated.
+     * @param input the user input
+     * @return <code>true</code> if the input represents a valid date or if the input is empty;
+     *         <code>false</code> otherwise
      */
-    private void parseUserInput() {
+    private boolean parseInput(String input) {
+        if (input == null || input.length() == 0) {
+            dateModel.setDate(null, dateModelChangeListener);
+            return true;
+        }
         try {
-            Date date = dateFormat.parse(tfDate.getText());
+            Date date = dateFormat.parse(input);
             if (DateUtil.getField(date, Calendar.YEAR) < 1900) {
                 throw new ParseException("Year is smaller than 1900", 0);
             }
             dateModel.setDate(date, dateModelChangeListener);
             tfDate.setBorder(null);
+            return true;
         } catch (ParseException ignore) {
-            if (tfDate.getText().length() > 0) {
-                tfDate.setBorder(new LineBorder(Color.RED));
-            } else {
-                tfDate.setBorder(null);
-            }
+            return false;
         }
     }
 }
