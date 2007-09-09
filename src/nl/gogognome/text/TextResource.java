@@ -1,5 +1,5 @@
 /*
- * $Id: TextResource.java,v 1.6 2007-08-18 10:48:04 sanderk Exp $
+ * $Id: TextResource.java,v 1.7 2007-09-09 19:33:38 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -149,8 +149,7 @@ public class TextResource {
 	 * @param date the date to be formatted
 	 * @return the formatted date
 	 */
-	public String formatDate(String formatId, Date date)
-	{
+	public String formatDate(String formatId, Date date) {
 	    SimpleDateFormat sdf = new SimpleDateFormat(getString(formatId), locale);
 	    return sdf.format(date);
 	}
