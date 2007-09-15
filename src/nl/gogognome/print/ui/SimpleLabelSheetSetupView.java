@@ -1,5 +1,5 @@
 /*
- * $Id: SimpleLabelSheetSetupView.java,v 1.2 2007-09-15 18:56:05 sanderk Exp $
+ * $Id: SimpleLabelSheetSetupView.java,v 1.3 2007-09-15 19:06:27 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -11,7 +11,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -152,7 +151,7 @@ public class SimpleLabelSheetSetupView extends View {
             }
         }
         
-        JPanel buttonPanel = new ButtonPanel(SwingConstants.RIGHT);
+        ButtonPanel buttonPanel = new ButtonPanel(SwingConstants.CENTER);
         btPreviousSheet = wf.createButton("simplelabelsheetsetupdialog.btPrevSheet", new AbstractAction() {
             public void actionPerformed(ActionEvent event) {
                 if (currentSheet > 0) {
@@ -184,7 +183,7 @@ public class SimpleLabelSheetSetupView extends View {
         sheetPanelWithButtons.add(buttonPanel, BorderLayout.SOUTH);
 
         // Create panel with ok and cancel buttons
-        buttonPanel = new JPanel(new FlowLayout());
+        buttonPanel = new ButtonPanel(SwingConstants.RIGHT);
         JButton okButton = wf.createButton(idOkButton, new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
                 idPressedButton = idOkButton;
