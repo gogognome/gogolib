@@ -1,5 +1,5 @@
 /*
- * $Id: WidgetFactory.java,v 1.6 2007-09-02 19:47:27 sanderk Exp $
+ * $Id: WidgetFactory.java,v 1.7 2007-09-15 18:57:25 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -116,6 +116,12 @@ public class WidgetFactory {
 	 */	
 	public JLabel createLabel(String id) {
 	    JLabel label = new JLabel(textResource.getString(id));
+
+        String s = textResource.getString(id + ".mnemonic");
+        if (s != null && s.length() == 1) {
+            label.setDisplayedMnemonic(s.charAt(0));
+        }
+
 		return label;
 	}
 	
