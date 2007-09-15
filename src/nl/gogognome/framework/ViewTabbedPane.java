@@ -1,10 +1,11 @@
 /*
- * $Id: ViewTabbedPane.java,v 1.5 2007-09-04 19:00:28 sanderk Exp $
+ * $Id: ViewTabbedPane.java,v 1.6 2007-09-15 18:55:41 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
 package nl.gogognome.framework;
 
+import java.awt.Container;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.Iterator;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
 /**
@@ -52,6 +54,7 @@ public class ViewTabbedPane extends JTabbedPane {
         view.doInit();
         addTab(view.getTitle(), view);
         views.add(view);
+        setDefaultButtonForView(view);
     }
 
     /**
@@ -116,4 +119,16 @@ public class ViewTabbedPane extends JTabbedPane {
         views.remove(view);
         super.remove(index);
     }
+    
+    /**
+     * Sets the default button for the view.
+     * @param view the view
+     */
+    private void setDefaultButtonForView(View view) {
+        Container topLevelContainer = getTopLevelAncestor();
+        if (topLevelContainer instanceof JFrame) {
+            ((JFrame) topLevelContainer).getRootPane().setDefaultButton(view.getDefaultButton()); 
+        }
+    }
+
 }
