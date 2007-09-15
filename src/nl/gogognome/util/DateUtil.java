@@ -1,5 +1,5 @@
 /*
- * $Id: DateUtil.java,v 1.2 2007-04-07 15:24:51 sanderk Exp $
+ * $Id: DateUtil.java,v 1.3 2007-09-15 18:58:44 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -16,7 +16,7 @@ import java.util.Date;
 public class DateUtil {
 
     /** Calendar used to perform conversions. */
-    private static Calendar calendar = Calendar.getInstance();
+    private final static Calendar CALENDAR = Calendar.getInstance();
     
     /**
      * Compares two dates up to the day of year, ignoring their time within
@@ -30,14 +30,14 @@ public class DateUtil {
      *          comes after <code>date2</code>. 
      */
     public static int compareDayOfYear(Date date1, Date date2) {
-        synchronized(calendar) {
-		    calendar.setTime(date1);
-		    int year1 = calendar.get(Calendar.YEAR);
-		    int dayOfYear1 = calendar.get(Calendar.DAY_OF_YEAR);
+        synchronized(CALENDAR) {
+		    CALENDAR.setTime(date1);
+		    int year1 = CALENDAR.get(Calendar.YEAR);
+		    int dayOfYear1 = CALENDAR.get(Calendar.DAY_OF_YEAR);
 		    
-		    calendar.setTime(date2);
-		    int year2 = calendar.get(Calendar.YEAR);
-		    int dayOfYear2 = calendar.get(Calendar.DAY_OF_YEAR);
+		    CALENDAR.setTime(date2);
+		    int year2 = CALENDAR.get(Calendar.YEAR);
+		    int dayOfYear2 = CALENDAR.get(Calendar.DAY_OF_YEAR);
 		    
 		    if (year1 < year2) {
 		        return -1;
@@ -61,9 +61,23 @@ public class DateUtil {
      * @return the value of the field
      */
     public static int getField(Date date, int field) {
-        synchronized(calendar) {
-            calendar.setTime(date);
-            return calendar.get(field);
+        synchronized(CALENDAR) {
+            CALENDAR.setTime(date);
+            return CALENDAR.get(field);
+        }
+    }
+    
+    /**
+     * Adds a number of days to a <code>Date</code>.
+     * @param date the <code>Date</code>
+     * @param numDays the number of days
+     * @return the new date
+     */
+    public static Date addDays(Date date, int numDays) {
+        synchronized(CALENDAR) {
+            CALENDAR.setTime(date);
+            CALENDAR.add(Calendar.DATE, numDays);
+            return CALENDAR.getTime();
         }
     }
 }
