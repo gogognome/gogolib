@@ -1,5 +1,5 @@
 /*
- * $Id: CsvFileParser.java,v 1.2 2007-08-08 18:58:07 sanderk Exp $
+ * $Id: CsvFileParser.java,v 1.3 2007-09-15 18:55:13 sanderk Exp $
  *
  * Copyright (C) 2007 Sander Kooijmans
  */
@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * This class parses a comma separated value (CSV) file. It also offers
@@ -19,11 +20,8 @@ import java.util.ArrayList;
  */
 public class CsvFileParser {
 
-    /** The number of the first line to be parsed. */
-    private int nrFirstLine = 0;
-    
-    /** The number of the last line to be parsed. */
-    private int nrLastLine = Integer.MAX_VALUE;
+    /** Contains the indices of the rows to be parsed. */ 
+    private int rowIndices[];
     
     /** The character that separates values in the CSV file. */
     private char separator = ',';
@@ -46,18 +44,25 @@ public class CsvFileParser {
      * @throws IOException if a problem occurs while reading the CSV fie
      */
     public String[][] getValues() throws IOException {
+        if (file == null) {
+            return new String[0][0];
+        }
+        
         BufferedReader reader = new BufferedReader(new FileReader(file));
         ArrayList rows;
-        if (nrLastLine != Integer. MAX_VALUE) {
-            rows = new ArrayList(nrLastLine - nrFirstLine + 1);
-        } else {
-            rows = new ArrayList();
+        rows = new ArrayList(rowIndices != null ? rowIndices.length : 100);
+
+        // Sort row indices. Now we can scan rowIndices from start to end to check line numbers.
+        int rowIndicesIndex = 0;
+        if (rowIndices != null) {
+            Arrays.sort(rowIndices);
         }
         
         int lineNr = 0;
         String line = reader.readLine();
         while (line != null) {
-            if (lineNr >= nrFirstLine && lineNr <= nrLastLine) {
+            if (rowIndices == null || (rowIndicesIndex < rowIndices.length && rowIndices[rowIndicesIndex] == lineNr)) {
+                rowIndicesIndex++;
                 rows.add(splitCsvLine(line));
             }
             line = reader.readLine();
@@ -142,23 +147,19 @@ public class CsvFileParser {
         return sb.toString();
     }
 
-    public int getNrFirstLine() {
-        return nrFirstLine;
-    }
-    public void setNrFirstLine(int nrFirstLine) {
-        this.nrFirstLine = nrFirstLine;
-    }
-    public int getNrLastLine() {
-        return nrLastLine;
-    }
-    public void setNrLastLine(int nrLastLine) {
-        this.nrLastLine = nrLastLine;
-    }
     public char getSeparator() {
         return separator;
     }
     public void setSeparator(char separator) {
         this.separator = separator;
+    }
+
+    public int[] getRowIndices() {
+        return rowIndices;
+    }
+
+    public void setRowIndices(int[] rowIndices) {
+        this.rowIndices = rowIndices;
     }
 
 }
