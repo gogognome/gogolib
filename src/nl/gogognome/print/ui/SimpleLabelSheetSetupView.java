@@ -1,5 +1,5 @@
 /*
- * $Id: SimpleLabelSheetSetupView.java,v 1.1 2007-09-04 19:01:08 sanderk Exp $
+ * $Id: SimpleLabelSheetSetupView.java,v 1.2 2007-09-15 18:56:05 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -29,6 +29,7 @@ import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 
 import nl.gogognome.framework.View;
@@ -36,6 +37,7 @@ import nl.gogognome.print.Label;
 import nl.gogognome.print.LabelSheet;
 import nl.gogognome.print.SimpleLabelSheet;
 import nl.gogognome.swing.ActionWrapper;
+import nl.gogognome.swing.ButtonPanel;
 import nl.gogognome.swing.SwingUtils;
 import nl.gogognome.swing.WidgetFactory;
 import nl.gogognome.text.TextResource;
@@ -150,7 +152,7 @@ public class SimpleLabelSheetSetupView extends View {
             }
         }
         
-        JPanel buttonPanel = new JPanel(new FlowLayout());
+        JPanel buttonPanel = new ButtonPanel(SwingConstants.RIGHT);
         btPreviousSheet = wf.createButton("simplelabelsheetsetupdialog.btPrevSheet", new AbstractAction() {
             public void actionPerformed(ActionEvent event) {
                 if (currentSheet > 0) {
