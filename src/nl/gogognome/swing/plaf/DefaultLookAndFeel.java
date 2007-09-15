@@ -1,5 +1,5 @@
 /*
- * $Id: DefaultLookAndFeel.java,v 1.2 2007-09-09 19:33:07 sanderk Exp $
+ * $Id: DefaultLookAndFeel.java,v 1.3 2007-09-15 18:57:58 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -7,28 +7,27 @@
 
 package nl.gogognome.swing.plaf;
 
-import javax.swing.JTextField;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.plaf.basic.BasicLookAndFeel;
-import javax.swing.plaf.basic.BasicTextFieldUI;
+import javax.swing.plaf.metal.MetalLookAndFeel;
 
 /**
  * This class implements the default look and feel for the
  * gogolib-based projects. 
  */
-public class DefaultLookAndFeel extends BasicLookAndFeel {
+public class DefaultLookAndFeel extends MetalLookAndFeel {
 
     private static final long serialVersionUID = 1L;
 
     public static void useDefaultLookAndFeel() {
-//        try {
-//            UIManager.setLookAndFeel(new DefaultLookAndFeel());
-//        } catch (UnsupportedLookAndFeelException e) {
-//            e.printStackTrace();
-//            // Don't let application crash because of an unsupported look and feel.
-//        }
+        try {
+//            UIManager.setLookAndFeel(new SubstanceLookAndFeel());
+            UIManager.setLookAndFeel(new DefaultLookAndFeel());
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+            // Don't let application crash because of an unsupported look and feel.
+        }
     }
     
     /* (non-Javadoc)
