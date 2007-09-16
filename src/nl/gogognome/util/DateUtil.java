@@ -1,5 +1,5 @@
 /*
- * $Id: DateUtil.java,v 1.3 2007-09-15 18:58:44 sanderk Exp $
+ * $Id: DateUtil.java,v 1.4 2007-09-16 19:53:53 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -79,5 +79,31 @@ public class DateUtil {
             CALENDAR.add(Calendar.DATE, numDays);
             return CALENDAR.getTime();
         }
+    }
+    
+    /**
+     * Gets the difference between two dates in years.
+     * 
+     * @param date1 a date
+     * @param date2 another date
+     * @return date1 minus date2 expressed in years
+     */
+    public static int getDifferenceInYears(Date date1, Date date2) {
+        int year1 = getField(date1, Calendar.YEAR);
+        int month1 = getField(date1, Calendar.MONTH);
+        int year2 = getField(date2, Calendar.YEAR);
+        int month2 = getField(date2, Calendar.MONTH);
+        
+        int diffInYears = year1 - year2;
+        if (month1 < month2) {
+            diffInYears--;
+        } else if (month2 == month1) {
+            int day1 = getField(date1, Calendar.DATE);
+            int day2 = getField(date2, Calendar.DATE);
+            if (day1 < day2) {
+                diffInYears--;
+            }
+        }
+        return diffInYears;
     }
 }
