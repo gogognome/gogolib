@@ -1,11 +1,14 @@
 /*
- * $Id: ViewFrame.java,v 1.1 2007-09-04 19:00:48 sanderk Exp $
+ * $Id: ViewFrame.java,v 1.2 2007-10-19 18:18:33 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
  */
 
 package nl.gogognome.framework;
+
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 
@@ -22,6 +25,13 @@ public class ViewFrame {
     
     public ViewFrame(View view) {
         setView(view);
+        
+        frame.addWindowListener(new WindowAdapter() {
+
+            public void windowClosing(WindowEvent e) {
+                dispose();
+            }
+        });
     }
     
     /**
