@@ -1,5 +1,5 @@
 /*
- * $Id: DateSelectionBean.java,v 1.5 2007-11-11 14:42:01 sanderk Exp $
+ * $Id: DateSelectionBean.java,v 1.6 2007-11-11 18:51:48 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -8,6 +8,7 @@ package nl.gogognome.beans;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.FocusListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -107,13 +108,19 @@ public class DateSelectionBean extends JPanel {
         dateFormat = null;
         tfDate = null;
     }
+
+    /**
+     * @see JComponent#addFocusListener(FocusListener)
+     */
+    public void addFocusListener(FocusListener listener) {
+        tfDate.addFocusListener(listener);
+    }
     
     /**
-     * Gets the focusable component of this bean.
-     * @return the focusable component
+     * @see JComponent#removeFocusListener(FocusListener)
      */
-    public JComponent getFocusableComponent() {
-        return tfDate;
+    public void removeFocusListener(FocusListener listener) {
+        tfDate.removeFocusListener(listener);
     }
     
     /**
