@@ -1,5 +1,5 @@
 /*
- * $Id: LabelPrinter.java,v 1.4 2007-08-18 10:48:48 sanderk Exp $
+ * $Id: LabelPrinter.java,v 1.5 2007-11-11 19:47:34 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -82,11 +82,10 @@ public class LabelPrinter {
             double paperWidth = paper.getWidth();
             double paperHeight = paper.getHeight();
             
-            // TODO: Is this still needed?
             // It seems that under Linux always the size of Letter is used instead of A4.
             // This is a workaround:
-//            paperWidth = (210.0 / 25.4) * 72.0;
-//            paperHeight = (297.0 / 25.4) * 72.0;
+            paperWidth = (210.0 / 25.4) * 72.0;
+            paperHeight = (297.0 / 25.4) * 72.0;
             
             int labelIndex = 0;
             for (int i=0; i<pageIndex; i++) {
