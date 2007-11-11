@@ -1,5 +1,5 @@
 /*
- * $Id: WidgetFactory.java,v 1.7 2007-09-15 18:57:25 sanderk Exp $
+ * $Id: WidgetFactory.java,v 1.8 2007-11-11 19:48:53 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -115,16 +115,30 @@ public class WidgetFactory {
 	 * @return the label.
 	 */	
 	public JLabel createLabel(String id) {
-	    JLabel label = new JLabel(textResource.getString(id));
+		return createLabel(id, null);
+	}
+
+    /**
+     * Creates a label with the specified text. If <code>component != null</code> then this
+     * component receives the focus after the user entered the mnemonic for this label.
+     * 
+     * @param id the id of the text.
+     * @param component the component that receives focus after the mnemonic for the
+     *        label has been entered
+     * @return the label.
+     */ 
+    public JLabel createLabel(String id, JComponent component) {
+        JLabel label = new JLabel(textResource.getString(id));
 
         String s = textResource.getString(id + ".mnemonic");
-        if (s != null && s.length() == 1) {
+        if (s != null && s.length() == 1 && component != null) {
             label.setDisplayedMnemonic(s.charAt(0));
+            label.setLabelFor(component);
         }
 
-		return label;
-	}
-	
+        return label;
+    }
+
 	/**
 	 * Creates a text field. When the created text field gains focus, its
 	 * contents is selected.
