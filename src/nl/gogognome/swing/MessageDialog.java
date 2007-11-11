@@ -1,7 +1,13 @@
 package nl.gogognome.swing;
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dialog;
+import java.awt.Frame;
+import java.awt.GridLayout;
+import java.awt.Window;
 
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -121,11 +127,15 @@ public class MessageDialog extends DialogWithButtons
 
 	/**
 	 * Shows a message dialog.
-	 * @param owner the owner of this dialog.
+	 * @param owner the owner of this dialog. Must be a <code>JDialog</code> or <code>JFrame</code>
 	 * @param titleId the id of the title string.
 	 * @param message the message to be shown to the user.
 	 */
-	public static void showMessage(Frame owner, String titleId, String message) {
-	    new MessageDialog(owner, titleId, message);
+	public static void showMessage(Window owner, String titleId, String message) {
+        if (owner instanceof JDialog) {
+            new MessageDialog((JDialog) owner, titleId, message);
+        } else {
+            new MessageDialog((JFrame) owner, titleId, message);
+        }
 	}
 }
