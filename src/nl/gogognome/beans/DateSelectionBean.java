@@ -1,10 +1,11 @@
 /*
- * $Id: DateSelectionBean.java,v 1.4 2007-09-09 19:32:00 sanderk Exp $
+ * $Id: DateSelectionBean.java,v 1.5 2007-11-11 14:42:01 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
 package nl.gogognome.beans;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.text.ParseException;
@@ -12,10 +13,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import javax.swing.InputVerifier;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.LineBorder;
+import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import nl.gogognome.framework.models.AbstractModel;
@@ -73,15 +75,25 @@ public class DateSelectionBean extends JPanel {
         };
         dateModel.addModelChangeListener(dateModelChangeListener);
         
-        tfDate.setInputVerifier(new InputVerifier() {
-            public boolean verify(JComponent input) {
-                return parseInput(tfDate.getText());
+        documentListener = new DocumentListener() {
+
+            public void changedUpdate(DocumentEvent evt) {
+                parseUserInput();
             }
-        });
+
+            public void insertUpdate(DocumentEvent evt) {
+                parseUserInput();
+            }
+
+            public void removeUpdate(DocumentEvent evt) {
+                parseUserInput();
+            }
+        };
+        
+        tfDate.getDocument().addDocumentListener(documentListener);
         add(tfDate, SwingUtils.createGBConstraints(0,0, 1, 1, 1.0, 0.0, 
             GridBagConstraints.WEST, GridBagConstraints.NONE,
-            0, 0, 0, 0));
-    }
+            0, 0, 0, 0));    }
 
     /**
      * Deinitializes this bean. It will free its resources.
@@ -94,6 +106,14 @@ public class DateSelectionBean extends JPanel {
         dateModel = null;
         dateFormat = null;
         tfDate = null;
+    }
+    
+    /**
+     * Gets the focusable component of this bean.
+     * @return the focusable component
+     */
+    public JComponent getFocusableComponent() {
+        return tfDate;
     }
     
     /**
@@ -111,25 +131,21 @@ public class DateSelectionBean extends JPanel {
     /**
      * Parses the date that is entered by the user. If the entered text is a valid
      * date, then the date model is updated.
-     * @param input the user input
-     * @return <code>true</code> if the input represents a valid date or if the input is empty;
-     *         <code>false</code> otherwise
      */
-    private boolean parseInput(String input) {
-        if (input == null || input.length() == 0) {
-            dateModel.setDate(null, dateModelChangeListener);
-            return true;
-        }
+    private void parseUserInput() {
         try {
-            Date date = dateFormat.parse(input);
+            Date date = dateFormat.parse(tfDate.getText());
             if (DateUtil.getField(date, Calendar.YEAR) < 1900) {
                 throw new ParseException("Year is smaller than 1900", 0);
             }
             dateModel.setDate(date, dateModelChangeListener);
             tfDate.setBorder(null);
-            return true;
         } catch (ParseException ignore) {
-            return false;
+            if (tfDate.getText().length() > 0) {
+                tfDate.setBorder(new LineBorder(Color.RED));
+            } else {
+                tfDate.setBorder(null);
+            }
         }
     }
 }
