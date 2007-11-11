@@ -1,11 +1,11 @@
 /*
- * $Id: View.java,v 1.6 2007-11-11 18:57:53 sanderk Exp $
+ * $Id: View.java,v 1.7 2007-11-11 19:45:52 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
 package nl.gogognome.framework;
 
-import java.awt.Container;
+import java.awt.Window;
 import java.util.ArrayList;
 
 import javax.swing.Action;
@@ -77,7 +77,7 @@ public abstract class View extends JPanel {
      * Returns the parent container of the view.
      * @return the parent container of the view
      */
-    public Container getParent() {
+    public Window getParentWindow() {
         if (parentDialog != null) {
             return parentDialog;
         } else {
