@@ -1,5 +1,5 @@
 /*
- * $Id: ViewDialog.java,v 1.3 2007-09-04 19:00:29 sanderk Exp $
+ * $Id: ViewDialog.java,v 1.4 2007-11-11 19:46:58 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -7,11 +7,10 @@ package nl.gogognome.framework;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dialog;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.KeyboardFocusManager;
 import java.awt.Rectangle;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -22,6 +21,7 @@ import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
@@ -49,20 +49,17 @@ public class ViewDialog {
     
     /**
      * Constructor.
-     * @param owner the owner of this dialog
+     * @param owner the owner of this dialog. Must be a <code>JDialog</code> or a <code>JFrame</code> 
      * @param view the view to be shown in this dialog
      */
-    public ViewDialog(Dialog owner, View view) {
-        initDialog(new JDialog(owner, view.getTitle(), true), view, owner.getBounds());
-    }
-    
-    /**
-     * Constructor.
-     * @param owner the owner of this dialog
-     * @param view the view to be shown in this dialog
-     */
-    public ViewDialog(Frame owner, View view) {
-        initDialog(new JDialog(owner, view.getTitle(), true), view, owner.getBounds());
+    public ViewDialog(Window owner, View view) {
+        if (owner instanceof JDialog) {
+            initDialog(new JDialog((JDialog)owner, view.getTitle(), true), view, owner.getBounds());
+        } else  if (owner instanceof JFrame){
+            initDialog(new JDialog((JFrame)owner, view.getTitle(), true), view, owner.getBounds());
+        } else {
+            throw new IllegalArgumentException("The owner must be a JDialog or a JFrame, but was: " + owner.getClass());
+        }
     }
     
     /**
@@ -122,13 +119,14 @@ public class ViewDialog {
             }
         };
         
+        view.setParentDialog(dialog);
         view.setCloseAction(closeAction);
         view.doInit();
         dialog.getContentPane().add(view, BorderLayout.CENTER);
         
         JButton defaultButton = view.getDefaultButton();
         if (defaultButton != null) {
-            dialog.getRootPane().setDefaultButton(view.getDefaultButton());
+            dialog.getRootPane().setDefaultButton(defaultButton);
         }
     }
     
