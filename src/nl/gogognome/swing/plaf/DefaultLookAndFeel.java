@@ -1,5 +1,5 @@
 /*
- * $Id: DefaultLookAndFeel.java,v 1.3 2007-09-15 18:57:58 sanderk Exp $
+ * $Id: DefaultLookAndFeel.java,v 1.4 2007-11-11 19:49:23 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -22,7 +22,6 @@ public class DefaultLookAndFeel extends MetalLookAndFeel {
 
     public static void useDefaultLookAndFeel() {
         try {
-//            UIManager.setLookAndFeel(new SubstanceLookAndFeel());
             UIManager.setLookAndFeel(new DefaultLookAndFeel());
         } catch (UnsupportedLookAndFeelException e) {
             e.printStackTrace();
@@ -74,6 +73,7 @@ public class DefaultLookAndFeel extends MetalLookAndFeel {
         UIDefaults defaults = super.getDefaults();
         defaults.put("TextFieldUI", DefaultTextFieldUI.class.getName());
         defaults.put("TabbedPaneUI", DefaultTabbedPaneUI.class.getName());
+        defaults.put("TableUI", DefaultTableUI.class.getName());
         return defaults;
     }
 }
