@@ -1,12 +1,11 @@
 /*
- * $Id: ViewTabbedPane.java,v 1.6 2007-09-15 18:55:41 sanderk Exp $
+ * $Id: ViewTabbedPane.java,v 1.7 2007-11-11 18:59:46 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
 package nl.gogognome.framework;
 
 import java.awt.Container;
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -27,13 +26,13 @@ public class ViewTabbedPane extends JTabbedPane {
     private ArrayList views = new ArrayList();
     
     /** The frame that contains this tabbed pane. */
-    private Frame parentFrame;
+    private JFrame parentFrame;
     
     /**
      * Constructor.
      * @param parentFrame the frame that contains this tabbed pane.
      */
-    public ViewTabbedPane(Frame parentFrame) {
+    public ViewTabbedPane(JFrame parentFrame) {
         super();
         this.parentFrame = parentFrame;
     }
