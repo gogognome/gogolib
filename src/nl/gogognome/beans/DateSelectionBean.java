@@ -1,5 +1,5 @@
 /*
- * $Id: DateSelectionBean.java,v 1.6 2007-11-11 18:51:48 sanderk Exp $
+ * $Id: DateSelectionBean.java,v 1.7 2007-11-22 20:46:10 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -146,12 +146,12 @@ public class DateSelectionBean extends JPanel {
                 throw new ParseException("Year is smaller than 1900", 0);
             }
             dateModel.setDate(date, dateModelChangeListener);
-            tfDate.setBorder(null);
+            tfDate.setBorder(new LineBorder(Color.GRAY));
         } catch (ParseException ignore) {
             if (tfDate.getText().length() > 0) {
                 tfDate.setBorder(new LineBorder(Color.RED));
             } else {
-                tfDate.setBorder(null);
+                tfDate.setBorder(new LineBorder(Color.GRAY));
             }
         }
     }
