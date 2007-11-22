@@ -1,5 +1,5 @@
 /*
- * $Id: DefaultTableUI.java,v 1.2 2007-11-19 19:45:18 sanderk Exp $
+ * $Id: DefaultTableUI.java,v 1.3 2007-11-22 20:46:27 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -83,7 +83,9 @@ public class DefaultTableUI extends BasicTableUI {
         
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             Component component = wrappedRenderer.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            component.setBackground(row % 2 == 0 ? Color.WHITE : COLOR_ODD_ROWS);
+            if (!isSelected) {
+                component.setBackground(row % 2 == 0 ? Color.WHITE : COLOR_ODD_ROWS);
+            }
             return component;
         }
         
