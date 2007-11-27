@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTabbedPane.java,v 1.7 2007-11-11 18:59:46 sanderk Exp $
+ * $Id: ViewTabbedPane.java,v 1.8 2007-11-27 21:15:47 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -23,7 +23,7 @@ import javax.swing.JTabbedPane;
 public class ViewTabbedPane extends JTabbedPane {
 
     /** Contains the views that are added to this tabbed pane. */
-    private ArrayList views = new ArrayList();
+    private ArrayList<View> views = new ArrayList<View>();
     
     /** The frame that contains this tabbed pane. */
     private JFrame parentFrame;
@@ -73,12 +73,9 @@ public class ViewTabbedPane extends JTabbedPane {
      * @param view the view
      */
     public void selectView(View view) {
-        int count = getTabCount();
-        for (int i=0; i<count; i++) {
-            if (getComponentAt(i).equals(view)) {
-                setSelectedIndex(i);
-                return;
-            }
+        int index = getIndexOfView(view);
+        if (index != -1) {
+            setSelectedIndex(index);
         }
     }
     
@@ -99,13 +96,14 @@ public class ViewTabbedPane extends JTabbedPane {
      *         <code>false</code> otherwise
      */
     public boolean hasView(View view) {
-        int count = getTabCount();
-        for (int i=0; i<count; i++) {
-            if (getComponentAt(i).equals(view)) {
-                return true;
-            }
+        return getIndexOfView(view) != -1;
+    }
+    
+    public void remove(View view) {
+        int index = getIndexOfView(view);
+        if (index != -1) {
+            remove(index);
         }
-        return false;
     }
     
     /**
@@ -130,4 +128,18 @@ public class ViewTabbedPane extends JTabbedPane {
         }
     }
 
+    /**
+     * Gets the index of the view in the tabbed pane.
+     * @param view the view
+     * @return the index or -1 if the view is not part of this tabbed pane
+     */
+    private int getIndexOfView(View view) {
+        int count = getTabCount();
+        for (int i=0; i<count; i++) {
+            if (getComponentAt(i).equals(view)) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }
