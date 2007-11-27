@@ -1,5 +1,5 @@
 /*
- * $Id: SwingUtils.java,v 1.2 2006-12-07 20:17:59 sanderk Exp $
+ * $Id: SwingUtils.java,v 1.3 2007-11-27 21:16:45 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -63,14 +63,14 @@ public class SwingUtils {
             int gridx, int gridy) {
         return createGBConstraints(gridx, gridy, 1, 1, 1.0, 0.0, 
                 GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
-                0, 0, 0, 0);
+                0, 0, 3, 0);
     }
 
     public static GridBagConstraints createLabelGBConstraints(
             int gridx, int gridy) {
         return createGBConstraints(gridx, gridy, 1, 1, 0.0, 0.0, 
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
-                0, 0, 0, 10);
+                0, 0, 3, 10);
     }
 
     public static GridBagConstraints createPanelGBConstraints(
