@@ -28,8 +28,7 @@ public class MessageDialog extends DialogWithButtons
 	 * @param titleId the id of the title string.
 	 * @param message the message to be shown to the user.
 	 */
-	public MessageDialog(Frame owner, String titleId, String message) 
-	{
+	public MessageDialog(Frame owner, String titleId, String message) {
 		this(owner, titleId, message, BT_OK );
 	}
 
@@ -41,8 +40,7 @@ public class MessageDialog extends DialogWithButtons
 	 * @param message the message to be shown to the user.
 	 * @param buttonIds the ids of the buttons.
 	 */
-	public MessageDialog(Frame owner, String titleId, String message, String[] buttonIds) 
-	{
+	public MessageDialog(Frame owner, String titleId, String message, String[] buttonIds) {
 		super(owner, titleId, buttonIds );
 		showDialog(message);
 	}
@@ -54,8 +52,7 @@ public class MessageDialog extends DialogWithButtons
 	 * @param titleId the id of the title string.
 	 * @param message the message to be shown to the user.
 	 */
-	public MessageDialog(Dialog owner, String titleId, String message) 
-	{
+	public MessageDialog(Dialog owner, String titleId, String message) {
 		this(owner, titleId, message, BT_OK);
 	}
 
@@ -67,8 +64,7 @@ public class MessageDialog extends DialogWithButtons
 	 * @param message the message to be shown to the user.
 	 * @param buttonIds the ids of the buttons.
 	 */
-	public MessageDialog(Dialog owner, String titleId, String message, String[] buttonIds) 
-	{
+	public MessageDialog(Dialog owner, String titleId, String message, String[] buttonIds) {
 		super(owner, titleId, buttonIds);
 		showDialog(message);
 	}
@@ -80,8 +76,7 @@ public class MessageDialog extends DialogWithButtons
      * @param titleId the id of the title string.
      * @param t throwable whose message will be shown to the user.
      */
-    public MessageDialog(Frame owner, String titleId, Throwable t) 
-    {
+    public MessageDialog(Frame owner, String titleId, Throwable t) {
         this(owner, titleId, t.getMessage(), BT_OK);
         t.printStackTrace();
     }
@@ -131,11 +126,26 @@ public class MessageDialog extends DialogWithButtons
 	 * @param titleId the id of the title string.
 	 * @param message the message to be shown to the user.
 	 */
-	public static void showMessage(Window owner, String titleId, String message) {
+	public static MessageDialog showMessage(Window owner, String titleId, String message) {
         if (owner instanceof JDialog) {
-            new MessageDialog((JDialog) owner, titleId, message);
+            return new MessageDialog((JDialog) owner, titleId, message);
         } else {
-            new MessageDialog((JFrame) owner, titleId, message);
+            return new MessageDialog((JFrame) owner, titleId, message);
         }
 	}
+    
+    /**
+     * Shows a message dialog.
+     * @param owner the owner of this dialog.
+     * @param titleId the id of the title string.
+     * @param message the message to be shown to the user.
+     */
+    public static MessageDialog showMessage(View owner, String titleId, String message) {
+        if (owner.getParentDialog() != null) {
+            return new MessageDialog(owner.getParentDialog(), titleId, message);
+        } else {
+            return new MessageDialog(owner.getParentFrame(), titleId, message);
+        }
+    }
+    
 }
