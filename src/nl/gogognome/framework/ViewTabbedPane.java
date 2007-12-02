@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTabbedPane.java,v 1.8 2007-11-27 21:15:47 sanderk Exp $
+ * $Id: ViewTabbedPane.java,v 1.9 2007-12-02 11:19:08 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -84,7 +84,7 @@ public class ViewTabbedPane extends JTabbedPane {
         for (Iterator iter = views.iterator(); iter.hasNext();) {
             View view = (View) iter.next();
             view.doClose();
-            remove(view);
+            super.remove(view);
         }
         views.clear();
     }
