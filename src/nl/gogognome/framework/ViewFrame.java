@@ -1,5 +1,5 @@
 /*
- * $Id: ViewFrame.java,v 1.2 2007-10-19 18:18:33 sanderk Exp $
+ * $Id: ViewFrame.java,v 1.3 2008-01-10 19:15:47 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -7,9 +7,12 @@
 
 package nl.gogognome.framework;
 
+import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JFrame;
 
 /**
@@ -45,7 +48,14 @@ public class ViewFrame {
         }
         removeView();
         
+        Action closeAction = new AbstractAction() {
+            public void actionPerformed(ActionEvent event) {
+                dispose();
+            }
+        };
+        
         this.view = view;
+        view.setCloseAction(closeAction);
         view.doInit();
         frame.getContentPane().add(view);
         if (frame.isVisible()) {
