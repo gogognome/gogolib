@@ -1,5 +1,5 @@
 /*
- * $Id: AmountFormat.java,v 1.1 2006-11-20 18:41:08 sanderk Exp $
+ * $Id: AmountFormat.java,v 1.2 2008-01-10 21:19:26 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -25,17 +25,15 @@ public class AmountFormat
      * Constructor.
      * @param locale the locale used to format amounts
      */
-    public AmountFormat(Locale locale)
-    {
+    public AmountFormat(Locale locale) {
         this.locale = locale;
     }
     
 	private final static String EMPTY_STRING = "";
 	
-	private final static HashMap SYMBOL_TO_CURRENCY_MAP = new HashMap();
+	private final static HashMap<String, Currency> SYMBOL_TO_CURRENCY_MAP = new HashMap<String, Currency>();
 	
-	static 
-	{
+	static {
 	    SYMBOL_TO_CURRENCY_MAP.put("EUR", Currency.getInstance("EUR"));
 	}
 	
@@ -56,9 +54,8 @@ public class AmountFormat
 	 * @param amount the amount to be formatted
 	 * @return the formatted amount
 	 */
-	public String formatAmount(Amount amount)
-	{
-        return formatAmount(amount, amount.getCurrency().getSymbol());
+	public String formatAmount(Amount amount) {
+        return formatAmount(amount, amount.getCurrency().getSymbol(locale));
 	}
 	
 	/**
@@ -67,9 +64,8 @@ public class AmountFormat
      * @param currencySymbol the currency symbol used as prefix of the formatted amount
 	 * @return the formatted amount
 	 */
-	public String formatAmount(Amount amount, String currencySymbol)
-	{
-        StringBuffer sb = new StringBuffer(amount.toString());
+	public String formatAmount(Amount amount, String currencySymbol) {
+        StringBuilder sb = new StringBuilder(amount.toString());
         int firstDigitIndex = 0;
         if (sb.charAt(0) == '-')
         {
@@ -118,7 +114,7 @@ public class AmountFormat
     public Amount parse(String amountString)
     	throws ParseException
     {
-        StringBuffer sb = new StringBuffer(amountString);
+        StringBuilder sb = new StringBuilder(amountString);
         try
         {
 	        int index = 0;
@@ -129,7 +125,7 @@ public class AmountFormat
 	        }
 	        
 	        int currencyIndex = index;
-	        StringBuffer currencySymbol = new StringBuffer(10);
+	        StringBuilder currencySymbol = new StringBuilder(10);
 	        while (Character.isLetter(sb.charAt(index)))
 	        {
 	            currencySymbol.append(sb.charAt(index));
@@ -170,15 +166,11 @@ public class AmountFormat
      * @return the amount
      * @throws ParseException if the string does not contain a valid amount
      */
-    public Amount parse(String amountString, Currency currency)
-    	throws ParseException
-    {
-        StringBuffer sb = new StringBuffer(amountString);
-        try
-        {
+    public Amount parse(String amountString, Currency currency) throws ParseException {
+        StringBuilder sb = new StringBuilder(amountString);
+        try {
 	        int index = 0;
-	        if (amountString.startsWith("-/- "))
-	        {
+	        if (amountString.startsWith("-/- ")) {
 	            sb.replace(0, 4, "-");
 	            index++;
 	        }
@@ -203,8 +195,7 @@ public class AmountFormat
      * @param symbol the symbol
      * @return the currency or <code>null</code> if no currency was found.
      */
-    private Currency getCurrency(String symbol)
-    {
-        return (Currency)SYMBOL_TO_CURRENCY_MAP.get(symbol);
+    private Currency getCurrency(String symbol) {
+        return SYMBOL_TO_CURRENCY_MAP.get(symbol);
     }
 }
