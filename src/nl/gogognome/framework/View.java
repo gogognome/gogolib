@@ -1,5 +1,5 @@
 /*
- * $Id: View.java,v 1.7 2007-11-11 19:45:52 sanderk Exp $
+ * $Id: View.java,v 1.8 2008-01-10 19:15:24 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -22,7 +22,7 @@ import javax.swing.JPanel;
 public abstract class View extends JPanel {
 
     /** The subscribed listeners. */
-    private ArrayList listeners = new ArrayList();
+    private ArrayList<ViewListener> listeners = new ArrayList<ViewListener>();
     
     /** 
      * This action closes the view. The action will be set before the view
@@ -123,7 +123,7 @@ public abstract class View extends JPanel {
      */
     void doClose() {
         onClose();
-        ViewListener[] tempListeners = (ViewListener[]) listeners.toArray(new ViewListener[listeners.size()]);
+        ViewListener[] tempListeners = listeners.toArray(new ViewListener[listeners.size()]);
         for (int i = 0; i < tempListeners.length; i++) {
             tempListeners[i].onViewClosed(this);
         }
