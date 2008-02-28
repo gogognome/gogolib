@@ -1,5 +1,5 @@
 /*
- * $Id: TableSorter.java,v 1.1 2007-11-19 19:45:28 sanderk Exp $
+ * $Id: TableSorter.java,v 1.2 2008-02-28 20:39:58 sanderk Exp $
  *
  * Obtained from http://java.sun.com/docs/books/tutorial/uiswing/components/example-1dot4/TableSorter.java
  */
@@ -66,8 +66,7 @@ import javax.swing.table.*;
  * @author Parwinder Sekhon
  * @version 2.0 02/27/04
  */
-
-public class TableSorter extends AbstractTableModel {
+class TableSorter extends AbstractTableModel {
     protected TableModel tableModel;
 
     public static final int DESCENDING = -1;
@@ -255,6 +254,10 @@ public class TableSorter extends AbstractTableModel {
         return modelToView;
     }
 
+    int viewIndex(int modelIndex) {
+        return getModelToView()[modelIndex];
+    }
+    
     // TableModel interface methods 
 
     public int getRowCount() {
