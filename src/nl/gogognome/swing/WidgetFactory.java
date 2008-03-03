@@ -1,5 +1,5 @@
 /*
- * $Id: WidgetFactory.java,v 1.8 2007-11-11 19:48:53 sanderk Exp $
+ * $Id: WidgetFactory.java,v 1.9 2008-03-03 20:06:11 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -7,11 +7,22 @@
 
 package nl.gogognome.swing;
 
-import java.awt.event.*;
+import java.awt.event.ActionListener;
 import java.lang.reflect.Field;
 import java.net.URL;
 
-import javax.swing.*;
+import javax.swing.Action;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 
 import nl.gogognome.text.TextResource;
 
@@ -273,6 +284,15 @@ public class WidgetFactory {
         } else {
             return new ImageIcon(iconUrl);
         }
+    }
+    
+    /**
+     * Creates a table component that allows the user to sort its rows.
+     * @param tableModel the table model
+     * @return the table component
+     */
+    public SortedTable createSortedTable(SortedTableModel tableModel) {
+        return new SortedTableImpl(tableModel);
     }
     
     /**
