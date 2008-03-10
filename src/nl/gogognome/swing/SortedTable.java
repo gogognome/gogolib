@@ -1,5 +1,5 @@
 /*
- * $Id: SortedTable.java,v 1.1 2008-03-03 20:06:11 sanderk Exp $
+ * $Id: SortedTable.java,v 1.2 2008-03-10 21:16:51 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -31,5 +31,10 @@ public interface SortedTable {
      * @return the {@link JComponent}
      */
     public JComponent getComponent();
-    
+ 
+    /**
+     * Sets the title for this table.
+     * @param title the title
+     */
+    public void setTitle(String title);
 }

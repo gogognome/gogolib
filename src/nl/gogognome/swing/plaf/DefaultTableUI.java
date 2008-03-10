@@ -1,5 +1,5 @@
 /*
- * $Id: DefaultTableUI.java,v 1.3 2007-11-22 20:46:27 sanderk Exp $
+ * $Id: DefaultTableUI.java,v 1.4 2008-03-10 21:16:51 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -7,8 +7,6 @@
 
 package nl.gogognome.swing.plaf;
 
-import java.awt.Color;
-import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashSet;
@@ -29,9 +27,6 @@ import sun.swing.DefaultLookup;
  */
 public class DefaultTableUI extends BasicTableUI {
     
-    /** Background color for the odd rows. */
-    private final static Color COLOR_ODD_ROWS = new Color(240, 240, 255);
-    
     public static ComponentUI createUI(JComponent c) {
         return new DefaultTableUI();
     }
@@ -39,7 +34,9 @@ public class DefaultTableUI extends BasicTableUI {
     public void installUI(JComponent c) {
         super.installUI(c);
         JTable table = (JTable) c;
-        HashSet classes = new HashSet();
+
+        // Install alternating background renderer for the columns.
+        HashSet<Class<?>> classes = new HashSet<Class<?>>();
         for (int col=0; col<table.getColumnCount(); col++) {
             Class clazz = table.getColumnClass(col);
             if (!classes.contains(clazz)) {
@@ -67,27 +64,5 @@ public class DefaultTableUI extends BasicTableUI {
         super.installKeyboardActions();
         InputMap inputMap = (InputMap)DefaultLookup.get(table, this, "Table.ancestorInputMap"); 
         inputMap.remove(KeyStroke.getKeyStroke("ENTER"));
-    }
-    
-    /**
-     * This class wraps a {@link TableCellRenderer}. It uses the wrapped renderer to obtain
-     * a table cell renderer component and sets the background color of that component alternatingly.
-     */
-    private static class AlternatingBackgroundRenderer implements TableCellRenderer {
-
-        private TableCellRenderer wrappedRenderer;
-        
-        public AlternatingBackgroundRenderer(TableCellRenderer wrappedRenderer) {
-            this.wrappedRenderer = wrappedRenderer;
-        }
-        
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            Component component = wrappedRenderer.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            if (!isSelected) {
-                component.setBackground(row % 2 == 0 ? Color.WHITE : COLOR_ODD_ROWS);
-            }
-            return component;
-        }
-        
     }
 }

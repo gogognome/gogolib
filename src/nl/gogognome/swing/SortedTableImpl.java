@@ -1,5 +1,5 @@
 /*
- * $Id: SortedTableImpl.java,v 1.1 2008-03-03 20:06:11 sanderk Exp $
+ * $Id: SortedTableImpl.java,v 1.2 2008-03-10 21:16:51 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -8,11 +8,18 @@
 package nl.gogognome.swing;
 
 import javax.swing.JComponent;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
+
+import nl.gogognome.swing.plaf.AlternatingBackgroundRenderer;
+import nl.gogognome.swing.plaf.DefaultTableUI;
 
 /**
  * This class implements a table that allows the user to sort the columns.
@@ -30,6 +37,9 @@ class SortedTableImpl implements SortedTable {
     /** The actual table. */
     private JTable table;
 
+    /** The scroll pane that contains the table. */
+    private JScrollPane scrollPane;
+    
     /** 
      * The selection model. The row numbers in the selection model refer to the unsorted rows.
      */
@@ -54,16 +64,21 @@ class SortedTableImpl implements SortedTable {
         for (int i=0; i<tableModel.getColumnCount(); i++) {
             TableCellRenderer renderer = tableModel.getRendererForColumn(i);
             if (renderer != null) {
-                columnModel.getColumn(i).setCellRenderer(renderer);
+                columnModel.getColumn(i).setCellRenderer(new AlternatingBackgroundRenderer(renderer));
             }
         }
+
+        // Install the UI explicitly, because initially it was set when the table had no model.
+        new DefaultTableUI().installUI(table);
+
+        scrollPane = new JScrollPane(table);
     }
 
     /**
      * @see SortedTable#getComponent()
      */
     public JComponent getComponent() {
-        return table;
+        return scrollPane;
     }
 
     /**
@@ -71,6 +86,13 @@ class SortedTableImpl implements SortedTable {
      */
     public ListSelectionModel getSelectionModel() {
         return selectionModel;
+    }
+    
+    /**
+     * @see SortedTable#setTitle(String)
+     */
+    public void setTitle(String title) {
+        scrollPane.setBorder(new CompoundBorder(new TitledBorder(title), new EmptyBorder(5, 5, 5, 5)));
     }
     
     private class ListSelectionModelWrapper implements ListSelectionModel {
