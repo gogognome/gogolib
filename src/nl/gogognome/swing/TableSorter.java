@@ -1,5 +1,5 @@
 /*
- * $Id: TableSorter.java,v 1.3 2008-03-10 21:16:51 sanderk Exp $
+ * $Id: TableSorter.java,v 1.4 2008-03-16 16:31:20 sanderk Exp $
  *
  * Obtained from http://java.sun.com/docs/books/tutorial/uiswing/components/example-1dot4/TableSorter.java
  */
@@ -156,7 +156,7 @@ class TableSorter extends AbstractTableModel {
     }
 
     public boolean isSorting() {
-        return sortingColumns.size() != 0;
+        return !sortingColumns.isEmpty();
     }
 
     private Directive getDirective(int column) {
