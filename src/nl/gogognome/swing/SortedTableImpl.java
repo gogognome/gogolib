@@ -1,11 +1,13 @@
 /*
- * $Id: SortedTableImpl.java,v 1.2 2008-03-10 21:16:51 sanderk Exp $
+ * $Id: SortedTableImpl.java,v 1.3 2008-03-16 16:32:31 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
  */
 
 package nl.gogognome.swing;
+
+import java.awt.Component;
 
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
@@ -16,6 +18,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import nl.gogognome.swing.plaf.AlternatingBackgroundRenderer;
@@ -59,12 +62,23 @@ class SortedTableImpl implements SortedTable {
         
         table.setRowSelectionAllowed(true);
         table.setColumnSelectionAllowed(false);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         
         TableColumnModel columnModel = table.getColumnModel();
-        for (int i=0; i<tableModel.getColumnCount(); i++) {
+        
+        int width = 0;
+        int nrCols = tableModel.getColumnCount();
+        for (int i=0; i<nrCols; i++) {
+            // Set column width
+            int colWidth = tableModel.getColumnWidth(i);
+            TableColumn column = columnModel.getColumn(i); 
+            column.setPreferredWidth(colWidth);
+            width += colWidth;
+            
+            // If present, set the table cell renderer
             TableCellRenderer renderer = tableModel.getRendererForColumn(i);
             if (renderer != null) {
-                columnModel.getColumn(i).setCellRenderer(new AlternatingBackgroundRenderer(renderer));
+                column.setCellRenderer(new AlternatingBackgroundRenderer(renderer));
             }
         }
 
@@ -240,5 +254,22 @@ class SortedTableImpl implements SortedTable {
             wrappedModel.setValueIsAdjusting(valueIsAdjusting);
         }
         
+    }
+
+    /**
+     * @see SortedTable#getFocusableComponent()
+     */
+    public Component getFocusableComponent() {
+        return table;
+    }
+
+    /**
+     * @see SortedTable#selectFirstRow()
+     */
+    public void selectFirstRow() {
+        if (tableSorter.getRowCount() > 0) {
+            table.getSelectionModel().clearSelection();
+            table.getSelectionModel().setSelectionInterval(0, 0);
+        }
     }
 }

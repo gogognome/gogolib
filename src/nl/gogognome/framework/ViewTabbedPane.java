@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTabbedPane.java,v 1.9 2007-12-02 11:19:08 sanderk Exp $
+ * $Id: ViewTabbedPane.java,v 1.10 2008-03-16 16:32:31 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -14,6 +14,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 
 /**
  * This class implements a tabbed pane that can hold <code>View</code>s.
@@ -54,6 +55,11 @@ public class ViewTabbedPane extends JTabbedPane {
         addTab(view.getTitle(), view);
         views.add(view);
         setDefaultButtonForView(view);
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                view.requestFocusInWindow();
+            }
+        });
     }
 
     /**

@@ -1,5 +1,5 @@
 /*
- * $Id: SortedTable.java,v 1.2 2008-03-10 21:16:51 sanderk Exp $
+ * $Id: SortedTable.java,v 1.3 2008-03-16 16:32:31 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -7,6 +7,7 @@
 
 package nl.gogognome.swing;
 
+import java.awt.Component;
 import java.awt.Container;
 
 import javax.swing.JComponent;
@@ -37,4 +38,15 @@ public interface SortedTable {
      * @param title the title
      */
     public void setTitle(String title);
+    
+    /**
+     * Gets the component that can receive the focus.
+     * @return the focusable component
+     */
+    public Component getFocusableComponent();
+    
+    /**
+     * If the table is not empty, then this method selects the first row.
+     */
+    public void selectFirstRow();
 }
