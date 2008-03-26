@@ -1,5 +1,5 @@
 /*
- * $Id: TableSorter.java,v 1.4 2008-03-16 16:31:20 sanderk Exp $
+ * $Id: TableSorter.java,v 1.5 2008-03-26 21:47:26 sanderk Exp $
  *
  * Obtained from http://java.sun.com/docs/books/tutorial/uiswing/components/example-1dot4/TableSorter.java
  */
@@ -75,18 +75,28 @@ class TableSorter extends AbstractTableModel {
 
     private static Directive EMPTY_DIRECTIVE = new Directive(-1, NOT_SORTED);
 
+    /** Comparator for objects that implement the {@link {@link Comparable} interface. */
     public static final Comparator<Object> COMPARABLE_COMAPRATOR = new Comparator<Object>() {
         @SuppressWarnings("unchecked")
         public int compare(Object o1, Object o2) {
             return ((Comparable<Object>) o1).compareTo(o2);
         }
     };
+    
+    /** Comparator that compares the string representations of the objects. */
     public static final Comparator<Object> LEXICAL_COMPARATOR = new Comparator<Object>() {
         public int compare(Object o1, Object o2) {
             return o1.toString().compareTo(o2.toString());
         }
     };
 
+    /** Comparator that compares the string representation of the objects ignoring the case. */
+    public static final Comparator<Object> CASE_INSENSITIVE_COMPARATOR = new Comparator<Object>() {
+        public int compare(Object o1, Object o2) {
+            return o1.toString().compareToIgnoreCase(o2.toString());
+        }
+    };
+    
     private Row[] viewToModel;
     private int[] modelToView;
 
@@ -218,6 +228,9 @@ class TableSorter extends AbstractTableModel {
         Comparator<Object> comparator = columnComparators.get(columnType);
         if (comparator != null) {
             return comparator;
+        }
+        if (String.class.equals(columnType)) {
+            return CASE_INSENSITIVE_COMPARATOR;
         }
         if (Comparable.class.isAssignableFrom(columnType)) {
             return COMPARABLE_COMAPRATOR;

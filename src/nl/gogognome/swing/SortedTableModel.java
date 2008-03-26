@@ -1,11 +1,13 @@
 /*
- * $Id: SortedTableModel.java,v 1.1 2008-03-03 20:06:11 sanderk Exp $
+ * $Id: SortedTableModel.java,v 1.2 2008-03-26 21:47:26 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
  */
 
 package nl.gogognome.swing;
+
+import java.util.Comparator;
 
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
@@ -29,4 +31,11 @@ public interface SortedTableModel extends TableModel {
      * @return the renderer or <code>null</code>
      */
     public TableCellRenderer getRendererForColumn(int column);
+    
+    /**
+     * Gets the comparator for the specified column.
+     * @param column the column index
+     * @return the comparator or <code>null</code> if the default comparator must be used.
+     */
+    public Comparator<Object> getComparator(int column); 
 }
