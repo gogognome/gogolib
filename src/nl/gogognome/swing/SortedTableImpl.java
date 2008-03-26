@@ -1,5 +1,5 @@
 /*
- * $Id: SortedTableImpl.java,v 1.3 2008-03-16 16:32:31 sanderk Exp $
+ * $Id: SortedTableImpl.java,v 1.4 2008-03-26 21:46:19 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -86,6 +86,7 @@ class SortedTableImpl implements SortedTable {
         new DefaultTableUI().installUI(table);
 
         scrollPane = new JScrollPane(table);
+        scrollPane.setOpaque(false);
     }
 
     /**
