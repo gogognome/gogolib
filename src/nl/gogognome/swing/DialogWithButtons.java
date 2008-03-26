@@ -1,5 +1,5 @@
 /*
- * $Id: DialogWithButtons.java,v 1.10 2007-09-02 19:48:19 sanderk Exp $
+ * $Id: DialogWithButtons.java,v 1.11 2008-03-26 21:45:53 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -13,6 +13,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
 
+import nl.gogognome.framework.View;
 import nl.gogognome.swing.WidgetFactory;
 import nl.gogognome.text.TextResource;
 
@@ -56,11 +57,9 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
 	 * @param titleId the id of the title string
 	 * @param buttonIds the ids of the buttons.
 	 */
-	protected DialogWithButtons( Frame frame, String titleId, String[] buttonIds ) 
-	{
-		initDialog( new JDialog( frame,
-		    TextResource.getInstance().getString(titleId), true), buttonIds,
-			frame.getBounds() );
+	protected DialogWithButtons(Frame frame, String titleId, String[] buttonIds) {
+		initDialog(new JDialog(frame,
+		    TextResource.getInstance().getString(titleId), true), buttonIds, frame.getBounds());
 	}
 
 	/**
@@ -69,13 +68,30 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
 	 * @param titleId the id of the title string
 	 * @param buttonIds the ids of the buttons.
 	 */
-	protected DialogWithButtons( Dialog dialog, String titleId, String[] buttonIds ) 
-	{
-		initDialog( new JDialog( dialog, 
+	protected DialogWithButtons(Dialog dialog, String titleId, String[] buttonIds) {
+		initDialog(new JDialog(dialog, 
 		    TextResource.getInstance().getString(titleId), true), buttonIds,
-			dialog.getBounds() );
+			dialog.getBounds());
 	}
 
+    /**
+     * Creates a dialog with one or more buttons.
+     * @param view the view that owns this dialog. 
+     * @param titleId the id of the title string
+     * @param buttonIds the ids of the buttons.
+     */
+    protected DialogWithButtons(View view, String titleId, String[] buttonIds) {
+        if (view.getParentFrame() != null) {
+            initDialog(new JDialog(view.getParentFrame(),
+                TextResource.getInstance().getString(titleId), true), 
+                buttonIds, view.getParentFrame().getBounds());
+        } else {
+            initDialog(new JDialog(view.getParentDialog(), 
+                TextResource.getInstance().getString(titleId), true), buttonIds,
+                view.getParentDialog().getBounds());
+        }
+    }
+    
 	/**
 	 * Initializes the dialog. The buttons are added to the dialog and the dialog is
 	 * centered in its parent dialog or frame.
@@ -84,12 +100,11 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
 	 * @param buttonIds the ids of the button labels.
 	 * @param parentBounds the bounds of the parent dialog or window.
 	 */
-	private void initDialog( JDialog dialog, String buttonIds[], Rectangle parentBounds ) {
+	private void initDialog(JDialog dialog, String buttonIds[], Rectangle parentBounds) {
 		this.dialog = dialog;
 		this.parentBounds = parentBounds; 
 		buttons = new JButton[buttonIds.length]; 
-		for (int i=0; i<buttonIds.length; i++) 
-		{
+		for (int i=0; i<buttonIds.length; i++) {
 			buttons[i] = WidgetFactory.getInstance().createButton(buttonIds[i], null);
 			buttons[i].addActionListener(this);
 		}

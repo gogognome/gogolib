@@ -2,6 +2,8 @@ package nl.gogognome.swing;
 
 import java.awt.*;
 
+import nl.gogognome.framework.View;
+
 
 /**
  * This class implements a dialog with two buttons: OK and Cancel.
@@ -23,8 +25,7 @@ public abstract class OkCancelDialog extends DialogWithButtons {
 	 * @param titleId the id of the title string.
 	 * @param buttonIds the ids of the buttons.
 	 */
-	protected OkCancelDialog( Frame frame, String titleId ) 
-	{
+	protected OkCancelDialog(Frame frame, String titleId) {
 		super(frame, titleId, BT_OK_CANCEL);
 	}
 
@@ -34,10 +35,19 @@ public abstract class OkCancelDialog extends DialogWithButtons {
 	 * @param titleId the id of the title string.
 	 * @param buttonIds the ids of the buttons.
 	 */
-	protected OkCancelDialog( Dialog dialog, String titleId ) 
-	{
+	protected OkCancelDialog(Dialog dialog, String titleId) {
 		super(dialog, titleId, BT_OK_CANCEL);
 	}
+
+    /**
+     * Creates a dialog with one or more buttons.
+     * @param view the view that owns this dialog. 
+     * @param titleId the id of the title string.
+     * @param buttonIds the ids of the buttons.
+     */
+    protected OkCancelDialog(View view, String titleId) {
+        super(view, titleId, BT_OK_CANCEL);
+    }
 
 	/**
 	 * Handles the button-pressed event. This method is called when one of the buttons
@@ -45,15 +55,11 @@ public abstract class OkCancelDialog extends DialogWithButtons {
 	 * 
 	 * @param index the index of the button: 0 for Ok, 1 for Cancel.
 	 */
-	final protected void handleButton( int index ) 
-	{
-		if (index == 0) 
-		{
+	final protected void handleButton(int index) {
+		if (index == 0) {
             exitedWithOk = true;
 			handleOk();
-		} 
-		else 
-		{
+		} else {
 			handleCancel();
 		}
 	}
