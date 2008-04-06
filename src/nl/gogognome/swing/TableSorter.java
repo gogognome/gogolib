@@ -1,5 +1,5 @@
 /*
- * $Id: TableSorter.java,v 1.5 2008-03-26 21:47:26 sanderk Exp $
+ * $Id: TableSorter.java,v 1.6 2008-04-06 17:49:23 sanderk Exp $
  *
  * Obtained from http://java.sun.com/docs/books/tutorial/uiswing/components/example-1dot4/TableSorter.java
  */
@@ -67,7 +67,7 @@ import javax.swing.table.*;
  * @version 2.0 02/27/04
  */
 class TableSorter extends AbstractTableModel {
-    protected TableModel tableModel;
+    protected SortedTableModel tableModel;
 
     public static final int DESCENDING = -1;
     public static final int NOT_SORTED = 0;
@@ -111,12 +111,12 @@ class TableSorter extends AbstractTableModel {
         this.tableModelListener = new TableModelHandler();
     }
 
-    public TableSorter(TableModel tableModel) {
+    public TableSorter(SortedTableModel tableModel) {
         this();
         setTableModel(tableModel);
     }
 
-    public TableSorter(TableModel tableModel, JTableHeader tableHeader) {
+    public TableSorter(SortedTableModel tableModel, JTableHeader tableHeader) {
         this();
         setTableHeader(tableHeader);
         setTableModel(tableModel);
@@ -131,7 +131,7 @@ class TableSorter extends AbstractTableModel {
         return tableModel;
     }
 
-    public void setTableModel(TableModel tableModel) {
+    public void setTableModel(SortedTableModel tableModel) {
         if (this.tableModel != null) {
             this.tableModel.removeTableModelListener(tableModelListener);
         }
@@ -224,8 +224,12 @@ class TableSorter extends AbstractTableModel {
     }
 
     protected Comparator<Object> getComparator(int column) {
+        Comparator<Object> comparator = tableModel.getComparator(column);
+        if (comparator != null) {
+            return comparator;
+        }
         Class columnType = tableModel.getColumnClass(column);
-        Comparator<Object> comparator = columnComparators.get(columnType);
+        comparator = columnComparators.get(columnType);
         if (comparator != null) {
             return comparator;
         }
@@ -253,6 +257,11 @@ class TableSorter extends AbstractTableModel {
         return viewToModel;
     }
 
+    /**
+     * Converts a view index to a model index.
+     * @param viewIndex the view index
+     * @return the model index
+     */
     public int modelIndex(int viewIndex) {
         return getViewToModel()[viewIndex].modelIndex;
     }
@@ -268,6 +277,11 @@ class TableSorter extends AbstractTableModel {
         return modelToView;
     }
 
+    /**
+     * Converts a model index to a view index.
+     * @param modelIndex the model index
+     * @return the view index
+     */
     int viewIndex(int modelIndex) {
         return getModelToView()[modelIndex];
     }

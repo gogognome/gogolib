@@ -1,5 +1,5 @@
 /*
- * $Id: SortedTable.java,v 1.3 2008-03-16 16:32:31 sanderk Exp $
+ * $Id: SortedTable.java,v 1.4 2008-04-06 17:49:23 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -10,6 +10,7 @@ package nl.gogognome.swing;
 import java.awt.Component;
 import java.awt.Container;
 
+import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.ListSelectionModel;
 
@@ -49,4 +50,20 @@ public interface SortedTable {
      * If the table is not empty, then this method selects the first row.
      */
     public void selectFirstRow();
+    
+    /**
+     * Returns the indices of all selected rows.
+     *
+     * @return an array of integers containing the indices of all selected rows,
+     *         or an empty array if no row is selected
+     * @see #getSelectedRow
+     */
+    public int[] getSelectedRows();
+    
+    /**
+     * Sets the action that is to be performed when the user selects a row in the table.
+     * @param action the action
+     */
+    public void setSelectionAction(Action action);
+
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: SortedTableImpl.java,v 1.4 2008-03-26 21:46:19 sanderk Exp $
+ * $Id: SortedTableImpl.java,v 1.5 2008-04-06 17:49:23 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -8,7 +8,12 @@
 package nl.gogognome.swing;
 
 import java.awt.Component;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
+import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -22,7 +27,6 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import nl.gogognome.swing.plaf.AlternatingBackgroundRenderer;
-import nl.gogognome.swing.plaf.DefaultTableUI;
 
 /**
  * This class implements a table that allows the user to sort the columns.
@@ -81,9 +85,6 @@ class SortedTableImpl implements SortedTable {
                 column.setCellRenderer(new AlternatingBackgroundRenderer(renderer));
             }
         }
-
-        // Install the UI explicitly, because initially it was set when the table had no model.
-        new DefaultTableUI().installUI(table);
 
         scrollPane = new JScrollPane(table);
         scrollPane.setOpaque(false);
@@ -272,5 +273,38 @@ class SortedTableImpl implements SortedTable {
             table.getSelectionModel().clearSelection();
             table.getSelectionModel().setSelectionInterval(0, 0);
         }
+    }
+
+    /**
+     * @see nl.gogognome.swing.SortedTable#getSelectedRows()
+     */
+    public int[] getSelectedRows() {
+        int[] rows = table.getSelectedRows();
+        // Convert view rows to model rows
+        for (int i=0; i<rows.length; i++) {
+            rows[i] = tableSorter.modelIndex(rows[i]);
+        }
+        return rows;
+    }
+
+    /**
+     * @see nl.gogognome.swing.SortedTable#setSelectionAction(javax.swing.Action)
+     */
+    public void setSelectionAction(final Action action) {
+        table.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    action.actionPerformed(null);
+                }
+            }
+        });
+        
+        table.addMouseListener(new MouseAdapter() {
+            public void mouseReleased(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    action.actionPerformed(null);
+                }
+            }
+        });
     }
 }
