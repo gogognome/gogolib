@@ -1,5 +1,5 @@
 /*
- * $Id: DefaultTableUI.java,v 1.5 2008-04-06 17:48:44 sanderk Exp $
+ * $Id: DefaultTableUI.java,v 1.6 2008-04-06 18:02:49 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -38,33 +38,20 @@ public class DefaultTableUI extends BasicTableUI {
 
     public void installUI(JComponent c) {
         super.installUI(c);
-        JTable table = (JTable) c;
+        final JTable table = (JTable) c;
 
         table.setDefaultRenderer(Date.class, new DateRenderer());
         
-        // Install alternating background renderer for the columns.
-        HashSet<Class<?>> classes = new HashSet<Class<?>>();
-        for (int col=0; col<table.getColumnCount(); col++) {
-            Class clazz = table.getColumnClass(col);
-            if (!classes.contains(clazz)) {
-                classes.add(clazz);
-                TableCellRenderer renderer = table.getDefaultRenderer(clazz);
-                table.setDefaultRenderer(clazz, new AlternatingBackgroundRenderer(renderer));
+        installAlternatingBackgroundRenderers(table);
+        
+        // Add listener that installs the alternating background renderers each time the model
+        // of the table changes (not when the contents of the model change, but when a new model
+        // is set in the table).
+        table.addPropertyChangeListener("model", new PropertyChangeListener() {
+            public void propertyChange(PropertyChangeEvent evt) {
+                installAlternatingBackgroundRenderers(table);
             }
-            
-            table.getColumnModel().getColumn(col).addPropertyChangeListener(new PropertyChangeListener() {
-
-                public void propertyChange(PropertyChangeEvent evt) {
-                    if ("cellRenderer".equals(evt.getPropertyName())) {
-                        if (!(evt.getNewValue() instanceof AlternatingBackgroundRenderer)) {
-                            ((TableColumn) evt.getSource()).setCellRenderer(
-                                new AlternatingBackgroundRenderer((TableCellRenderer)evt.getNewValue()));
-                        }
-                    }
-                }
-                
-            });
-        }
+        });
     }
     
     protected void installKeyboardActions() {
@@ -83,6 +70,33 @@ public class DefaultTableUI extends BasicTableUI {
                 value = TextResource.getInstance().formatDate("gen.dateFormat", (Date) value);
             }
             return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        }
+    }
+    
+    /**
+     * Install alternating background renderer for the columns.
+     * @param table the table for which the renderers must be installed
+     */
+    private static void installAlternatingBackgroundRenderers(JTable table) {
+        HashSet<Class<?>> classes = new HashSet<Class<?>>();
+        for (int col=0; col<table.getColumnCount(); col++) {
+            Class clazz = table.getColumnClass(col);
+            if (!classes.contains(clazz)) {
+                classes.add(clazz);
+                TableCellRenderer renderer = table.getDefaultRenderer(clazz);
+                table.setDefaultRenderer(clazz, new AlternatingBackgroundRenderer(renderer));
+            }
+            
+            table.getColumnModel().getColumn(col).addPropertyChangeListener(new PropertyChangeListener() {
+                public void propertyChange(PropertyChangeEvent evt) {
+                    if ("cellRenderer".equals(evt.getPropertyName())) {
+                        if (!(evt.getNewValue() instanceof AlternatingBackgroundRenderer)) {
+                            ((TableColumn) evt.getSource()).setCellRenderer(
+                                new AlternatingBackgroundRenderer((TableCellRenderer)evt.getNewValue()));
+                        }
+                    }
+                }
+            });
         }
     }
 }
