@@ -1,5 +1,5 @@
 /*
- * $Id: DefaultTableUI.java,v 1.4 2008-03-10 21:16:51 sanderk Exp $
+ * $Id: DefaultTableUI.java,v 1.5 2008-04-06 17:48:44 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -7,8 +7,10 @@
 
 package nl.gogognome.swing.plaf;
 
+import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Date;
 import java.util.HashSet;
 
 import javax.swing.InputMap;
@@ -17,8 +19,11 @@ import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTableUI;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+
+import nl.gogognome.text.TextResource;
 
 import sun.swing.DefaultLookup;
 
@@ -35,6 +40,8 @@ public class DefaultTableUI extends BasicTableUI {
         super.installUI(c);
         JTable table = (JTable) c;
 
+        table.setDefaultRenderer(Date.class, new DateRenderer());
+        
         // Install alternating background renderer for the columns.
         HashSet<Class<?>> classes = new HashSet<Class<?>>();
         for (int col=0; col<table.getColumnCount(); col++) {
@@ -64,5 +71,18 @@ public class DefaultTableUI extends BasicTableUI {
         super.installKeyboardActions();
         InputMap inputMap = (InputMap)DefaultLookup.get(table, this, "Table.ancestorInputMap"); 
         inputMap.remove(KeyStroke.getKeyStroke("ENTER"));
+    }
+    
+    private static class DateRenderer extends DefaultTableCellRenderer {
+        /**
+         * @see javax.swing.table.DefaultTableCellRenderer#getTableCellRendererComponent(javax.swing.JTable, java.lang.Object, boolean, boolean, int, int)
+         */
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                boolean hasFocus, int row, int column) {
+            if (value instanceof Date) {
+                value = TextResource.getInstance().formatDate("gen.dateFormat", (Date) value);
+            }
+            return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        }
     }
 }
