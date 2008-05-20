@@ -1,5 +1,5 @@
 /*
- * $Id: FileUtil.java,v 1.1 2008-05-13 19:28:05 sanderk Exp $
+ * $Id: FileUtil.java,v 1.2 2008-05-20 19:18:35 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -25,12 +25,23 @@ public class FileUtil {
     }
     
     /**
-     * Copies a file.
+     * Copies a file. The last-modification time of <code>dst</code> will be
+     * the same as that of <code>src</code>.
+     * 
+     * <p>If <code>dst</code> exists and it has the same last-modification time
+     * as <code>src</code> and the same size, then it is assumed that
+     * the files are equal. In this case, the method returns immediately.
+     *  
      * @param src the source file
      * @param dst the destination file
      * @throws IOException if a problem occurs while copying
      */
     public static void copyFile(File src, File dst) throws IOException {
+        if (dst.exists() && src.lastModified() == dst.lastModified()
+                && src.length() == dst.length()) {
+            return;
+        }
+        
         BufferedInputStream inputStream = null;
         BufferedOutputStream outputStream = null;
         try {
@@ -48,6 +59,9 @@ public class FileUtil {
             }
             if (outputStream != null) {
                 outputStream.close();
+            }
+            if (dst.exists()) {
+                dst.setLastModified(src.lastModified());
             }
         }
     }
