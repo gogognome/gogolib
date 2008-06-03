@@ -1,5 +1,5 @@
 /*
- * $Id: TableSorter.java,v 1.6 2008-04-06 17:49:23 sanderk Exp $
+ * $Id: TableSorter.java,v 1.7 2008-06-03 18:41:19 sanderk Exp $
  *
  * Obtained from http://java.sun.com/docs/books/tutorial/uiswing/components/example-1dot4/TableSorter.java
  */
@@ -69,11 +69,7 @@ import javax.swing.table.*;
 class TableSorter extends AbstractTableModel {
     protected SortedTableModel tableModel;
 
-    public static final int DESCENDING = -1;
-    public static final int NOT_SORTED = 0;
-    public static final int ASCENDING = 1;
-
-    private static Directive EMPTY_DIRECTIVE = new Directive(-1, NOT_SORTED);
+    private static Directive EMPTY_DIRECTIVE = new Directive(-1, SortedTable.NOT_SORTED);
 
     /** Comparator for objects that implement the {@link {@link Comparable} interface. */
     public static final Comparator<Object> COMPARABLE_COMAPRATOR = new Comparator<Object>() {
@@ -191,12 +187,17 @@ class TableSorter extends AbstractTableModel {
         }
     }
 
+    /**
+     * Set the sorting states.
+     * @param column the column to be sorted
+     * @param status {@link #DESCENDING}, {@link #NOT_SORTED} or {@link #ASCENDING}
+     */
     public void setSortingStatus(int column, int status) {
         Directive directive = getDirective(column);
         if (directive != EMPTY_DIRECTIVE) {
             sortingColumns.remove(directive);
         }
-        if (status != NOT_SORTED) {
+        if (status != SortedTable.NOT_SORTED) {
             sortingColumns.add(new Directive(column, status));
         }
         sortingStatusChanged();
@@ -207,7 +208,7 @@ class TableSorter extends AbstractTableModel {
         if (directive == EMPTY_DIRECTIVE) {
             return null;
         }
-        return new Arrow(directive.direction == DESCENDING, size, sortingColumns.indexOf(directive));
+        return new Arrow(directive.direction == SortedTable.DESCENDING, size, sortingColumns.indexOf(directive));
     }
 
     private void cancelSorting() {
@@ -347,7 +348,7 @@ class TableSorter extends AbstractTableModel {
                     comparison = getComparator(column).compare(o1, o2);
                 }
                 if (comparison != 0) {
-                    return directive.direction == DESCENDING ? -comparison : comparison;
+                    return directive.direction == SortedTable.DESCENDING ? -comparison : comparison;
                 }
             }
             return 0;
@@ -393,7 +394,7 @@ class TableSorter extends AbstractTableModel {
             int column = e.getColumn();
             if (e.getFirstRow() == e.getLastRow()
                     && column != TableModelEvent.ALL_COLUMNS
-                    && getSortingStatus(column) == NOT_SORTED
+                    && getSortingStatus(column) == SortedTable.NOT_SORTED
                     && modelToView != null) {
                 int viewIndex = getModelToView()[e.getFirstRow()];
                 fireTableChanged(new TableModelEvent(TableSorter.this, 

@@ -1,5 +1,5 @@
 /*
- * $Id: SortedTableImpl.java,v 1.5 2008-04-06 17:49:23 sanderk Exp $
+ * $Id: SortedTableImpl.java,v 1.6 2008-06-03 18:41:19 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -306,5 +306,12 @@ class SortedTableImpl implements SortedTable {
                 }
             }
         });
+    }
+
+    /**
+     * @see nl.gogognome.swing.SortedTable#setSortingStatus(int, int)
+     */
+    public void setSortingStatus(int column, int status) {
+        tableSorter.setSortingStatus(column, status);
     }
 }

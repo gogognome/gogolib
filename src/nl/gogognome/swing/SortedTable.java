@@ -1,5 +1,5 @@
 /*
- * $Id: SortedTable.java,v 1.4 2008-04-06 17:49:23 sanderk Exp $
+ * $Id: SortedTable.java,v 1.5 2008-06-03 18:41:19 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -19,6 +19,15 @@ import javax.swing.ListSelectionModel;
  * on the column's header.
  */
 public interface SortedTable {
+
+    /** Indicates descending order. */ 
+    public static final int DESCENDING = -1;
+    
+    /** Indicates unsorted order. */
+    public static final int NOT_SORTED = 0;
+    
+    /** Indicates ascending order. */
+    public static final int ASCENDING = 1;
 
     /**
      * Gets the selection model. This selection model refers to the unsorted rows.
@@ -50,6 +59,13 @@ public interface SortedTable {
      * If the table is not empty, then this method selects the first row.
      */
     public void selectFirstRow();
+    
+    /**
+     * Set the sorting states.
+     * @param column the column to be sorted
+     * @param status {@link #DESCENDING}, {@link #NOT_SORTED} or {@link #ASCENDING}
+     */
+    public void setSortingStatus(int column, int status);
     
     /**
      * Returns the indices of all selected rows.
