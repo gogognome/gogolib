@@ -1,5 +1,5 @@
 /*
- * $Id: TextResource.java,v 1.7 2007-09-09 19:33:38 sanderk Exp $
+ * $Id: TextResource.java,v 1.8 2008-06-03 18:41:43 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -7,7 +7,9 @@ package nl.gogognome.text;
 
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -25,7 +27,7 @@ public class TextResource {
 	private static TextResource instance;
 	
 	/** Contains the string resources of the user interface. */
-	private ResourceBundle[] stringResources;
+	private List<ResourceBundle> stringResources;
 	
 	/** The locale used to obtain resources and format currencies and dates. */
 	private Locale locale = Locale.getDefault();
@@ -58,9 +60,9 @@ public class TextResource {
      * Loads the resources.
      */
     private void loadResources() {
-        stringResources = new ResourceBundle[2];
-        stringResources[0] = ResourceBundle.getBundle("stringresources", locale);
-        stringResources[1] = ResourceBundle.getBundle("gogolibstrings", locale);
+        stringResources = new ArrayList<ResourceBundle>();
+        stringResources.add(ResourceBundle.getBundle("stringresources", locale));
+        stringResources.add(ResourceBundle.getBundle("gogolibstrings", locale));
     }
     
 
@@ -102,9 +104,9 @@ public class TextResource {
 	 */
 	public String getString(String id) {
         String result = null;
-        for (int i=0; result == null && i<stringResources.length; i++) {
+        for (int i=0; result == null && i<stringResources.size(); i++) {
             try {
-                result = stringResources[i].getString(id);
+                result = stringResources.get(i).getString(id);
             } catch (MissingResourceException e) {
             }
         }
