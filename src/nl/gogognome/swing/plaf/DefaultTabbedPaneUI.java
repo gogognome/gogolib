@@ -1,5 +1,5 @@
 /*
- * $Id: DefaultTabbedPaneUI.java,v 1.2 2007-09-02 18:14:35 sanderk Exp $
+ * $Id: DefaultTabbedPaneUI.java,v 1.3 2008-07-05 10:50:43 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -22,8 +22,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
-
-import com.sun.java.swing.SwingUtilities2;
 
 /**
  * Default UI for tabbed panes.
@@ -64,7 +62,7 @@ public class DefaultTabbedPaneUI extends BasicTabbedPaneUI {
                        tabRect.width, tabRect.height, isSelected);
         
         Font font = tabPane.getFont();
-        FontMetrics metrics = SwingUtilities2.getFontMetrics(tabPane, g, font);
+        FontMetrics metrics = tabPane.getFontMetrics(font);
         Icon icon = getIconForTab(tabIndex);
         String title = tabPane.getTitleAt(tabIndex);
         
