@@ -1,5 +1,5 @@
 /*
- * $Id: TextResource.java,v 1.8 2008-06-03 18:41:43 sanderk Exp $
+ * $Id: TextResource.java,v 1.9 2008-11-10 20:13:50 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -121,11 +121,15 @@ public class TextResource {
 	 * @return the string from the resources or <code>null</code> if no string was
 	 *         found in the resources.
 	 */
-	public String getString(String id, Object[] arguments)
-	{
+	public String getString(String id, Object[] arguments) {
 	    String result;
         String s = getString(id);
         if (s != null) {
+            for (int i=0; i<arguments.length; i++) {
+                if (arguments[i] instanceof Date) {
+                    arguments[i] = formatDate("gen.dateFormatFull", (Date) arguments[i]);
+                }
+            }
             result = MessageFormat.format(s, arguments);
         } else {
             result = null;
