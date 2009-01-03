@@ -1,11 +1,10 @@
 /*
- * $Id: AbstractModel.java,v 1.1 2007-04-07 15:23:47 sanderk Exp $
+ * $Id: AbstractModel.java,v 1.2 2009-01-03 12:21:15 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
 package nl.gogognome.framework.models;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
@@ -16,7 +15,7 @@ import java.util.LinkedList;
 public class AbstractModel {
 
     /** Contains the subscribed listeners. */
-    private LinkedList listeners = new LinkedList();
+    private LinkedList<ModelChangeListener> listeners = new LinkedList<ModelChangeListener>();
     
     /**
      * Adds a model change listener to this model.
@@ -41,8 +40,7 @@ public class AbstractModel {
      *         is subcribed, it will not get notified by this method. 
      */
     protected void notifyListeners(ModelChangeListener source) {
-        for (Iterator iter = listeners.iterator(); iter.hasNext();) {
-            ModelChangeListener listener = (ModelChangeListener) iter.next();
+        for (ModelChangeListener listener : listeners) {
             if (listener != source) {
                 listener.modelChanged(this);
             }

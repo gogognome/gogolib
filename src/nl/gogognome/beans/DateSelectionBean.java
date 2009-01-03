@@ -1,5 +1,5 @@
 /*
- * $Id: DateSelectionBean.java,v 1.7 2007-11-22 20:46:10 sanderk Exp $
+ * $Id: DateSelectionBean.java,v 1.8 2009-01-03 12:21:15 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -52,7 +52,7 @@ public class DateSelectionBean extends JPanel {
     
     /**
      * Constructor.
-     * @param initialDate the date that is shown in the bean initially.
+     * @param dateModel the date model that will reflect the content of the bean
      */
     public DateSelectionBean(DateModel dateModel) {
         this.dateModel = dateModel;
