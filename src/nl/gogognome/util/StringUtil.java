@@ -1,5 +1,5 @@
 /*
- * $Id: StringUtil.java,v 1.2 2008-07-31 20:18:53 sanderk Exp $
+ * $Id: StringUtil.java,v 1.3 2009-01-03 12:20:45 sanderk Exp $
  *
  * Copyright (C) 2007 Sander Kooijmans
  */
@@ -35,5 +35,26 @@ public class StringUtil {
         } else {
             return s;
         }
+    }
+    
+    public static String fillToSize(String s, int size, char c, boolean append) {
+        int sizePadding = size - s.length();
+        if (sizePadding == 0) {
+            return s;
+        }
+        if (sizePadding < 0) {
+            return s.substring(0, size);
+        }
+        StringBuilder sb = new StringBuilder(size);
+        if (append) {
+            sb.append(s);
+        }
+        for (int i=0; i<sizePadding; i++) {
+            sb.append(c);
+        }
+        if (!append) {
+            sb.append(s);
+        }
+        return sb.toString();
     }
 }
