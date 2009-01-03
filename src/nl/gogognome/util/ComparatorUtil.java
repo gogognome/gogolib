@@ -1,5 +1,5 @@
 /*
- * $Id: ComparatorUtil.java,v 1.1 2007-04-07 15:24:31 sanderk Exp $
+ * $Id: ComparatorUtil.java,v 1.2 2009-01-03 12:20:58 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -35,5 +35,23 @@ public class ComparatorUtil {
         }
         
         return o1.equals(o2);
+    }
+
+    /**
+     * Compares two numbers and returns -1, 0 or 1 if <code>m</code> is less than,
+     * equal to or larger than <code>n</code>.
+     * @param m an int
+     * @param n an int
+     * @return -1, 0 or 1 if <code>m</code> is less than, equal to or larger 
+     *         than <code>n</code>
+     */
+    public static int compareTo(int m, int n) {
+        if (m < n) {
+            return -1;
+        } else if (m > n) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 }
