@@ -1,5 +1,5 @@
 /*
- * $Id: TestDateUtil.java,v 1.1 2007-02-10 16:28:07 sanderk Exp $
+ * $Id: TestDateUtil.java,v 1.2 2009-02-01 19:54:08 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -40,6 +40,14 @@ public class TestDateUtil extends TestCase {
         date2 = cal.getTime();
         assertEquals(0, DateUtil.compareDayOfYear(date1, date2));
         assertEquals(0, DateUtil.compareDayOfYear(date2, date1));
+        
+        cal.set(2008, 3-1, 31);
+        date1 = cal.getTime();
+        
+        cal.set(2008, 4-1, 1);
+        date2 = cal.getTime();
+        assertEquals(-1, DateUtil.compareDayOfYear(date1, date2));
+        assertEquals(1, DateUtil.compareDayOfYear(date2, date1));
     }
     
     public void testThreadSafety() {
