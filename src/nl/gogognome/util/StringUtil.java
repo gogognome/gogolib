@@ -1,5 +1,5 @@
 /*
- * $Id: StringUtil.java,v 1.3 2009-01-03 12:20:45 sanderk Exp $
+ * $Id: StringUtil.java,v 1.4 2009-02-01 19:54:16 sanderk Exp $
  *
  * Copyright (C) 2007 Sander Kooijmans
  */
@@ -37,6 +37,15 @@ public class StringUtil {
         }
     }
     
+    /**
+     * Fills a string to the specificied size.
+     * @param s the string
+     * @param size the size of the returned string
+     * @param c the character used to pad the string if needed
+     * @param append <code>true</code> if the string is padded at the end;
+     *        <code>false</code> if the string is padded at the front.
+     * @return a string of exactly the specified size
+     */
     public static String fillToSize(String s, int size, char c, boolean append) {
         int sizePadding = size - s.length();
         if (sizePadding == 0) {
