@@ -1,5 +1,5 @@
 /*
- * $Id: DateUtil.java,v 1.4 2007-09-16 19:53:53 sanderk Exp $
+ * $Id: DateUtil.java,v 1.5 2009-02-19 21:16:51 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -17,28 +17,28 @@ public class DateUtil {
 
     /** Calendar used to perform conversions. */
     private final static Calendar CALENDAR = Calendar.getInstance();
-    
+
     /**
      * Compares two dates up to the day of year, ignoring their time within
      * the day.
-     * 
+     *
      * @param date1 a date
      * @param date2 a date
-     * @return a negative integer if <code>date1</code> comes before 
-     *          <code>date2</code>;0 if <code>date1</code> represents the same day 
+     * @return a negative integer if <code>date1</code> comes before
+     *          <code>date2</code>;0 if <code>date1</code> represents the same day
      *          as <code>date2</code>; a positive integer if <code>date1</code>
-     *          comes after <code>date2</code>. 
+     *          comes after <code>date2</code>.
      */
     public static int compareDayOfYear(Date date1, Date date2) {
         synchronized(CALENDAR) {
 		    CALENDAR.setTime(date1);
 		    int year1 = CALENDAR.get(Calendar.YEAR);
 		    int dayOfYear1 = CALENDAR.get(Calendar.DAY_OF_YEAR);
-		    
+
 		    CALENDAR.setTime(date2);
 		    int year2 = CALENDAR.get(Calendar.YEAR);
 		    int dayOfYear2 = CALENDAR.get(Calendar.DAY_OF_YEAR);
-		    
+
 		    if (year1 < year2) {
 		        return -1;
 		    } else if (year1 > year2) {
@@ -49,11 +49,11 @@ public class DateUtil {
 		    } else if (dayOfYear1 > dayOfYear2) {
 		        return 1;
 		    }
-		    
+
 		    return 0;
         }
     }
-    
+
     /**
      * Gets a field of the date.
      * @param date the date
@@ -66,7 +66,7 @@ public class DateUtil {
             return CALENDAR.get(field);
         }
     }
-    
+
     /**
      * Adds a number of days to a <code>Date</code>.
      * @param date the <code>Date</code>
@@ -80,10 +80,24 @@ public class DateUtil {
             return CALENDAR.getTime();
         }
     }
-    
+
+    /**
+     * Adds a number of years to a <code>Date</code>.
+     * @param date the <code>Date</code>
+     * @param numYears the number of years
+     * @return the new date
+     */
+    public static Date addYears(Date date, int numYears) {
+        synchronized(CALENDAR) {
+            CALENDAR.setTime(date);
+            CALENDAR.add(Calendar.YEAR, numYears);
+            return CALENDAR.getTime();
+        }
+    }
+
     /**
      * Gets the difference between two dates in years.
-     * 
+     *
      * @param date1 a date
      * @param date2 another date
      * @return date1 minus date2 expressed in years
@@ -93,7 +107,7 @@ public class DateUtil {
         int month1 = getField(date1, Calendar.MONTH);
         int year2 = getField(date2, Calendar.YEAR);
         int month2 = getField(date2, Calendar.MONTH);
-        
+
         int diffInYears = year1 - year2;
         if (month1 < month2) {
             diffInYears--;
