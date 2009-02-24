@@ -1,5 +1,5 @@
 /*
- * $Id: ValuesEditPanel.java,v 1.2 2009-02-19 21:17:13 sanderk Exp $
+ * $Id: ValuesEditPanel.java,v 1.3 2009-02-24 21:31:57 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -9,8 +9,10 @@ package nl.gogognome.framework;
 
 import java.awt.Component;
 import java.awt.GridBagLayout;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import nl.gogognome.beans.DateSelectionBean;
@@ -31,7 +33,7 @@ public class ValuesEditPanel extends JPanel {
     /** Contains the number of fields present in the panel. */
     private int nrFields;
 
-    private List<Component> components;
+    private List<Component> components = new ArrayList<Component>();
 
     /**
      * Constructor.
@@ -50,8 +52,8 @@ public class ValuesEditPanel extends JPanel {
             Component component = componentIter.next();
             if (component instanceof TextFieldBean) {
                 ((TextFieldBean) component).deinitialize();
-            } else {
-                throw new IllegalStateException("Unknown component found: " + component);
+            } else if (component instanceof DateSelectionBean) {
+                ((DateSelectionBean) component).deinitialize();
             }
         }
     }
@@ -62,13 +64,7 @@ public class ValuesEditPanel extends JPanel {
      * @param model the model controlling the text field
      */
     public void addField(String labelId, StringModel model) {
-        TextFieldBean textfield = new TextFieldBean(model);
-        JLabel label = WidgetFactory.getInstance().createLabel(labelId, textfield);
-        add(label, SwingUtils.createLabelGBConstraints(0, nrFields));
-        add(textfield, SwingUtils.createTextFieldGBConstraints(1, nrFields));
-        nrFields++;
-
-        components.add(textfield);
+        addField(labelId, new TextFieldBean(model));
     }
 
     /**
@@ -77,13 +73,21 @@ public class ValuesEditPanel extends JPanel {
      * @param model the model controlling the text field
      */
     public void addField(String labelId, DateModel model) {
-        DateSelectionBean dateSelectionBean = new DateSelectionBean(model);
-        JLabel label = WidgetFactory.getInstance().createLabel(labelId, dateSelectionBean);
-        add(label, SwingUtils.createLabelGBConstraints(0, nrFields));
-        add(dateSelectionBean, SwingUtils.createTextFieldGBConstraints(1, nrFields));
-        nrFields++;
-
-        components.add(dateSelectionBean);
+        addField(labelId, new DateSelectionBean(model));
     }
 
+    /**
+     * Adds a component. Use this method to add components for which the general
+     * models (StringModel, DateModel etc.) cannot be used.
+     * @param labelId the id of the label that is put in front of the component
+     * @param component the component
+     */
+    public void addField(String labelId, JComponent component) {
+        JLabel label = WidgetFactory.getInstance().createLabel(labelId, component);
+        add(label, SwingUtils.createLabelGBConstraints(0, nrFields));
+        add(component, SwingUtils.createTextFieldGBConstraints(1, nrFields));
+        nrFields++;
+
+        components.add(component);
+    }
 }
