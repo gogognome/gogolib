@@ -1,14 +1,12 @@
 /*
- * $Id: ViewDialog.java,v 1.4 2007-11-11 19:46:58 sanderk Exp $
+ * $Id: ViewDialog.java,v 1.5 2009-07-15 17:33:08 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
 package nl.gogognome.framework;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.KeyboardFocusManager;
 import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -23,7 +21,6 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
 
 /**
  * This class implements a <code>JDialog</code> that can hold a <code>View</code>.
@@ -34,22 +31,22 @@ public class ViewDialog {
 
     /** The view shown in this dialog. */
     private View view;
-    
+
     /** The actual dialog holding the view. */
     private JDialog dialog;
-    
-    /** 
+
+    /**
      * The bounds of the parent frame or dialog at the moment this dialog
-     * was created. 
+     * was created.
      */
     private Rectangle parentBounds;
 
     /** The action to close this dialog. */
     private Action closeAction;
-    
+
     /**
      * Constructor.
-     * @param owner the owner of this dialog. Must be a <code>JDialog</code> or a <code>JFrame</code> 
+     * @param owner the owner of this dialog. Must be a <code>JDialog</code> or a <code>JFrame</code>
      * @param view the view to be shown in this dialog
      */
     public ViewDialog(Window owner, View view) {
@@ -61,7 +58,7 @@ public class ViewDialog {
             throw new IllegalArgumentException("The owner must be a JDialog or a JFrame, but was: " + owner.getClass());
         }
     }
-    
+
     /**
      * Initializes the dialog
      * @param dialog the dialog
@@ -71,8 +68,9 @@ public class ViewDialog {
         this.dialog = dialog;
         this.parentBounds = parentBounds;
         setView(view);
-        
+
         dialog.addWindowListener( new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) { dispose(); } }
         );
 
@@ -80,31 +78,17 @@ public class ViewDialog {
             KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "ESC_ACTION");
         dialog.getRootPane().getActionMap().put("ESC_ACTION", closeAction);
     }
-    
+
     /**
      * Shows the dialog.
      */
     final public void showDialog() {
-        // Determine the currently focused component so the focus can be
-        // returned to this component after the dialog has been shown.
-        final Component focusedComponent = 
-            KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
-     
         // Show the dialog.
         dialog.pack();
         Dimension d = dialog.getPreferredSize();
         dialog.setLocation( parentBounds.x + (parentBounds.width-d.width)/2,
             parentBounds.y + (parentBounds.height-d.height)/2 );
         dialog.setVisible(true);
-        
-        // Give focus back to the component that had focus before this dialog was shown.
-        if (focusedComponent != null) {
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    focusedComponent.requestFocus();
-                }
-            });
-        }
     }
 
     /**
@@ -118,18 +102,18 @@ public class ViewDialog {
                 dispose();
             }
         };
-        
+
         view.setParentDialog(dialog);
         view.setCloseAction(closeAction);
         view.doInit();
         dialog.getContentPane().add(view, BorderLayout.CENTER);
-        
+
         JButton defaultButton = view.getDefaultButton();
         if (defaultButton != null) {
             dialog.getRootPane().setDefaultButton(defaultButton);
         }
     }
-    
+
     /** Disposes the dialog. */
     public void dispose() {
         view.doClose();
