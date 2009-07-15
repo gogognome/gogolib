@@ -1,5 +1,5 @@
 /*
- * $Id: SortedTableImpl.java,v 1.6 2008-06-03 18:41:19 sanderk Exp $
+ * $Id: SortedTableImpl.java,v 1.7 2009-07-15 17:33:47 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -30,55 +30,62 @@ import nl.gogognome.swing.plaf.AlternatingBackgroundRenderer;
 
 /**
  * This class implements a table that allows the user to sort the columns.
- * 
+ *
  * <p>This class is needed, because simply adding a {@link TableSorter} to a {@link JTable}
  * messes the selection mechanism of the {@link JTable}.
- * 
+ *
  * @author Sander Kooijmans
  */
 class SortedTableImpl implements SortedTable {
 
     /** The table model that sorts the rows. */
     private TableSorter tableSorter;
-    
+
     /** The actual table. */
     private JTable table;
 
     /** The scroll pane that contains the table. */
     private JScrollPane scrollPane;
-    
-    /** 
+
+    /**
      * The selection model. The row numbers in the selection model refer to the unsorted rows.
      */
     private ListSelectionModel selectionModel;
-    
+
+    /** If <code>true</code> then the user cannot change the way the table is sorted. */
+    private boolean disableSorting;
+
     /**
      * Constructs a table based on the specified table model. The table allows selection of rows,
      * not of columns.
      * @param tableModel the table model
+     * @param disableSorting <code>true</code> if the user cannot change the sorting;
+     *        <code>false</code> if the user can change the sorting.
      */
-    public SortedTableImpl(SortedTableModel tableModel) {
+    public SortedTableImpl(SortedTableModel tableModel, boolean disableSorting) {
         super();
+        this.disableSorting = disableSorting;
+
         table = new JTable();
-        tableSorter = new TableSorter(tableModel, table.getTableHeader());
+        tableSorter = new TableSorter(tableModel, disableSorting ? null : table.getTableHeader());
         table.setModel(tableSorter);
         selectionModel = new ListSelectionModelWrapper(table.getSelectionModel());
-        
+
         table.setRowSelectionAllowed(true);
         table.setColumnSelectionAllowed(false);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-        
+
         TableColumnModel columnModel = table.getColumnModel();
-        
+
         int width = 0;
         int nrCols = tableModel.getColumnCount();
         for (int i=0; i<nrCols; i++) {
             // Set column width
             int colWidth = tableModel.getColumnWidth(i);
-            TableColumn column = columnModel.getColumn(i); 
+            TableColumn column = columnModel.getColumn(i);
             column.setPreferredWidth(colWidth);
             width += colWidth;
-            
+
             // If present, set the table cell renderer
             TableCellRenderer renderer = tableModel.getRendererForColumn(i);
             if (renderer != null) {
@@ -103,22 +110,22 @@ class SortedTableImpl implements SortedTable {
     public ListSelectionModel getSelectionModel() {
         return selectionModel;
     }
-    
+
     /**
      * @see SortedTable#setTitle(String)
      */
     public void setTitle(String title) {
         scrollPane.setBorder(new CompoundBorder(new TitledBorder(title), new EmptyBorder(5, 5, 5, 5)));
     }
-    
+
     private class ListSelectionModelWrapper implements ListSelectionModel {
 
         private ListSelectionModel wrappedModel;
-        
+
         public ListSelectionModelWrapper(ListSelectionModel wrappedModel) {
             this.wrappedModel = wrappedModel;
         }
-        
+
         public void addListSelectionListener(ListSelectionListener listener) {
             wrappedModel.addListSelectionListener(listener);
         }
@@ -130,7 +137,7 @@ class SortedTableImpl implements SortedTable {
                 index1 = t;
             }
             assert index0 <= index1;
-            
+
             for (int i=index0; i<=index1; i++) {
                 int index = tableSorter.viewIndex(i);
                 wrappedModel.addSelectionInterval(index, index);
@@ -200,7 +207,7 @@ class SortedTableImpl implements SortedTable {
                 index1 = t;
             }
             assert index0 <= index1;
-            
+
             for (int i=index0; i<=index1; i++) {
                 int index = tableSorter.viewIndex(i);
                 wrappedModel.removeIndexInterval(index, index);
@@ -218,7 +225,7 @@ class SortedTableImpl implements SortedTable {
                 index1 = t;
             }
             assert index0 <= index1;
-            
+
             for (int i=index0; i<=index1; i++) {
                 int index = tableSorter.viewIndex(i);
                 wrappedModel.removeIndexInterval(index, index);
@@ -241,7 +248,7 @@ class SortedTableImpl implements SortedTable {
                 index1 = t;
             }
             assert index0 <= index1;
-            
+
             for (int i=index0; i<=index1; i++) {
                 int index = tableSorter.viewIndex(i);
                 wrappedModel.addSelectionInterval(index, index);
@@ -249,13 +256,13 @@ class SortedTableImpl implements SortedTable {
          }
 
         public void setSelectionMode(int selectionMode) {
-            wrappedModel.setSelectionMode(selectionMode);            
+            wrappedModel.setSelectionMode(selectionMode);
         }
 
         public void setValueIsAdjusting(boolean valueIsAdjusting) {
             wrappedModel.setValueIsAdjusting(valueIsAdjusting);
         }
-        
+
     }
 
     /**
@@ -292,14 +299,16 @@ class SortedTableImpl implements SortedTable {
      */
     public void setSelectionAction(final Action action) {
         table.addKeyListener(new KeyAdapter() {
+            @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     action.actionPerformed(null);
                 }
             }
         });
-        
+
         table.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseReleased(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     action.actionPerformed(null);

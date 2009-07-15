@@ -1,5 +1,5 @@
 /*
- * $Id: WidgetFactory.java,v 1.9 2008-03-03 20:06:11 sanderk Exp $
+ * $Id: WidgetFactory.java,v 1.10 2009-07-15 17:33:47 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -29,36 +29,36 @@ import nl.gogognome.text.TextResource;
 /**
  * This class is a factory for buttons, menus, menu items, text fields and
  * check boxes.
- *  
+ *
  * @author kooijmas
  */
 public class WidgetFactory {
-	
+
 	/** The singleton instance of this class. */
 	private static WidgetFactory instance;
 
 	/** The <code>TextResource</code> used to obtain string resources. */
 	private TextResource textResource;
-	
+
 	/**
 	 * Gets the singleton instance of this class.
 	 * @return the singleton instance of this class.
 	 */
-	public static synchronized WidgetFactory getInstance() 
+	public static synchronized WidgetFactory getInstance()
 	{
-		if (instance == null) 
+		if (instance == null)
 		{
 			instance = new WidgetFactory();
 		}
 		return instance;
 	}
-	
+
 	/** Private constructor to enforce usage of <tt>getInstance()</tt>. */
-	private WidgetFactory() 
+	private WidgetFactory()
 	{
 		textResource = TextResource.getInstance();
 	}
-	
+
 	/**
 	 * Creates an <code>Action</code> for the specified identifier.
 	 * @param id the identifier
@@ -66,9 +66,9 @@ public class WidgetFactory {
 	 *          identifier does not occur in the resources.
 	 */
 	public ActionWrapper createAction(String id) {
-    
+
 	    String name = textResource.getString(id);
-	    
+
 	    ActionWrapper action;
 	    if (name != null) {
 		    Icon icon = createIcon(id + ".icon16");
@@ -81,12 +81,12 @@ public class WidgetFactory {
 	        action = new ActionWrapper();
 	    }
 
-	    String s = textResource.getString(id + ".accelerator"); 
+	    String s = textResource.getString(id + ".accelerator");
 	    KeyStroke accelerator = s != null ? KeyStroke.getKeyStroke(s) : null;
 	    if (accelerator != null) {
 	        action.putValue(Action.ACCELERATOR_KEY, accelerator);
 	    }
-	    
+
 	    s = textResource.getString(id + ".mnemonic");
 	    int mnemonic = getMnemonic(id);
 	    if (mnemonic != -1) {
@@ -102,29 +102,29 @@ public class WidgetFactory {
 	    if (s != null) {
 	        action.putValue(Action.LONG_DESCRIPTION, s);
 	    }
-	    
+
 	    return action;
 	}
-	
+
 	/**
 	 * Creates a button.
 	 * @param id the id of the button's description in the resources.
 	 * @action the action to be performed when the button is pressed
 	 * @return the button.
-	 */	
+	 */
 	public JButton createButton(String id, Action action) {
 	    ActionWrapper actionWrapper = createAction(id);
 	    actionWrapper.setAction(action);
-	    
+
 		return new JButton(actionWrapper);
 	}
 
 	/**
 	 * Creates a label with the specified text.
-	 * 
+	 *
 	 * @param id the id of the text.
 	 * @return the label.
-	 */	
+	 */
 	public JLabel createLabel(String id) {
 		return createLabel(id, null);
 	}
@@ -132,12 +132,12 @@ public class WidgetFactory {
     /**
      * Creates a label with the specified text. If <code>component != null</code> then this
      * component receives the focus after the user entered the mnemonic for this label.
-     * 
+     *
      * @param id the id of the text.
      * @param component the component that receives focus after the mnemonic for the
      *        label has been entered
      * @return the label.
-     */ 
+     */
     public JLabel createLabel(String id, JComponent component) {
         JLabel label = new JLabel(textResource.getString(id));
 
@@ -153,9 +153,9 @@ public class WidgetFactory {
 	/**
 	 * Creates a text field. When the created text field gains focus, its
 	 * contents is selected.
-	 * 
+	 *
 	 * @return the text field.
-	 */	
+	 */
 	public JTextField createTextField() {
 		JTextField textField = new JTextField();
 		return textField;
@@ -164,25 +164,25 @@ public class WidgetFactory {
 	/**
 	 * Creates a text field. When the created text field gains focus, its
 	 * contents is selected.
-	 * 
+	 *
 	 * @param columns the number of columns of the text field.
 	 * @return the text field.
-	 */	
-	public JTextField createTextField( int columns ) 
+	 */
+	public JTextField createTextField( int columns )
 	{
 		JTextField textField = new JTextField(columns);
         textField.setFocusable(true);
 		return textField;
 	}
-	
+
 	/**
 	 * Creates a text field. When the created text field gains focus, its
 	 * contents is selected.
-	 * 
+	 *
 	 * @param text the initial text of the text field.
 	 * @return the text field.
-	 */	
-	public JTextField createTextField( String text ) 
+	 */
+	public JTextField createTextField( String text )
 	{
 		JTextField textField = new JTextField(text);
 		return textField;
@@ -190,14 +190,14 @@ public class WidgetFactory {
 
     /**
      * Creates a check box.
-     * 
+     *
      * @param textId the id of the check box' text.
      * @param checked the initial state of the check box.
      * @return the check box.
-     */ 
-    public JCheckBox createCheckBox( String textId, boolean checked ) 
+     */
+    public JCheckBox createCheckBox( String textId, boolean checked )
     {
-        JCheckBox checkBox = new JCheckBox( 
+        JCheckBox checkBox = new JCheckBox(
             textResource.getString(textId), checked );
         return checkBox;
     }
@@ -205,10 +205,10 @@ public class WidgetFactory {
 	/**
 	 * Creates a <tt>JMenu</tt> with a specified string as label.
 	 * @param id the id of the string.
-	 * @param keyEvent the key event assoicated with the mnemonic. 
+	 * @param keyEvent the key event assoicated with the mnemonic.
 	 * @return the menu.
 	 */
-	public JMenu createMenu( String id ) 
+	public JMenu createMenu( String id )
 	{
 		JMenu result = new JMenu( textResource.getString(id) );
 		int mnemonic = getMnemonic(id);
@@ -218,15 +218,15 @@ public class WidgetFactory {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Creates a <tt>JMenuItem</tt> with a specified string as label.
 	 * @param id the id of the string.
 	 * @param l the action listener that has to be added to the menu item or
-	 *          <tt>null</tt> if no listener has to be added.   
+	 *          <tt>null</tt> if no listener has to be added.
 	 * @return the menu item.
 	 */
-	public JMenuItem createMenuItem( String id, ActionListener l ) 
+	public JMenuItem createMenuItem( String id, ActionListener l )
 	{
 		JMenuItem result = new JMenuItem( textResource.getString(id) );
 		result.setActionCommand(id);
@@ -239,45 +239,45 @@ public class WidgetFactory {
 		if (keyStrokeDescription != null)
 		{
 			KeyStroke keyStroke = KeyStroke.getKeyStroke(keyStrokeDescription);
-			if (keyStroke != null) 
+			if (keyStroke != null)
 			{
 				result.setAccelerator(keyStroke);
 			}
 		}
-		if (l != null) 
+		if (l != null)
 		{
 			result.addActionListener(l);
 		}
 		return result;
 	}
-    
+
     /**
      * Creates a <tt>JComboBox</tt> with the specified values.
      * @param ids the ids of the values.
      * @return the <tt>JComboBox</tt>.
      */
-    public JComboBox createComboBox( String[] ids ) 
+    public JComboBox createComboBox( String[] ids )
     {
         JComboBox result = new JComboBox();
-        for (int i = 0; i < ids.length; i++) 
+        for (int i = 0; i < ids.length; i++)
         {
             result.addItem(textResource.getString(ids[i]));
         }
         return result;
     }
-    
+
     public Icon createIcon(String id) {
         TextResource tr = TextResource.getInstance();
         String iconResourceName = tr.getString(id);
         if (iconResourceName == null) {
             return null;
         }
-        
+
         URL iconUrl = WidgetFactory.class.getResource(iconResourceName);
         if (iconUrl == null) {
             return null;
         }
-        
+
         String description = tr.getString(id + ".description");
         if (description != null) {
             return new ImageIcon(iconUrl, description);
@@ -285,16 +285,25 @@ public class WidgetFactory {
             return new ImageIcon(iconUrl);
         }
     }
-    
+
     /**
      * Creates a table component that allows the user to sort its rows.
      * @param tableModel the table model
      * @return the table component
      */
     public SortedTable createSortedTable(SortedTableModel tableModel) {
-        return new SortedTableImpl(tableModel);
+        return new SortedTableImpl(tableModel, false);
     }
-    
+
+    /**
+     * Creates a table component that does not allow the user to sort its rows.
+     * @param tableModel the table model
+     * @return the table component
+     */
+    public SortedTable createUnsortedTable(SortedTableModel tableModel) {
+        return new SortedTableImpl(tableModel, true);
+    }
+
     /**
      * Gets the mnemonic for the specified resource.
      * @param id the id of the resource
