@@ -1,5 +1,5 @@
 /*
- * $Id: DateUtil.java,v 1.5 2009-02-19 21:16:51 sanderk Exp $
+ * $Id: DateUtil.java,v 1.6 2010-02-12 18:27:15 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -77,6 +77,20 @@ public class DateUtil {
         synchronized(CALENDAR) {
             CALENDAR.setTime(date);
             CALENDAR.add(Calendar.DATE, numDays);
+            return CALENDAR.getTime();
+        }
+    }
+
+    /**
+     * Adds a number of days to a <code>Date</code>.
+     * @param date the <code>Date</code>
+     * @param numMonths the number of days
+     * @return the new date
+     */
+    public static Date addMonths(Date date, int numMonths) {
+        synchronized(CALENDAR) {
+            CALENDAR.setTime(date);
+            CALENDAR.add(Calendar.MONTH, numMonths);
             return CALENDAR.getTime();
         }
     }
