@@ -1,5 +1,5 @@
 /*
- * $Id: WidgetFactory.java,v 1.10 2009-07-15 17:33:47 sanderk Exp $
+ * $Id: WidgetFactory.java,v 1.11 2010-03-16 21:07:03 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -21,6 +21,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 
@@ -292,7 +293,17 @@ public class WidgetFactory {
      * @return the table component
      */
     public SortedTable createSortedTable(SortedTableModel tableModel) {
-        return new SortedTableImpl(tableModel, false);
+        return new SortedTableImpl(tableModel, false, JTable.AUTO_RESIZE_ALL_COLUMNS);
+    }
+
+    /**
+     * Creates a table component that allows the user to sort its rows.
+     * @param tableModel the table model
+     * @param autoResizeMode the auto resize mode of the table
+     * @return the table component
+     */
+    public SortedTable createSortedTable(SortedTableModel tableModel, int autoResizeMode) {
+        return new SortedTableImpl(tableModel, false, autoResizeMode);
     }
 
     /**
@@ -301,7 +312,17 @@ public class WidgetFactory {
      * @return the table component
      */
     public SortedTable createUnsortedTable(SortedTableModel tableModel) {
-        return new SortedTableImpl(tableModel, true);
+        return new SortedTableImpl(tableModel, true, JTable.AUTO_RESIZE_ALL_COLUMNS);
+    }
+
+    /**
+     * Creates a table component that does not allow the user to sort its rows.
+     * @param tableModel the table model
+     * @param autoResizeMode the auto resize mode of the table
+     * @return the table component
+     */
+    public SortedTable createUnsortedTable(SortedTableModel tableModel, int autoResizeMode) {
+        return new SortedTableImpl(tableModel, true, autoResizeMode);
     }
 
     /**

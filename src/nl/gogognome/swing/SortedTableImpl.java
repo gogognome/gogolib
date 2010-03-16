@@ -1,5 +1,5 @@
 /*
- * $Id: SortedTableImpl.java,v 1.7 2009-07-15 17:33:47 sanderk Exp $
+ * $Id: SortedTableImpl.java,v 1.8 2010-03-16 21:07:03 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -61,8 +61,9 @@ class SortedTableImpl implements SortedTable {
      * @param tableModel the table model
      * @param disableSorting <code>true</code> if the user cannot change the sorting;
      *        <code>false</code> if the user can change the sorting.
+     * @param autoResizeMode the auto resize mode of the table
      */
-    public SortedTableImpl(SortedTableModel tableModel, boolean disableSorting) {
+    public SortedTableImpl(SortedTableModel tableModel, boolean disableSorting, int autoResizeMode) {
         super();
         this.disableSorting = disableSorting;
 
@@ -73,7 +74,7 @@ class SortedTableImpl implements SortedTable {
 
         table.setRowSelectionAllowed(true);
         table.setColumnSelectionAllowed(false);
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        table.setAutoResizeMode(autoResizeMode);
 
         TableColumnModel columnModel = table.getColumnModel();
 
