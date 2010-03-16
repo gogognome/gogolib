@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractSortedTableModel.java,v 1.1 2009-12-01 19:26:30 sanderk Exp $
+ * $Id: AbstractSortedTableModel.java,v 1.2 2010-03-16 21:07:27 sanderk Exp $
  */
 
 package nl.gogognome.swing;
@@ -27,6 +27,16 @@ public abstract class AbstractSortedTableModel extends AbstractTableModel implem
     public AbstractSortedTableModel(List<ColumnDefinition> columnDefinitions) {
         super();
         this.columnDefinitions = columnDefinitions;
+    }
+
+    @Override
+    public String getColumnName(int column) {
+        return columnDefinitions.get(column).getName();
+    }
+
+    @Override
+    public Class<?> getColumnClass(int column) {
+        return columnDefinitions.get(column).getClassOfValues();
     }
 
     /** {@inheritDoc} */
