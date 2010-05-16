@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTabbedPane.java,v 1.10 2008-03-16 16:32:31 sanderk Exp $
+ * $Id: ViewTabbedPane.java,v 1.11 2010-05-16 19:36:49 sanderk Exp $
  *
  * Copyright (C) 2006 Sander Kooijmans
  */
@@ -14,7 +14,6 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
-import javax.swing.SwingUtilities;
 
 /**
  * This class implements a tabbed pane that can hold <code>View</code>s.
@@ -25,10 +24,10 @@ public class ViewTabbedPane extends JTabbedPane {
 
     /** Contains the views that are added to this tabbed pane. */
     private ArrayList<View> views = new ArrayList<View>();
-    
+
     /** The frame that contains this tabbed pane. */
     private JFrame parentFrame;
-    
+
     /**
      * Constructor.
      * @param parentFrame the frame that contains this tabbed pane.
@@ -37,7 +36,7 @@ public class ViewTabbedPane extends JTabbedPane {
         super();
         this.parentFrame = parentFrame;
     }
-    
+
     /**
      * Adds a view to the tabbed pane.
      * @param view the view to be added
@@ -48,18 +47,18 @@ public class ViewTabbedPane extends JTabbedPane {
                 remove(view);
             }
         };
-        
+
         view.setCloseAction(closeAction);
         view.setParentFrame(parentFrame);
         view.doInit();
         addTab(view.getTitle(), view);
         views.add(view);
         setDefaultButtonForView(view);
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                view.requestFocusInWindow();
-            }
-        });
+//        SwingUtilities.invokeLater(new Runnable() {
+//            public void run() {
+//                view.requestFocusInWindow();
+//            }
+//        });
     }
 
     /**
@@ -73,7 +72,7 @@ public class ViewTabbedPane extends JTabbedPane {
             views.remove(view);
         }
     }
-    
+
     /**
      * Select the tab that contains the specified view.
      * @param view the view
@@ -84,7 +83,7 @@ public class ViewTabbedPane extends JTabbedPane {
             setSelectedIndex(index);
         }
     }
-    
+
     /** Closes all views in the tabbed pane. */
     public void closeAllViews() {
         for (Iterator iter = views.iterator(); iter.hasNext();) {
@@ -104,25 +103,26 @@ public class ViewTabbedPane extends JTabbedPane {
     public boolean hasView(View view) {
         return getIndexOfView(view) != -1;
     }
-    
+
     public void remove(View view) {
         int index = getIndexOfView(view);
         if (index != -1) {
             remove(index);
         }
     }
-    
+
     /**
      * This method can be called by the UI when the user closes the tab.
      * @param index index of the tab to be closed
      */
-    public void remove(int index) {
-        View view = (View)getComponentAt(index); 
+    @Override
+	public void remove(int index) {
+        View view = (View)getComponentAt(index);
         view.doClose();
         views.remove(view);
         super.remove(index);
     }
-    
+
     /**
      * Sets the default button for the view.
      * @param view the view
@@ -130,7 +130,7 @@ public class ViewTabbedPane extends JTabbedPane {
     private void setDefaultButtonForView(View view) {
         Container topLevelContainer = getTopLevelAncestor();
         if (topLevelContainer instanceof JFrame) {
-            ((JFrame) topLevelContainer).getRootPane().setDefaultButton(view.getDefaultButton()); 
+            ((JFrame) topLevelContainer).getRootPane().setDefaultButton(view.getDefaultButton());
         }
     }
 
