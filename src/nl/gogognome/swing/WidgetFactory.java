@@ -1,5 +1,5 @@
 /*
- * $Id: WidgetFactory.java,v 1.11 2010-03-16 21:07:03 sanderk Exp $
+ * $Id: WidgetFactory.java,v 1.12 2010-05-16 19:36:21 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -267,24 +267,34 @@ public class WidgetFactory {
         return result;
     }
 
+    /**
+     * Creates an icon. Icons are cached.
+     * @param id the id of a string resource. The string resource refers to an image resource
+     * @return the icon or <code>null</code> if no icon exists with the specified id
+     */
     public Icon createIcon(String id) {
-        TextResource tr = TextResource.getInstance();
-        String iconResourceName = tr.getString(id);
-        if (iconResourceName == null) {
-            return null;
-        }
+    	Icon icon = IconCache.getInstance().getIcon(id);
+    	if (icon == null) {
+            TextResource tr = TextResource.getInstance();
+            String iconResourceName = tr.getString(id);
+            if (iconResourceName == null) {
+                return null;
+            }
 
-        URL iconUrl = WidgetFactory.class.getResource(iconResourceName);
-        if (iconUrl == null) {
-            return null;
-        }
+            URL iconUrl = WidgetFactory.class.getResource(iconResourceName);
+            if (iconUrl == null) {
+                return null;
+            }
 
-        String description = tr.getString(id + ".description");
-        if (description != null) {
-            return new ImageIcon(iconUrl, description);
-        } else {
-            return new ImageIcon(iconUrl);
-        }
+            String description = tr.getString(id + ".description");
+            if (description != null) {
+                icon = new ImageIcon(iconUrl, description);
+            } else {
+                icon = new ImageIcon(iconUrl);
+            }
+            IconCache.getInstance().addIcon(id, icon);
+    	}
+        return icon;
     }
 
     /**
