@@ -1,5 +1,5 @@
 /*
- * $Id: DialogWithButtons.java,v 1.12 2009-07-15 17:33:25 sanderk Exp $
+ * $Id: DialogWithButtons.java,v 1.13 2010-07-11 14:56:09 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -271,7 +271,7 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
 	 */
 	final protected void showErrorMessage( String titleId, String messageId )
 	{
-		new MessageDialog( dialog, titleId,
+		new MessageDialog(dialog, titleId,
 			TextResource.getInstance().getString(messageId));
 	}
 
