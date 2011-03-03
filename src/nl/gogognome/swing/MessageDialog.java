@@ -15,15 +15,15 @@ import nl.gogognome.framework.View;
 
 
 /**
- * This class implements dialog used to show a message to the user. 
- * 
+ * This class implements dialog used to show a message to the user.
+ *
  * @author Sander Kooijmans
  */
-public class MessageDialog extends DialogWithButtons 
+public class MessageDialog extends DialogWithButtons
 {
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param owner the owner of this dialog.
 	 * @param titleId the id of the title string.
 	 * @param message the message to be shown to the user.
@@ -34,7 +34,7 @@ public class MessageDialog extends DialogWithButtons
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param owner the owner of this dialog.
 	 * @param titleId the id of the title string.
 	 * @param message the message to be shown to the user.
@@ -47,7 +47,7 @@ public class MessageDialog extends DialogWithButtons
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param owner the owner of this dialog.
 	 * @param titleId the id of the title string.
 	 * @param message the message to be shown to the user.
@@ -58,7 +58,7 @@ public class MessageDialog extends DialogWithButtons
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param owner the owner of this dialog.
 	 * @param titleId the id of the title string.
 	 * @param message the message to be shown to the user.
@@ -71,7 +71,7 @@ public class MessageDialog extends DialogWithButtons
 
     /**
      * Constructor.
-     * 
+     *
      * @param owner the owner of this dialog.
      * @param titleId the id of the title string.
      * @param t throwable whose message will be shown to the user.
@@ -83,7 +83,7 @@ public class MessageDialog extends DialogWithButtons
 
     /**
      * Constructor.
-     * 
+     *
      * @param owner the owner of this dialog.
      * @param titleId the id of the title string.
      * @param message the message to be shown to the user.
@@ -103,7 +103,7 @@ public class MessageDialog extends DialogWithButtons
 	 * Shows the dialog.
 	 * @param message the message to be shown. The sequence of the characters
 	 *        '\\' and 'n' indicate a line break.
-	 */	
+	 */
 	private void showDialog( String message ) {
 	    String[] lines = message.split("\\n");
 	    Component messageComponent;
@@ -114,7 +114,7 @@ public class MessageDialog extends DialogWithButtons
             }
 	        messageComponent = panel;
 	    } else {
-	        messageComponent = new JLabel(message); 
+	        messageComponent = new JLabel(message);
 	    }
 		componentInitialized(messageComponent);
 		super.showDialog();
@@ -133,7 +133,20 @@ public class MessageDialog extends DialogWithButtons
             return new MessageDialog((JFrame) owner, titleId, message);
         }
 	}
-    
+
+	/**
+	 * Shows a message dialog based on a {@link Throwable}.
+	 * @param owner the owner of this dialog. Must be a <code>JDialog</code> or <code>JFrame</code>
+	 * @param t the throwable whose message is shown
+	 */
+	public static MessageDialog showMessage(Window owner, Throwable t) {
+		String message = t.getMessage();
+		if (t.getCause() != null) {
+			message += ' ' + t.getCause().getMessage();
+		}
+		return showMessage(owner, "gen.error", message);
+	}
+
     /**
      * Shows a message dialog.
      * @param owner the owner of this dialog.
@@ -147,5 +160,5 @@ public class MessageDialog extends DialogWithButtons
             return new MessageDialog(owner.getParentFrame(), titleId, message);
         }
     }
-    
+
 }
