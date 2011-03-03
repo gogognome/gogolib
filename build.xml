@@ -1,4 +1,4 @@
-<project name="gogolib" default="compile" basedir=".">
+<project name="gogolib" default="dist" basedir=".">
 
 	<!-- set global properties for this build -->
 	<property name="srcdir" value="src" />
@@ -29,7 +29,7 @@
 		</copy>
 	</target>
 
-	<target name="dist" depends="compile"
+	<target name="dist" depends="clean,compile"
 		description="creates a distribution of the project">
 		<!-- Create the distribution directory -->
 		<mkdir dir="${distdir}"/>
