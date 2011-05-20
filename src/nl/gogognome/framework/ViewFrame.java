@@ -1,10 +1,19 @@
 /*
- * $Id: ViewFrame.java,v 1.3 2008-01-10 19:15:47 sanderk Exp $
- *
- * Copyright (C) 2005 Sander Kooijmans
- *
- */
+    This file is part of gogolib.
 
+    gogolib is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    gogolib is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with gogolib.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package nl.gogognome.framework;
 
 import java.awt.event.ActionEvent;
@@ -16,27 +25,28 @@ import javax.swing.Action;
 import javax.swing.JFrame;
 
 /**
- * This class implements a view in a frame. 
+ * This class implements a view in a frame.
  */
 public class ViewFrame {
 
     /** The frame containing the view. */
     private JFrame frame = new JFrame();
-    
+
     /** The view currently shown in the frame. */
     private View view;
-    
+
     public ViewFrame(View view) {
         setView(view);
-        
+
         frame.addWindowListener(new WindowAdapter() {
 
-            public void windowClosing(WindowEvent e) {
+            @Override
+			public void windowClosing(WindowEvent e) {
                 dispose();
             }
         });
     }
-    
+
     /**
      * Sets the view in the frame. If the frame already has a view,
      * then the old view will be closed and replaced by the new view.
@@ -47,13 +57,14 @@ public class ViewFrame {
             throw new IllegalStateException("This ViewFrame has been disposed.");
         }
         removeView();
-        
+
         Action closeAction = new AbstractAction() {
-            public void actionPerformed(ActionEvent event) {
+            @Override
+			public void actionPerformed(ActionEvent event) {
                 dispose();
             }
         };
-        
+
         this.view = view;
         view.setCloseAction(closeAction);
         view.doInit();
@@ -71,10 +82,10 @@ public class ViewFrame {
         frame.pack();
         frame.setVisible(true);
     }
-    
-    /** 
+
+    /**
      * Disposes the frame. If it contains a view, the view will be closed too.
-     * After calling this method, this instance should not be used anymore. 
+     * After calling this method, this instance should not be used anymore.
      */
     public void dispose() {
         if (frame == null) {
@@ -84,7 +95,7 @@ public class ViewFrame {
         frame.dispose();
         frame = null;
     }
-    
+
     /** Removes the view from the frame. */
     private void removeView() {
         if (frame == null) {

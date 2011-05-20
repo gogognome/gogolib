@@ -1,8 +1,19 @@
 /*
- * $Id: TextResource.java,v 1.9 2008-11-10 20:13:50 sanderk Exp $
- *
- * Copyright (C) 2006 Sander Kooijmans
- */
+    This file is part of gogolib.
+
+    gogolib is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    gogolib is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with gogolib.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package nl.gogognome.text;
 
 import java.text.MessageFormat;
@@ -17,40 +28,40 @@ import java.util.ResourceBundle;
 /**
  * This class represents a text resource. It offers functionality to
  * obtain texts from resource files. It also offers easy methods to
- * format strings. 
+ * format strings.
  *
  * @author Sander Kooijmans
  */
 public class TextResource {
-    
+
 	/** The singleton instance of this class. */
 	private static TextResource instance;
-	
+
 	/** Contains the string resources of the user interface. */
 	private List<ResourceBundle> stringResources;
-	
+
 	/** The locale used to obtain resources and format currencies and dates. */
 	private Locale locale = Locale.getDefault();
-	
-	/** 
+
+	/**
 	 * An <code>AmountFormat</code> created with <code>locale</code> as its
 	 * locale.
 	 */
 	private AmountFormat amountFormat = new AmountFormat(locale);
-	
+
 	/**
 	 * Gets the singleton instance of this class.
 	 * @return the singleton instance of this class.
 	 */
-	public static synchronized TextResource getInstance() 
+	public static synchronized TextResource getInstance()
 	{
-		if (instance == null) 
+		if (instance == null)
 		{
 			instance = new TextResource();
 		}
 		return instance;
 	}
-	
+
 	/** Private constructor to enforce usage of <tt>getInstance()</tt>. */
 	private TextResource() {
         loadResources();
@@ -64,7 +75,7 @@ public class TextResource {
         stringResources.add(ResourceBundle.getBundle("stringresources", locale));
         stringResources.add(ResourceBundle.getBundle("gogolibstrings", locale));
     }
-    
+
 
 	/**
 	 * Sets the locale for the string resources.
@@ -76,7 +87,7 @@ public class TextResource {
 	    this.amountFormat = new AmountFormat(locale);
 	    loadResources();
 	}
-	
+
 	/**
 	 * Gets the locale for the string resources.
 	 * @return the locale for the string resources
@@ -85,10 +96,10 @@ public class TextResource {
 	{
 	    return locale;
 	}
-	
+
 	/**
 	 * Gets the <code>AmountFormat</code> with the same <code>Locale</code>
-	 * as this <code>TextResource</code>. 
+	 * as this <code>TextResource</code>.
 	 * @return the <code>AmountFormat</code>
 	 */
 	public AmountFormat getAmountFormat()
@@ -136,11 +147,11 @@ public class TextResource {
         }
 	    return result;
 	}
-	
+
 	public String getString(String id, Object argument) {
 	    return getString(id, new Object[] { argument } );
 	}
-	
+
 	public String getString(String id, int argument) {
 	    return getString(id, Integer.toString(argument));
 	}
@@ -159,5 +170,5 @@ public class TextResource {
 	    SimpleDateFormat sdf = new SimpleDateFormat(getString(formatId), locale);
 	    return sdf.format(date);
 	}
-	
+
 }

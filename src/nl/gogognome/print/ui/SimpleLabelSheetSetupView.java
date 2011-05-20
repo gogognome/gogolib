@@ -1,10 +1,19 @@
 /*
- * $Id: SimpleLabelSheetSetupView.java,v 1.3 2007-09-15 19:06:27 sanderk Exp $
- *
- * Copyright (C) 2005 Sander Kooijmans
- *
- */
+    This file is part of gogolib.
 
+    gogolib is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    gogolib is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with gogolib.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package nl.gogognome.print.ui;
 
 import java.awt.BorderLayout;
@@ -42,53 +51,53 @@ import nl.gogognome.swing.WidgetFactory;
 import nl.gogognome.text.TextResource;
 
 /**
- * This class implements a view for setting up <code>SimpleLabelSheet</code>s 
+ * This class implements a view for setting up <code>SimpleLabelSheet</code>s
  * to print labels.
  */
 public class SimpleLabelSheetSetupView extends View {
 
     /** The labels to be printed. */
     private Label[] labels;
-    
+
     /** Contains the label sheets needed to print the labels. */
     private ArrayList labelSheets = new ArrayList();
 
     private int nrColsPerSheet = 3;
-    
+
     private int nrRowsPerSheet = 8;
-    
+
     private LabelButton[][] labelButtons;
-    
+
     private JButton btPreviousSheet;
-    
+
     private JButton btNextSheet;
-    
+
     private JLabel lbNrSheets;
-    
+
     /** Titled border that shows the current sheet number. */
     private TitledBorder titledBorder;
-    
+
     private JPanel mainPanel;
-    
-    /** 
+
+    /**
      * Contains the <code>LabelSheet</code>s that were set up when the user pressed the Ok button.
      * Is <code>null</code> if the user did not press the Ok button yet or if the user pressed the
-     * Cancel button. 
+     * Cancel button.
      */
     private LabelSheet[] resulingLabelSheets;
-    
-    /** 
+
+    /**
      * Index in <code>labelSheets</code> of the <code>LabelSheet</code> currently shown
      * in the dialog.
      */
     private int currentSheet = 0;
-    
+
     private String idOkButton;
     private String idCancelButton;
-    
+
     /** Contains the identifier of the button that was used to close this view. */
     private String idPressedButton;
-    
+
     /**
      * Constructor.
      * @param frame the parent of this dialog
@@ -102,14 +111,17 @@ public class SimpleLabelSheetSetupView extends View {
         setSheets(labels);
     }
 
-    public String getTitle() {
+    @Override
+	public String getTitle() {
         return TextResource.getInstance().getString("simplelabelsheetsetupdialog.title");
     }
 
-    public void onClose() {
+    @Override
+	public void onClose() {
     }
 
-    public void onInit() {
+    @Override
+	public void onInit() {
         initLabelSheets();
         add(createPanel());
     }
@@ -117,17 +129,17 @@ public class SimpleLabelSheetSetupView extends View {
     private void setSheets(Label[] labels) {
         this.labels = labels;
     }
-    
+
     /**
      * Creates the panel that contains all widgets for this dialog, except the
      * Ok and Cancel buttons, which are provided by the superclass.
-     * 
+     *
      * @return the panel
      */
     private JPanel createPanel() {
         WidgetFactory wf = WidgetFactory.getInstance();
         TextResource tr = TextResource.getInstance();
-        
+
         mainPanel = new JPanel(new GridBagLayout());
 
         // Create panel with statistics
@@ -137,12 +149,12 @@ public class SimpleLabelSheetSetupView extends View {
         lbNrSheets = new JLabel(tr.getString("simplelabelsheetsetupdialog.lbNrSheets", labelSheets.size()));
         statisticsPanel.add(lbNrSheets,
             SwingUtils.createLabelGBConstraints(0, 1));
-        
+
         // Create panel with layout of sheet
         JPanel sheetPanel = new JPanel(new GridLayout(nrRowsPerSheet, nrColsPerSheet));
         titledBorder = new TitledBorder(tr.getString("simplelabelsheetsetupdialog.currentPage", currentSheet+1));
         sheetPanel.setBorder(titledBorder);
-        
+
         labelButtons = new LabelButton[nrRowsPerSheet][nrColsPerSheet];
         for (int r=0; r<nrRowsPerSheet; r++) {
             for (int c=0; c<nrColsPerSheet; c++) {
@@ -150,10 +162,11 @@ public class SimpleLabelSheetSetupView extends View {
                 sheetPanel.add(labelButtons[r][c]);
             }
         }
-        
+
         ButtonPanel buttonPanel = new ButtonPanel(SwingConstants.CENTER);
         btPreviousSheet = wf.createButton("simplelabelsheetsetupdialog.btPrevSheet", new AbstractAction() {
-            public void actionPerformed(ActionEvent event) {
+            @Override
+			public void actionPerformed(ActionEvent event) {
                 if (currentSheet > 0) {
                     currentSheet--;
                     titledBorder.setTitle(TextResource.getInstance().getString(
@@ -163,9 +176,10 @@ public class SimpleLabelSheetSetupView extends View {
                 }
             }
         });
-        
+
         btNextSheet = wf.createButton("simplelabelsheetsetupdialog.btNextSheet", new AbstractAction() {
-            public void actionPerformed(ActionEvent event) {
+            @Override
+			public void actionPerformed(ActionEvent event) {
                 if (currentSheet+1 < labelSheets.size()) {
                     currentSheet++;
                     titledBorder.setTitle(TextResource.getInstance().getString(
@@ -177,7 +191,7 @@ public class SimpleLabelSheetSetupView extends View {
         });
         buttonPanel.add(btPreviousSheet);
         buttonPanel.add(btNextSheet);
-        
+
         JPanel sheetPanelWithButtons = new JPanel(new BorderLayout());
         sheetPanelWithButtons.add(sheetPanel, BorderLayout.CENTER);
         sheetPanelWithButtons.add(buttonPanel, BorderLayout.SOUTH);
@@ -185,7 +199,8 @@ public class SimpleLabelSheetSetupView extends View {
         // Create panel with ok and cancel buttons
         buttonPanel = new ButtonPanel(SwingConstants.RIGHT);
         JButton okButton = wf.createButton(idOkButton, new AbstractAction() {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 idPressedButton = idOkButton;
                 resulingLabelSheets = (LabelSheet[]) labelSheets.toArray(new LabelSheet[labelSheets.size()]);
                 closeAction.actionPerformed(e);
@@ -193,20 +208,21 @@ public class SimpleLabelSheetSetupView extends View {
         });
         buttonPanel.add(okButton);
         JButton cancelButton = wf.createButton(idCancelButton, new AbstractAction() {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 idPressedButton = idCancelButton;
                 closeAction.actionPerformed(e);
             }
         });
         buttonPanel.add(cancelButton);
-        
-        mainPanel.add(statisticsPanel, 
+
+        mainPanel.add(statisticsPanel,
             SwingUtils.createPanelGBConstraints(0, 0));
-        mainPanel.add(sheetPanelWithButtons, 
+        mainPanel.add(sheetPanelWithButtons,
             SwingUtils.createPanelGBConstraints(0, 1));
-        mainPanel.add(buttonPanel, 
+        mainPanel.add(buttonPanel,
             SwingUtils.createPanelGBConstraints(0, 2));
-        
+
         return mainPanel;
     }
 
@@ -239,13 +255,13 @@ public class SimpleLabelSheetSetupView extends View {
                     break;
                 }
             }
-            
+
             while (labelSheets.size() > nrOfSheets) {
                 labelSheets.remove(labelSheets.size() - 1);
             }
         }
     }
-    
+
     /**
      * Initializes the sheet with buttons for sheet <code>currentSheet</code>.
      * Also disables and enables the previous and next button.
@@ -268,7 +284,7 @@ public class SimpleLabelSheetSetupView extends View {
         btPreviousSheet.setEnabled(currentSheet > 0);
         btNextSheet.setEnabled(currentSheet+1 < labelSheets.size());
     }
-    
+
     /**
      * Gets the identifier of the button that was used to close this view.
      * @return the identifier of the button
@@ -276,11 +292,11 @@ public class SimpleLabelSheetSetupView extends View {
     public String getIdPressedButton() {
         return idPressedButton;
     }
-    
+
     /**
      * Gets the <code>LabelSheet</code>s that were set up when the user pressed the Ok button.
      * Is <code>null</code> if the user did not press the Ok button yet or if the user pressed the
-     * Cancel button. 
+     * Cancel button.
      * @return the <code>LabelSheet</code>s
      */
     public LabelSheet[] getResultingLabelSheets() {
@@ -291,13 +307,14 @@ public class SimpleLabelSheetSetupView extends View {
 
         private int row;
         private int column;
-        
+
         public ToggleLabelAction(int row, int column) {
             this.row = row;
             this.column = column;
         }
-        
-        public void actionPerformed(ActionEvent event) {
+
+        @Override
+		public void actionPerformed(ActionEvent event) {
             SimpleLabelSheet sheet = (SimpleLabelSheet) labelSheets.get(currentSheet);
             if (sheet != null) {
                 sheet.setAvailable(row, column, !sheet.isLabelAvailble(row, column));
@@ -307,66 +324,71 @@ public class SimpleLabelSheetSetupView extends View {
             mainPanel.repaint();
         }
     }
-    
+
     private class LabelButton extends Component {
-        
+
         private ActionWrapper actionWrapper;
-        
+
         private boolean available = true;
-        
+
         private final Dimension DIMENSION = new Dimension(80, 30);
-        
+
         public LabelButton(Action action) {
             super();
             actionWrapper = WidgetFactory.getInstance().createAction(
                 "simplelabelsheetsetupdialog.btLabel");
             actionWrapper.setAction(action);
-         
+
             setFocusable(true);
             addMouseListener(new MouseAdapter() {
-                public void mouseClicked(MouseEvent e) {
+                @Override
+				public void mouseClicked(MouseEvent e) {
                     actionWrapper.actionPerformed(null);
                 }
             });
-            
+
             addFocusListener(new FocusListener() {
 
-                public void focusGained(FocusEvent e) {
+                @Override
+				public void focusGained(FocusEvent e) {
                     repaint();
                 }
 
-                public void focusLost(FocusEvent e) {
+                @Override
+				public void focusLost(FocusEvent e) {
                     repaint();
                 }
             });
-            
+
             addKeyListener(new KeyAdapter() {
 
-                public void keyTyped(KeyEvent event) {
+                @Override
+				public void keyTyped(KeyEvent event) {
                     if (KeyEvent.VK_SPACE == event.getKeyChar()) {
                         actionWrapper.actionPerformed(null);
                     }
                 }
             });
         }
-        
+
         public void setAvaialble(boolean available) {
             this.available = available;
             repaint();
         }
-        
-        public void paint(Graphics g) {
+
+        @Override
+		public void paint(Graphics g) {
             g.setColor(available ? Color.WHITE : Color.BLUE);
             if (!isEnabled()) {
                 g.setColor(Color.DARK_GRAY);
             }
-            
+
             Dimension d = getPreferredSize();
             g.fillRect(0, 0, d.width, d.height);
-            
+
             g.setColor(Color.GRAY);
             g.drawRect(0, 0, d.width, d.height);
-            
+
             if (hasFocus()) {
                 g.setColor(Color.BLACK);
                 g.drawRect(2, 2, d.width - 4, d.height - 4);
@@ -374,8 +396,9 @@ public class SimpleLabelSheetSetupView extends View {
                 g.drawRect(3, 3, d.width - 6, d.height - 6);
             }
         }
-        
-        public Dimension getPreferredSize() {
+
+        @Override
+		public Dimension getPreferredSize() {
             return DIMENSION;
         }
     }

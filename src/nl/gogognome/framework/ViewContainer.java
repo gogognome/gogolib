@@ -1,10 +1,19 @@
 /*
- * $Id: ViewContainer.java,v 1.1 2007-09-04 19:00:40 sanderk Exp $
- *
- * Copyright (C) 2005 Sander Kooijmans
- *
- */
+    This file is part of gogolib.
 
+    gogolib is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    gogolib is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with gogolib.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package nl.gogognome.framework;
 
 import java.awt.BorderLayout;
@@ -14,7 +23,7 @@ import javax.swing.AbstractAction;
 
 /**
  * This class implements a container for a view.
- * 
+ *
  * <p>If a view is added to a dialog, then closing the view will automatically close the dialog.
  * If a wizzard-like dialog must be made, in which a sequence of views are shown, then add
  * a <code>ViewContainer</code> to the dialog and show the sequences of views in this
@@ -28,7 +37,7 @@ public class ViewContainer extends View {
 
     /** The title of this <code>ViewContainer</code>. */
     private String title;
-    
+
     /**
      * Constructor.
      * @param title the title of this <code>ViewContainer</code>
@@ -41,17 +50,20 @@ public class ViewContainer extends View {
      * Gets the title of this view.
      * @return the title
      */
-    public String getTitle() {
+    @Override
+	public String getTitle() {
         return title;
     }
 
     /** This method is called when the <code>ViewContainer</code> is closed. */
-    public void onClose() {
+    @Override
+	public void onClose() {
         removeView();
     }
 
     /** This method is called when the <code>ViewContainer</code> is initialized. */
-    public void onInit() {
+    @Override
+	public void onInit() {
         setLayout(new BorderLayout());
     }
 
@@ -66,7 +78,8 @@ public class ViewContainer extends View {
         view.setParentDialog(getParentDialog());
         view.setParentFrame(getParentFrame());
         view.setCloseAction(new AbstractAction() {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 removeView();
             }
         });
@@ -74,7 +87,7 @@ public class ViewContainer extends View {
         add(view, BorderLayout.CENTER);
         validate();
     }
-    
+
     /** Removes the view from this <code>ViewContainer</code>. */
     public void removeView() {
         View oldView = view;

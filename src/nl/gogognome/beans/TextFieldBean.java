@@ -1,8 +1,19 @@
 /*
- * $Id: TextFieldBean.java,v 1.1 2009-01-03 12:21:15 sanderk Exp $
- *
- * Copyright (C) 2006 Sander Kooijmans
- */
+    This file is part of gogolib.
+
+    gogolib is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    gogolib is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with gogolib.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package nl.gogognome.beans;
 
 import java.awt.Color;
@@ -28,19 +39,19 @@ import nl.gogognome.swing.SwingUtils;
  * @author Sander Kooijmans
  */
 public class TextFieldBean extends JPanel {
-    
+
     /** The model that stores the string of this bean. */
     private StringModel stringModel;
 
     /** The text field in which the user can enter the string. */
     private JTextField textfield;
-    
+
     /** The model change listener for the stirng model. */
     private ModelChangeListener stringModelChangeListener;
-    
+
     /** The document listener for the text field. */
     private DocumentListener documentListener;
-    
+
     /**
      * Constructor.
      * @param stringModel the stirng model that will reflect the content of the bean
@@ -49,38 +60,42 @@ public class TextFieldBean extends JPanel {
         this.stringModel = stringModel;
 
         setOpaque(false);
-        
+
         setLayout(new GridBagLayout());
-        
+
         textfield = new JTextField();
 
         upstringTextField();
         stringModelChangeListener = new ModelChangeListener() {
 
-            public void modelChanged(AbstractModel model) {
+            @Override
+			public void modelChanged(AbstractModel model) {
                 upstringTextField();
             }
-            
+
         };
         stringModel.addModelChangeListener(stringModelChangeListener);
-        
+
         documentListener = new DocumentListener() {
 
-            public void changedUpdate(DocumentEvent evt) {
+            @Override
+			public void changedUpdate(DocumentEvent evt) {
                 parseUserInput();
             }
 
-            public void insertUpdate(DocumentEvent evt) {
+            @Override
+			public void insertUpdate(DocumentEvent evt) {
                 parseUserInput();
             }
 
-            public void removeUpdate(DocumentEvent evt) {
+            @Override
+			public void removeUpdate(DocumentEvent evt) {
                 parseUserInput();
             }
         };
-        
+
         textfield.getDocument().addDocumentListener(documentListener);
-        add(textfield, SwingUtils.createGBConstraints(0,0, 1, 1, 1.0, 0.0, 
+        add(textfield, SwingUtils.createGBConstraints(0,0, 1, 1, 1.0, 0.0,
             GridBagConstraints.WEST, GridBagConstraints.NONE,
             0, 0, 0, 0));    }
 
@@ -99,17 +114,19 @@ public class TextFieldBean extends JPanel {
     /**
      * @see JComponent#addFocusListener(FocusListener)
      */
-    public void addFocusListener(FocusListener listener) {
+    @Override
+	public void addFocusListener(FocusListener listener) {
         textfield.addFocusListener(listener);
     }
-    
+
     /**
      * @see JComponent#removeFocusListener(FocusListener)
      */
-    public void removeFocusListener(FocusListener listener) {
+    @Override
+	public void removeFocusListener(FocusListener listener) {
         textfield.removeFocusListener(listener);
     }
-    
+
     /**
      * Upstrings the text field with the value of the string model.
      */
@@ -121,7 +138,7 @@ public class TextFieldBean extends JPanel {
             textfield.setText("");
         }
     }
-    
+
     /**
      * Parses the string that is entered by the user. If the entered text is a valid
      * string, then the string model is upstringd.

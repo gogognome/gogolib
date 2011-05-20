@@ -1,8 +1,19 @@
 /*
- * $Id: DateSelectionBean.java,v 1.9 2009-02-24 21:32:15 sanderk Exp $
- *
- * Copyright (C) 2006 Sander Kooijmans
- */
+    This file is part of gogolib.
+
+    gogolib is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    gogolib is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with gogolib.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package nl.gogognome.beans;
 
 import java.awt.Color;
@@ -13,12 +24,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
 import nl.gogognome.framework.models.AbstractModel;
 import nl.gogognome.framework.models.DateModel;
 import nl.gogognome.framework.models.ModelChangeListener;
@@ -67,7 +80,8 @@ public class DateSelectionBean extends JPanel {
         updateTextField();
         dateModelChangeListener = new ModelChangeListener() {
 
-            public void modelChanged(AbstractModel model) {
+            @Override
+			public void modelChanged(AbstractModel model) {
                 updateTextField();
             }
 
@@ -76,15 +90,18 @@ public class DateSelectionBean extends JPanel {
 
         documentListener = new DocumentListener() {
 
-            public void changedUpdate(DocumentEvent evt) {
+            @Override
+			public void changedUpdate(DocumentEvent evt) {
                 parseUserInput();
             }
 
-            public void insertUpdate(DocumentEvent evt) {
+            @Override
+			public void insertUpdate(DocumentEvent evt) {
                 parseUserInput();
             }
 
-            public void removeUpdate(DocumentEvent evt) {
+            @Override
+			public void removeUpdate(DocumentEvent evt) {
                 parseUserInput();
             }
         };

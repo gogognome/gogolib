@@ -1,6 +1,19 @@
-/**
- *
- */
+/*
+    This file is part of gogolib.
+
+    gogolib is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    gogolib is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with gogolib.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package nl.gogognome.task.ui;
 
 import java.awt.BorderLayout;
@@ -105,7 +118,8 @@ public class TaskWithProgressDialog implements TaskProgressListener {
 
     public void onFinished(final Exception e) {
     	SwingUtilities.invokeLater(new Runnable() {
-    		public void run() {
+    		@Override
+			public void run() {
     			progressDialog.setVisible(false);
 		    	if (e != null) {
 		            MessageDialog dialog = new MessageDialog(parentFrame, "gen.titleError", e);
@@ -115,9 +129,11 @@ public class TaskWithProgressDialog implements TaskProgressListener {
     	});
     }
 
-    public void onProgressUpdate(final int percentageCompleted) {
+    @Override
+	public void onProgressUpdate(final int percentageCompleted) {
     	SwingUtilities.invokeLater(new Runnable() {
-    		public void run() {
+    		@Override
+			public void run() {
     			progressBar.setValue(percentageCompleted);
     		}
     	});

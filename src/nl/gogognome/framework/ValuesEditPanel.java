@@ -1,10 +1,19 @@
 /*
- * $Id: ValuesEditPanel.java,v 1.3 2009-02-24 21:31:57 sanderk Exp $
- *
- * Copyright (C) 2005 Sander Kooijmans
- *
- */
+    This file is part of gogolib.
 
+    gogolib is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    gogolib is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with gogolib.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package nl.gogognome.framework;
 
 import java.awt.Component;
@@ -12,9 +21,11 @@ import java.awt.GridBagLayout;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
 import nl.gogognome.beans.DateSelectionBean;
 import nl.gogognome.beans.TextFieldBean;
 import nl.gogognome.framework.models.DateModel;
@@ -23,7 +34,7 @@ import nl.gogognome.swing.SwingUtils;
 import nl.gogognome.swing.WidgetFactory;
 
 /**
- * This class implemetns a panel containing a column of input fields.
+ * This class implements a panel containing a column of input fields.
  * Each input field consists of a label and a component (typically a text field).
  * The values of the fields are managed by models (e.g., {@link StringModel}
  * or {@link DateModel}.

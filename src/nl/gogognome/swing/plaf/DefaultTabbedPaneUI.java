@@ -1,10 +1,19 @@
 /*
- * $Id: DefaultTabbedPaneUI.java,v 1.3 2008-07-05 10:50:43 sanderk Exp $
- *
- * Copyright (C) 2005 Sander Kooijmans
- *
- */
+    This file is part of gogolib.
 
+    gogolib is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    gogolib is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with gogolib.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package nl.gogognome.swing.plaf;
 
 import java.awt.Color;
@@ -29,27 +38,30 @@ import javax.swing.plaf.basic.BasicTabbedPaneUI;
 public class DefaultTabbedPaneUI extends BasicTabbedPaneUI {
 
     private final static DefaultTabbedPaneUI INSTANCE = new DefaultTabbedPaneUI();
-    
+
     private final static int CROSS_X = 7;
     private final static int CROSS_Y = 5;
     private final static int CROSS_WIDTH = 10;
     private final static int CROSS_HEIGHT = 10;
-    
+
     public static ComponentUI createUI(JComponent c) {
         return INSTANCE;
     }
-    
-    public void installUI(JComponent c) {
+
+    @Override
+	public void installUI(JComponent c) {
         JTabbedPane tabbedPane = (JTabbedPane)c;
         super.installUI(tabbedPane);
         tabbedPane.setBorder(new EmptyBorder(5, 5, 5, 5));
     }
 
-    protected int calculateTabWidth(int tabPlacement, int tabIndex, FontMetrics metrics) {
+    @Override
+	protected int calculateTabWidth(int tabPlacement, int tabIndex, FontMetrics metrics) {
         return super.calculateTabWidth(tabPlacement, tabIndex, metrics) + 20;
     }
 
-    protected void paintTab(Graphics g, int tabPlacement, Rectangle[] rects,
+    @Override
+	protected void paintTab(Graphics g, int tabPlacement, Rectangle[] rects,
             int tabIndex, Rectangle iconRect, Rectangle textRect) {
         Rectangle tabRect = rects[tabIndex];
         int selectedIndex = tabPane.getSelectedIndex();
@@ -58,23 +70,23 @@ public class DefaultTabbedPaneUI extends BasicTabbedPaneUI {
         paintTabBackground(g, tabPlacement, tabIndex, tabRect.x, tabRect.y,
                 tabRect.width, tabRect.height, isSelected);
 
-        paintTabBorder(g, tabPlacement, tabIndex, tabRect.x, tabRect.y, 
+        paintTabBorder(g, tabPlacement, tabIndex, tabRect.x, tabRect.y,
                        tabRect.width, tabRect.height, isSelected);
-        
+
         Font font = tabPane.getFont();
         FontMetrics metrics = tabPane.getFontMetrics(font);
         Icon icon = getIconForTab(tabIndex);
         String title = tabPane.getTitleAt(tabIndex);
-        
-        layoutLabel(tabPlacement, metrics, tabIndex, title, icon, 
+
+        layoutLabel(tabPlacement, metrics, tabIndex, title, icon,
                     tabRect, iconRect, textRect, isSelected);
 
         Graphics2D g2d = (Graphics2D) g;
         textRect = new Rectangle(textRect.x + CROSS_WIDTH, textRect.y, textRect.width, textRect.height);
         iconRect = new Rectangle(iconRect.x + CROSS_WIDTH, iconRect.y, iconRect.width, iconRect.height);
-        paintText(g2d, tabPlacement, font, metrics, 
+        paintText(g2d, tabPlacement, font, metrics,
                   tabIndex, title, textRect, isSelected);
-        
+
         paintIcon(g, tabPlacement, tabIndex, icon, iconRect, isSelected);
 
         g.setColor(Color.BLACK);
@@ -82,47 +94,52 @@ public class DefaultTabbedPaneUI extends BasicTabbedPaneUI {
         int y = tabRect.y + CROSS_Y;
         int w = CROSS_WIDTH;
         int h = CROSS_HEIGHT;
-        
+
         for (int i=0; i<2; i++) {
             for (int j=0; j<2; j++) {
                 g2d.drawLine(x + i, y + j, x + i + w, y + j + h);
                 g2d.drawLine(x + i, y + j + h, x + i + w, y + j);
             }
         }
-        
-        paintFocusIndicator(g, tabPlacement, rects, tabIndex, 
+
+        paintFocusIndicator(g, tabPlacement, rects, tabIndex,
                   iconRect, textRect, isSelected);
-        
+
 //        g.setColor(Color.RED);
 //        Rectangle clipBounds = g.getClipBounds();
 //        g.drawRect(clipBounds.x, clipBounds.y, clipBounds.width, clipBounds.height);
     }
-    
-    protected MouseListener createMouseListener() {
+
+    @Override
+	protected MouseListener createMouseListener() {
         return new MouseHandler(super.createMouseListener());
     }
-    
+
     private class MouseHandler implements MouseListener {
 
         private MouseListener wrappedMouseListener;
-        
+
         public MouseHandler(MouseListener wrappedMouseListener) {
             this.wrappedMouseListener = wrappedMouseListener;
         }
-        
-        public void mouseClicked(MouseEvent e) {
+
+        @Override
+		public void mouseClicked(MouseEvent e) {
             wrappedMouseListener.mouseClicked(e);
         }
 
-        public void mouseEntered(MouseEvent e) {
+        @Override
+		public void mouseEntered(MouseEvent e) {
             wrappedMouseListener.mouseEntered(e);
         }
 
-        public void mouseExited(MouseEvent e) {
+        @Override
+		public void mouseExited(MouseEvent e) {
             wrappedMouseListener.mouseExited(e);
         }
 
-        public void mousePressed(MouseEvent e) {
+        @Override
+		public void mousePressed(MouseEvent e) {
             int x = e.getX();
             int y = e.getY();
             for (int i=0; i<rects.length; i++) {
@@ -139,9 +156,10 @@ public class DefaultTabbedPaneUI extends BasicTabbedPaneUI {
             wrappedMouseListener.mousePressed(e);
         }
 
-        public void mouseReleased(MouseEvent e) {
+        @Override
+		public void mouseReleased(MouseEvent e) {
             wrappedMouseListener.mouseReleased(e);
         }
-        
+
     }
 }

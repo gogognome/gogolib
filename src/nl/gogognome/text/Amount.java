@@ -1,8 +1,19 @@
 /*
- * $Id: Amount.java,v 1.4 2007-04-02 17:33:42 sanderk Exp $
- *
- * Copyright (C) 2006 Sander Kooijmans
- */
+    This file is part of gogolib.
+
+    gogolib is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    gogolib is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with gogolib.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package nl.gogognome.text;
 
 import java.math.BigInteger;
@@ -15,32 +26,32 @@ import java.util.Locale;
  * This class represents amounts. It should be used instead of floats, doubles,
  * ints or longs, since floats and doubles suffer from rounding differences
  * and all of them lack checks for overflows.
- * 
+ *
  * @author Sander Kooijmans
  */
-public class Amount 
+public class Amount
 {
     /** The currency of this amount. */
     private Currency currency;
-    
+
     /** Represents the amount in cents. */
     private BigInteger amount;
 
-    /** 
-     * Maps a <code>Currency</code> to an <code>Amount</code> that represents 
-     * the value zero in that currency. 
-     */ 
+    /**
+     * Maps a <code>Currency</code> to an <code>Amount</code> that represents
+     * the value zero in that currency.
+     */
     private static HashMap currencyToZeroMap = new HashMap();
-    
+
     /**
      * Constructs an amount.
      * @param amount a string representation of the amount
-     * @param currency the currency of the amount 
+     * @param currency the currency of the amount
      */
-    protected Amount(String amount, Currency currency, Locale locale) 
+    protected Amount(String amount, Currency currency, Locale locale)
     {
         this.currency = currency;
-        
+
         // remove fraction separator from string
         int numFractionDigits = currency.getDefaultFractionDigits();
         if (numFractionDigits > 0)
@@ -54,14 +65,14 @@ public class Amount
                 index = sb.length();
                 sb.append(fractionSeparator);
             }
-            
-            // Append as many zeros as needed to let sb have exactly 
+
+            // Append as many zeros as needed to let sb have exactly
             // numFractionDigits digits.
             while (numFractionDigits > (sb.length() - index - 1))
             {
                 sb.append('0');
             }
-            
+
             sb.deleteCharAt(index);
             amount = sb.toString();
         }
@@ -78,11 +89,11 @@ public class Amount
      * Gets the currency of this amount.
      * @return the currency
      */
-    public Currency getCurrency() 
+    public Currency getCurrency()
     {
         return currency;
     }
-    
+
     /**
      * Gets the amount that represents zero in the specified currency.
      * @param currency the currency
@@ -98,12 +109,12 @@ public class Amount
         }
         return result;
     }
-    
+
     public Amount add(Amount that)
     {
         return new Amount(this.amount.add(that.amount), currency);
     }
-    
+
     public Amount subtract(Amount that)
     {
         return new Amount(this.amount.subtract(that.amount), currency);
@@ -113,16 +124,16 @@ public class Amount
     {
         return new Amount(this.amount.divide(new BigInteger(Integer.toString(val))), currency);
     }
-    
+
     public Amount multiply(int val) {
         return new Amount(this.amount.multiply(new BigInteger(Integer.toString(val))), currency);
     }
-    
+
     public Amount negate()
     {
         return new Amount(amount.negate(), currency);
     }
-    
+
     public int compareTo(Amount that)
     {
         if (this.currency.equals(that.currency))
@@ -153,32 +164,34 @@ public class Amount
         return amount.signum() == -1;
     }
 
-    /** 
+    /**
      * Checks whether this amount is zero.
-     * @return <code>true</code> if this amount is zero; <code>false</code> otherwise  
+     * @return <code>true</code> if this amount is zero; <code>false</code> otherwise
      */
     public boolean isZero() {
         return amount.signum() == 0;
     }
-    
+
     /**
      * Gets a string representation of this amount.
      * The string representation will be the result of the underlying
-     * <code>BigInteger</code>'s <code>toString()</code> method. 
+     * <code>BigInteger</code>'s <code>toString()</code> method.
      * @return a string representation of this amount
      */
-    public String toString()
+    @Override
+	public String toString()
     {
         return amount.toString();
     }
-    
+
     /**
      * Checks whether this instance is equal to another instance.
      * @param o the other instance
      * @return <code>true</code> if this instance is equal to <code>o</code>;
      *          <code>false</code> otherwise
      */
-    public boolean equals(Object o) {
+    @Override
+	public boolean equals(Object o) {
         if (o instanceof Amount) {
             Amount that = (Amount) o;
             return this.currency.equals(that.currency) &&
@@ -187,8 +200,9 @@ public class Amount
             return false;
         }
     }
-    
-    public int hashCode() {
+
+    @Override
+	public int hashCode() {
         return currency.hashCode() + amount.hashCode();
     }
 }

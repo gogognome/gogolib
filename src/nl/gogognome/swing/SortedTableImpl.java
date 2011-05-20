@@ -1,10 +1,19 @@
 /*
- * $Id: SortedTableImpl.java,v 1.8 2010-03-16 21:07:03 sanderk Exp $
- *
- * Copyright (C) 2005 Sander Kooijmans
- *
- */
+    This file is part of gogolib.
 
+    gogolib is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    gogolib is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with gogolib.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package nl.gogognome.swing;
 
 import java.awt.Component;
@@ -101,21 +110,24 @@ class SortedTableImpl implements SortedTable {
     /**
      * @see SortedTable#getComponent()
      */
-    public JComponent getComponent() {
+    @Override
+	public JComponent getComponent() {
         return scrollPane;
     }
 
     /**
      * @see SortedTable#getSelectionModel()
      */
-    public ListSelectionModel getSelectionModel() {
+    @Override
+	public ListSelectionModel getSelectionModel() {
         return selectionModel;
     }
 
     /**
      * @see SortedTable#setTitle(String)
      */
-    public void setTitle(String title) {
+    @Override
+	public void setTitle(String title) {
         scrollPane.setBorder(new CompoundBorder(new TitledBorder(title), new EmptyBorder(5, 5, 5, 5)));
     }
 
@@ -127,11 +139,13 @@ class SortedTableImpl implements SortedTable {
             this.wrappedModel = wrappedModel;
         }
 
-        public void addListSelectionListener(ListSelectionListener listener) {
+        @Override
+		public void addListSelectionListener(ListSelectionListener listener) {
             wrappedModel.addListSelectionListener(listener);
         }
 
-        public void addSelectionInterval(int index0, int index1) {
+        @Override
+		public void addSelectionInterval(int index0, int index1) {
             if (index0 > index1) {
                 int t = index0;
                 index0 = index1;
@@ -145,19 +159,23 @@ class SortedTableImpl implements SortedTable {
             }
         }
 
-        public void clearSelection() {
+        @Override
+		public void clearSelection() {
             wrappedModel.clearSelection();
         }
 
-        public int getAnchorSelectionIndex() {
+        @Override
+		public int getAnchorSelectionIndex() {
             return tableSorter.modelIndex(wrappedModel.getAnchorSelectionIndex());
         }
 
-        public int getLeadSelectionIndex() {
+        @Override
+		public int getLeadSelectionIndex() {
             return tableSorter.modelIndex(wrappedModel.getLeadSelectionIndex());
         }
 
-        public int getMaxSelectionIndex() {
+        @Override
+		public int getMaxSelectionIndex() {
             int result = -1;
             for (int i=0; i<table.getRowCount(); i++) {
                 if (wrappedModel.isSelectedIndex(i)) {
@@ -167,7 +185,8 @@ class SortedTableImpl implements SortedTable {
             return result;
         }
 
-        public int getMinSelectionIndex() {
+        @Override
+		public int getMinSelectionIndex() {
             int result = Integer.MAX_VALUE;
             for (int i=0; i<table.getRowCount(); i++) {
                 if (wrappedModel.isSelectedIndex(i)) {
@@ -180,28 +199,34 @@ class SortedTableImpl implements SortedTable {
             return result;
         }
 
-        public int getSelectionMode() {
+        @Override
+		public int getSelectionMode() {
             return wrappedModel.getSelectionMode();
         }
 
-        public boolean getValueIsAdjusting() {
+        @Override
+		public boolean getValueIsAdjusting() {
             return wrappedModel.getValueIsAdjusting();
         }
 
-        public void insertIndexInterval(int index, int length, boolean before) {
+        @Override
+		public void insertIndexInterval(int index, int length, boolean before) {
             // TODO Auto-generated method stub
             System.out.println("insertIndexInterval(" + index + ", " + length + ", " + before);
         }
 
-        public boolean isSelectedIndex(int index) {
+        @Override
+		public boolean isSelectedIndex(int index) {
             return wrappedModel.isSelectedIndex(tableSorter.viewIndex(index));
         }
 
-        public boolean isSelectionEmpty() {
+        @Override
+		public boolean isSelectionEmpty() {
             return wrappedModel.isSelectionEmpty();
         }
 
-        public void removeIndexInterval(int index0, int index1) {
+        @Override
+		public void removeIndexInterval(int index0, int index1) {
             if (index0 > index1) {
                 int t = index0;
                 index0 = index1;
@@ -215,11 +240,13 @@ class SortedTableImpl implements SortedTable {
             }
         }
 
-        public void removeListSelectionListener(ListSelectionListener listener) {
+        @Override
+		public void removeListSelectionListener(ListSelectionListener listener) {
             wrappedModel.removeListSelectionListener(listener);
         }
 
-        public void removeSelectionInterval(int index0, int index1) {
+        @Override
+		public void removeSelectionInterval(int index0, int index1) {
             if (index0 > index1) {
                 int t = index0;
                 index0 = index1;
@@ -233,15 +260,18 @@ class SortedTableImpl implements SortedTable {
             }
         }
 
-        public void setAnchorSelectionIndex(int index) {
+        @Override
+		public void setAnchorSelectionIndex(int index) {
             wrappedModel.setAnchorSelectionIndex(tableSorter.viewIndex(index));
         }
 
-        public void setLeadSelectionIndex(int index) {
+        @Override
+		public void setLeadSelectionIndex(int index) {
             wrappedModel.setLeadSelectionIndex(tableSorter.viewIndex(index));
         }
 
-        public void setSelectionInterval(int index0, int index1) {
+        @Override
+		public void setSelectionInterval(int index0, int index1) {
             clearSelection();
             if (index0 > index1) {
                 int t = index0;
@@ -256,11 +286,13 @@ class SortedTableImpl implements SortedTable {
             }
          }
 
-        public void setSelectionMode(int selectionMode) {
+        @Override
+		public void setSelectionMode(int selectionMode) {
             wrappedModel.setSelectionMode(selectionMode);
         }
 
-        public void setValueIsAdjusting(boolean valueIsAdjusting) {
+        @Override
+		public void setValueIsAdjusting(boolean valueIsAdjusting) {
             wrappedModel.setValueIsAdjusting(valueIsAdjusting);
         }
 
@@ -269,14 +301,16 @@ class SortedTableImpl implements SortedTable {
     /**
      * @see SortedTable#getFocusableComponent()
      */
-    public Component getFocusableComponent() {
+    @Override
+	public Component getFocusableComponent() {
         return table;
     }
 
     /**
      * @see SortedTable#selectFirstRow()
      */
-    public void selectFirstRow() {
+    @Override
+	public void selectFirstRow() {
         if (tableSorter.getRowCount() > 0) {
             table.getSelectionModel().clearSelection();
             table.getSelectionModel().setSelectionInterval(0, 0);
@@ -286,7 +320,8 @@ class SortedTableImpl implements SortedTable {
     /**
      * @see nl.gogognome.swing.SortedTable#getSelectedRows()
      */
-    public int[] getSelectedRows() {
+    @Override
+	public int[] getSelectedRows() {
         int[] rows = table.getSelectedRows();
         // Convert view rows to model rows
         for (int i=0; i<rows.length; i++) {
@@ -298,7 +333,8 @@ class SortedTableImpl implements SortedTable {
     /**
      * @see nl.gogognome.swing.SortedTable#setSelectionAction(javax.swing.Action)
      */
-    public void setSelectionAction(final Action action) {
+    @Override
+	public void setSelectionAction(final Action action) {
         table.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -321,7 +357,8 @@ class SortedTableImpl implements SortedTable {
     /**
      * @see nl.gogognome.swing.SortedTable#setSortingStatus(int, int)
      */
-    public void setSortingStatus(int column, int status) {
+    @Override
+	public void setSortingStatus(int column, int status) {
         tableSorter.setSortingStatus(column, status);
     }
 }

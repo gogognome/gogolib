@@ -1,10 +1,19 @@
 /*
- * $Id: LabelPrinter.java,v 1.5 2007-11-11 19:47:34 sanderk Exp $
- *
- * Copyright (C) 2005 Sander Kooijmans
- *
- */
+    This file is part of gogolib.
 
+    gogolib is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    gogolib is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with gogolib.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package nl.gogognome.print;
 
 import java.awt.Color;
@@ -27,7 +36,7 @@ public class LabelPrinter {
 
     /** Indicates whether debug functionality of this class is enabled. */
     private final static boolean DEBUG = false;
-    
+
     /**
      * Private constructor, because this class only has static methods.
      */
@@ -43,7 +52,7 @@ public class LabelPrinter {
      */
     public static void printLabels(Label[] labels, LabelSheet[] labelPapers) throws PrinterException {
         PrinterJob printerJob = PrinterJob.getPrinterJob();
-        
+
         Book book = new Book();
         PrintableImpl printable = new PrintableImpl(labels, labelPapers);
         book.append(printable, new PageFormat(), labelPapers.length);
@@ -66,27 +75,28 @@ public class LabelPrinter {
             this.labels = labels;
             this.labelPapers = labelPapers;
         }
-        
+
         /**
          * @see java.awt.print.Printable#print(java.awt.Graphics, java.awt.print.PageFormat, int)
          */
-        public int print(Graphics g, PageFormat format, int pageIndex) throws PrinterException {
+        @Override
+		public int print(Graphics g, PageFormat format, int pageIndex) throws PrinterException {
             if (pageIndex >= labelPapers.length) {
                 return Printable.NO_SUCH_PAGE;
             }
-            
+
             Graphics2D g2d = (Graphics2D) g;
             g2d.setClip(null);
-            
+
             Paper paper = format.getPaper();
             double paperWidth = paper.getWidth();
             double paperHeight = paper.getHeight();
-            
+
             // It seems that under Linux always the size of Letter is used instead of A4.
             // This is a workaround:
             paperWidth = (210.0 / 25.4) * 72.0;
             paperHeight = (297.0 / 25.4) * 72.0;
-            
+
             int labelIndex = 0;
             for (int i=0; i<pageIndex; i++) {
                 labelIndex += labelPapers[i].getNrAvailableLabels();
@@ -102,7 +112,7 @@ public class LabelPrinter {
                         g2d.drawRect((int)labelX, (int)labelY, (int)labelWidth, (int)labelHeight);
                     }
                     g2d.setPaint(Color.BLACK);
-                    
+
                     if (labelPapers[pageIndex].isLabelAvailble(y, x)) {
                         labels[labelIndex].printLabel(g2d, labelX, labelY, labelWidth, labelHeight, format, pageIndex);
                         labelIndex++;

@@ -1,10 +1,20 @@
 /*
- * $Id: SortedTable.java,v 1.5 2008-06-03 18:41:19 sanderk Exp $
- *
- * Copyright (C) 2005 Sander Kooijmans
- *
- */
+/*
+    This file is part of gogolib.
 
+    gogolib is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    gogolib is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with gogolib.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package nl.gogognome.swing;
 
 import java.awt.Component;
@@ -20,12 +30,12 @@ import javax.swing.ListSelectionModel;
  */
 public interface SortedTable {
 
-    /** Indicates descending order. */ 
+    /** Indicates descending order. */
     public static final int DESCENDING = -1;
-    
+
     /** Indicates unsorted order. */
     public static final int NOT_SORTED = 0;
-    
+
     /** Indicates ascending order. */
     public static final int ASCENDING = 1;
 
@@ -34,39 +44,39 @@ public interface SortedTable {
      * @return the selection model
      */
     public ListSelectionModel getSelectionModel();
-    
+
     /**
      * Gets the actual {@link JComponent} that contains the table. This component should
      * be added to a {@link Container}.
-     * 
+     *
      * @return the {@link JComponent}
      */
     public JComponent getComponent();
- 
+
     /**
      * Sets the title for this table.
      * @param title the title
      */
     public void setTitle(String title);
-    
+
     /**
      * Gets the component that can receive the focus.
      * @return the focusable component
      */
     public Component getFocusableComponent();
-    
+
     /**
      * If the table is not empty, then this method selects the first row.
      */
     public void selectFirstRow();
-    
+
     /**
      * Set the sorting states.
      * @param column the column to be sorted
      * @param status {@link #DESCENDING}, {@link #NOT_SORTED} or {@link #ASCENDING}
      */
     public void setSortingStatus(int column, int status);
-    
+
     /**
      * Returns the indices of all selected rows.
      *
@@ -75,7 +85,7 @@ public interface SortedTable {
      * @see #getSelectedRow
      */
     public int[] getSelectedRows();
-    
+
     /**
      * Sets the action that is to be performed when the user selects a row in the table.
      * @param action the action

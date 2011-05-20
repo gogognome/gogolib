@@ -1,39 +1,49 @@
 /*
- * $Id: SimpleLabelSheet.java,v 1.1 2007-08-08 18:57:20 sanderk Exp $
- *
- * Copyright (C) 2005 Sander Kooijmans
- *
- */
+    This file is part of gogolib.
 
+    gogolib is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    gogolib is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with gogolib.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package nl.gogognome.print;
 
 /**
- * This class implements a sheet of which the number of rows and columns are configurable.  
+ * This class implements a sheet of which the number of rows and columns are configurable.
  */
 public class SimpleLabelSheet implements LabelSheet {
 
-    /** 
+    /**
      * <code>unavailableLabels[row][column] == true</code> if and only if
      * the label <code>(row, column)</code> is <b>un</b>available.
-     * It was chosen to use unavailable instead of available, because by 
-     * default a boolean array is initialize with all values to <code>false</code>. 
+     * It was chosen to use unavailable instead of available, because by
+     * default a boolean array is initialize with all values to <code>false</code>.
      */
     private boolean[][] unavailableLabels;
-    
+
     private int nrRows;
-    
+
     private int nrColumns;
-    
+
     public SimpleLabelSheet(int nrRows, int nrColumns) {
         this.nrRows = nrRows;
         this.nrColumns = nrColumns;
         unavailableLabels = new boolean[nrRows][nrColumns];
     }
-    
+
     /**
      * @see nl.gogognome.print.LabelSheet#getNrAvailableLabels()
      */
-    public int getNrAvailableLabels() {
+    @Override
+	public int getNrAvailableLabels() {
         int sum = 0;
         for (int r = 0; r<getNrRows(); r++) {
             for (int c=0; c<getNrColumns(); c++) {
@@ -48,21 +58,24 @@ public class SimpleLabelSheet implements LabelSheet {
     /**
      * @see nl.gogognome.print.LabelSheet#getNrColumns()
      */
-    public int getNrColumns() {
+    @Override
+	public int getNrColumns() {
         return nrColumns;
     }
 
     /**
      * @see nl.gogognome.print.LabelSheet#getNrRows()
      */
-    public int getNrRows() {
+    @Override
+	public int getNrRows() {
         return nrRows;
     }
 
     /**
      * @see nl.gogognome.print.LabelSheet#isLabelAvailble(int, int)
      */
-    public boolean isLabelAvailble(int row, int column) {
+    @Override
+	public boolean isLabelAvailble(int row, int column) {
         return !unavailableLabels[row][column];
     }
 

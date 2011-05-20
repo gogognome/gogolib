@@ -1,10 +1,24 @@
 /*
- * $Id: DateUtil.java,v 1.6 2010-02-12 18:27:15 sanderk Exp $
- *
- * Copyright (C) 2006 Sander Kooijmans
- */
+    This file is part of gogolib.
+
+    gogolib is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    gogolib is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with gogolib.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package nl.gogognome.util;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -15,8 +29,59 @@ import java.util.Date;
  */
 public class DateUtil {
 
+	private final static DateFormat YYYYMMDD = new SimpleDateFormat("yyyyMMdd");
+
     /** Calendar used to perform conversions. */
     private final static Calendar CALENDAR = Calendar.getInstance();
+
+    /**
+     * Creates a date with the time set to midnight of the date.
+     * @param year the year
+     * @param month the month (1 = January, ..., 12 = December)
+     * @param day the day
+     * @return the date
+     */
+    public static Date createDate(int year, int month, int day) {
+    	return createDate(year, month, day, 0, 0, 0, 0);
+    }
+
+    /**
+     * Creates a date including a time. The number of milliseconds is set to zero.
+     * @param year the year
+     * @param month the month (1 = January, ..., 12 = December)
+     * @param day the day
+     * @param hour the hour
+     * @param minute the minute
+     * @param second the second
+     * @return the date
+     */
+    public static Date createDate(int year, int month, int day, int hour, int minute, int second) {
+    	return createDate(year, month, day, hour, minute, second, 0);
+    }
+
+    /**
+     * Creates a date including a time.
+     * @param year the year
+     * @param month the month (1 = January, ..., 12 = December)
+     * @param day the day
+     * @param hour the hour
+     * @param minute the minute
+     * @param second the second
+     * @param millisecond the millisecond
+     * @return the date
+     */
+    public static Date createDate(int year, int month, int day, int hour, int minute, int second, int millisecond) {
+    	synchronized (CALENDAR) {
+    		CALENDAR.set(Calendar.YEAR, year);
+    		CALENDAR.set(Calendar.MONTH, month - 1);
+    		CALENDAR.set(Calendar.DATE, day);
+    		CALENDAR.set(Calendar.HOUR_OF_DAY, hour);
+    		CALENDAR.set(Calendar.MINUTE, minute);
+    		CALENDAR.set(Calendar.SECOND, second);
+    		CALENDAR.set(Calendar.MILLISECOND, millisecond);
+    		return CALENDAR.getTime();
+    	}
+    }
 
     /**
      * Compares two dates up to the day of year, ignoring their time within
@@ -134,4 +199,32 @@ public class DateUtil {
         }
         return diffInYears;
     }
+
+    /**
+     * Formats a date in the format YYYYMMDD.
+     * @param date the date
+     * @return the formatted date
+     */
+    public static String formatDateYYYYMMDD(Date date) {
+    	synchronized (YYYYMMDD) {
+    		return YYYYMMDD.format(date);
+    	}
+    }
+
+    /**
+     * Parses a date in the format YYYYMMDD. Contrary to {@link DateFormat#parse(String)}
+     * parses the complete string and not just a prefix.
+     * @param dateString the string to be parsed
+     * @return the date
+     * @throws ParseException if the parameter does not match the format YYYYMMDD.
+     */
+	public static Date parseDateYYYYMMDD(String dateString) throws ParseException {
+		synchronized (YYYYMMDD) {
+			Date date = YYYYMMDD.parse(dateString);
+			if (!YYYYMMDD.format(date).equals(dateString)) {
+				throw new ParseException("The date \"" + dateString + "\" is not in the format YYYYMMDD." , 1);
+			}
+			return date;
+		}
+	}
 }

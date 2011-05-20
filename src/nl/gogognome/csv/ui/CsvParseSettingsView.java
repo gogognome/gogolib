@@ -1,8 +1,19 @@
 /*
- * $Id: CsvParseSettingsView.java,v 1.1 2008-01-10 19:15:56 sanderk Exp $
- *
- * Copyright (C) 2007 Sander Kooijmans
- */
+    This file is part of gogolib.
+
+    gogolib is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    gogolib is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with gogolib.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package nl.gogognome.csv.ui;
 
 import java.awt.BorderLayout;
@@ -43,39 +54,39 @@ import nl.gogognome.text.TextResource;
 
 /**
  * This class implements a view that allows the user to select a CSV file, select lines
- * from this file and specify an output format that is to be applied to each selected line. 
+ * from this file and specify an output format that is to be applied to each selected line.
  *
  * @author Sander Kooijmans
  */
 public class CsvParseSettingsView extends View {
 
-    /** The model of the table showing the CSV file. */ 
+    /** The model of the table showing the CSV file. */
     private CsvTableModel tableModel;
-    
+
     /** The table showing the CSV file. */
     private JTable table;
-    
+
     /** The values of the CSV file. Must never be <code>null</code>. */
     private String[][] values = new String[0][0];
 
     /** The CSV file. */
     private File file;
-    
+
     private JTextField tfFileName;
 
     private JTextField tfOutputFormat;
-    
+
     private JTextArea taSampleOutput;
-    
+
     /** The parser used to parse the CSV file. */
     private CsvFileParser parser;
 
     private String idOkButton;
     private String idCancelButton;
-    
+
     /** Contains the identifier of the button that was used to close this view. */
     private String idPressedButton;
-    
+
     /**
      * @param dialog
      * @param file the CSV file to be read
@@ -103,7 +114,7 @@ public class CsvParseSettingsView extends View {
     private Component createPanel() {
         JPanel mainPanel = new JPanel(new GridBagLayout());
         WidgetFactory wf = WidgetFactory.getInstance();
-        
+
         // Create file panel
         JPanel filePanel = new JPanel(new GridBagLayout());
         filePanel.add(wf.createLabel("csvParseSettingsView.filename"),
@@ -112,14 +123,15 @@ public class CsvParseSettingsView extends View {
         tfFileName = wf.createTextField(30);
         filePanel.add(tfFileName, SwingUtils.createTextFieldGBConstraints(1, 0));
 
-        JButton button = wf.createButton("gen.btSelectFile", new AbstractAction() { 
-            public void actionPerformed(ActionEvent event) {
+        JButton button = wf.createButton("gen.btSelectFile", new AbstractAction() {
+            @Override
+			public void actionPerformed(ActionEvent event) {
                 onChoseFile();
             }
         });
-        filePanel.add(button, SwingUtils.createGBConstraints(2, 0, 1, 1, 0.0, 0.0, 
+        filePanel.add(button, SwingUtils.createGBConstraints(2, 0, 1, 1, 0.0, 0.0,
             GridBagConstraints.CENTER, GridBagConstraints.NONE, 0, 5, 0, 0));
-        
+
         // Create table panel
         JPanel tablePanel = new JPanel(new BorderLayout());
         tableModel = new CsvTableModel();
@@ -130,32 +142,33 @@ public class CsvParseSettingsView extends View {
         tablePanel.setBorder(new CompoundBorder(
                 new TitledBorder(TextResource.getInstance().getString("csvParseSettingsView.tableBorderTitle")),
                 new EmptyBorder(5, 10, 0, 10)));
-        
+
         // Create output format panel
         JPanel outputFormatPanel = new JPanel(new GridBagLayout());
         outputFormatPanel.add(wf.createLabel("csvParseSettingsView.format"),
                 SwingUtils.createLabelGBConstraints(0, 0));
         tfOutputFormat = new JTextField("{2} {1}\\n{3}\\n{4} {5}");
         tfOutputFormat.addFocusListener(new FocusAdapter() {
-            public void focusLost(FocusEvent e) {
+            @Override
+			public void focusLost(FocusEvent e) {
                 updateSample();
             }
         });
         outputFormatPanel.add(tfOutputFormat,
                 SwingUtils.createTextFieldGBConstraints(1, 0));
-        
+
         outputFormatPanel.add(wf.createLabel("csvParseSettingsView.sample"),
-                SwingUtils.createGBConstraints(0, 1, 1, 1, 0.0, 0.0, 
+                SwingUtils.createGBConstraints(0, 1, 1, 1, 0.0, 0.0,
                         GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                         5, 0, 0, 0));
         taSampleOutput = new JTextArea(4, 40);
         taSampleOutput.setEditable(false);
         outputFormatPanel.add(taSampleOutput,
-                SwingUtils.createGBConstraints(1, 1, 1, 1, 1.0, 1.0, 
+                SwingUtils.createGBConstraints(1, 1, 1, 1, 1.0, 1.0,
                         GridBagConstraints.WEST, GridBagConstraints.BOTH,
                         5, 0, 0, 0));
         updateSample();
-        
+
         outputFormatPanel.setBorder(new CompoundBorder(
                 new TitledBorder(TextResource.getInstance().getString("csvParseSettingsView.outputFormatBorderTitle")),
                 new EmptyBorder(5, 10, 0, 10)));
@@ -164,40 +177,43 @@ public class CsvParseSettingsView extends View {
         JPanel buttonPanel = new JPanel(new FlowLayout());
         buttonPanel = new ButtonPanel(SwingConstants.RIGHT);
         JButton okButton = wf.createButton(idOkButton, new AbstractAction() {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 idPressedButton = idOkButton;
                 closeAction.actionPerformed(e);
             }
         });
         buttonPanel.add(okButton);
         JButton cancelButton = wf.createButton(idCancelButton, new AbstractAction() {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 idPressedButton = idCancelButton;
                 closeAction.actionPerformed(e);
             }
         });
         buttonPanel.add(cancelButton);
-        
+
         // Put all panels on the main panel
-        mainPanel.add(filePanel, 
+        mainPanel.add(filePanel,
             SwingUtils.createPanelGBConstraints(0, 0));
-        mainPanel.add(tablePanel, 
+        mainPanel.add(tablePanel,
                 SwingUtils.createPanelGBConstraints(0, 1));
-        mainPanel.add(outputFormatPanel, 
+        mainPanel.add(outputFormatPanel,
                 SwingUtils.createPanelGBConstraints(0, 2));
-        mainPanel.add(buttonPanel, 
+        mainPanel.add(buttonPanel,
             SwingUtils.createPanelGBConstraints(0, 3));
 
         // Finally, add listeners
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
+            @Override
+			public void valueChanged(ListSelectionEvent e) {
                 updateSample();
             }
         });
 
         return mainPanel;
     }
-    
+
     private void updateSample() {
         String format = tfOutputFormat.getText();
         String sample;
@@ -209,14 +225,14 @@ public class CsvParseSettingsView extends View {
             sample = TextResource.getInstance().getString("csvParseSettingsView.emptySelection");
         }
         sample = sample.replaceAll("\\\\n", "\n");
-        
+
         taSampleOutput.setText(sample);
     }
-    
+
     public String getOutputFormat() {
         return tfOutputFormat.getText();
     }
-    
+
     /**
      * Gets the parser as it is configured by the user. This method should
      * only be called if the user exited the dialog by pressing the Ok button.
@@ -226,7 +242,7 @@ public class CsvParseSettingsView extends View {
         parser.setRowIndices(table.getSelectedRows());
         return parser;
     }
-    
+
     private class CsvTableModel extends AbstractTableModel {
 
         private int nrColumns;
@@ -241,74 +257,84 @@ public class CsvParseSettingsView extends View {
                 nrColumns = Math.max(nrColumns, values[i].length);
             }
         }
-        
-        public Class<?> getColumnClass(int columnIndex) {
+
+        @Override
+		public Class<?> getColumnClass(int columnIndex) {
             return String.class;
         }
-        
-        public String getColumnName(int column) {
+
+        @Override
+		public String getColumnName(int column) {
             return Integer.toString(column);
         }
-        
+
         /* (non-Javadoc)
          * @see javax.swing.table.TableModel#getColumnCount()
          */
-        public int getColumnCount() {
+        @Override
+		public int getColumnCount() {
             return nrColumns;
         }
 
         /* (non-Javadoc)
          * @see javax.swing.table.TableModel#getRowCount()
          */
-        public int getRowCount() {
+        @Override
+		public int getRowCount() {
             return values.length;
         }
 
         /* (non-Javadoc)
          * @see javax.swing.table.TableModel#getValueAt(int, int)
          */
-        public Object getValueAt(int row, int col) {
+        @Override
+		public Object getValueAt(int row, int col) {
             if (col < values[row].length) {
                 return values[row][col];
             } else {
                 return "";
             }
         }
-        
+
     }
 
-    public String getTitle() {
+    @Override
+	public String getTitle() {
         return TextResource.getInstance().getString("csvParseSettingsView.title");
     }
 
-    public void onClose() {
+    @Override
+	public void onClose() {
     }
 
-    public void onInit() {
+    @Override
+	public void onInit() {
         add(createPanel());
         onFileChanged();
     }
-    
+
     /** Opens the file selection dialog to let the user select a file. */
     private void onChoseFile() {
         JFileChooser fileChooser = new JFileChooser(tfFileName.getText());
         fileChooser.setFileFilter(new FileFilter() {
 
-            public boolean accept(File f) {
+            @Override
+			public boolean accept(File f) {
                 return f.isDirectory() || f.getName().endsWith(".csv");
             }
 
-            public String getDescription() {
+            @Override
+			public String getDescription() {
                 return TextResource.getInstance().getString("csvParseSettingsView.csvFile");
             }
-            
+
         });
         if (fileChooser.showOpenDialog(CsvParseSettingsView.this) == JFileChooser.APPROVE_OPTION) {
             file = fileChooser.getSelectedFile();
             onFileChanged();
         }
     }
-    
+
     private void onFileChanged() {
         tfFileName.setText(file != null ? file.getAbsolutePath() : "");
         parser = new CsvFileParser(file);

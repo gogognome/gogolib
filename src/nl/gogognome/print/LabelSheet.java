@@ -1,10 +1,19 @@
 /*
- * $Id: LabelSheet.java,v 1.1 2007-08-08 18:57:09 sanderk Exp $
- *
- * Copyright (C) 2005 Sander Kooijmans
- *
- */
+    This file is part of gogolib.
 
+    gogolib is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    gogolib is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with gogolib.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package nl.gogognome.print;
 
 /**
@@ -20,13 +29,13 @@ public interface LabelSheet {
      * @return the number of rows
      */
     public int getNrRows();
-    
+
     /**
      * Gets the number of columns of labels.
      * @return the number of columns
      */
     public int getNrColumns();
-    
+
     /**
      * Checks whether the specified label is available. Only available labels can be printed.
      * @param row the row of the label
@@ -34,9 +43,9 @@ public interface LabelSheet {
      * @return <code>true</code> if the label is avaible; <code>false</code> otherwise
      */
     public boolean isLabelAvailble(int row, int column);
-    
+
     /**
-     * Returns the number of available labels on this sheet. 
+     * Returns the number of available labels on this sheet.
      * @return the number of available labels on this sheet
      */
     public int getNrAvailableLabels();

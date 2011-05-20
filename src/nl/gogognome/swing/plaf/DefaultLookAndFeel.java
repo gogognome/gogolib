@@ -1,10 +1,19 @@
 /*
- * $Id: DefaultLookAndFeel.java,v 1.4 2007-11-11 19:49:23 sanderk Exp $
- *
- * Copyright (C) 2005 Sander Kooijmans
- *
- */
+    This file is part of gogolib.
 
+    gogolib is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    gogolib is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with gogolib.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package nl.gogognome.swing.plaf;
 
 import javax.swing.UIDefaults;
@@ -14,7 +23,7 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
 
 /**
  * This class implements the default look and feel for the
- * gogolib-based projects. 
+ * gogolib-based projects.
  */
 public class DefaultLookAndFeel extends MetalLookAndFeel {
 
@@ -28,48 +37,54 @@ public class DefaultLookAndFeel extends MetalLookAndFeel {
             // Don't let application crash because of an unsupported look and feel.
         }
     }
-    
+
     /* (non-Javadoc)
      * @see javax.swing.LookAndFeel#getDescription()
      */
-    public String getDescription() {
+    @Override
+	public String getDescription() {
         return "The gogolib look and feel";
     }
 
     /* (non-Javadoc)
      * @see javax.swing.LookAndFeel#getID()
      */
-    public String getID() {
+    @Override
+	public String getID() {
         return "gogolib";
     }
 
     /* (non-Javadoc)
      * @see javax.swing.LookAndFeel#getName()
      */
-    public String getName() {
+    @Override
+	public String getName() {
         return "The gogolib look and feel";
     }
 
     /* (non-Javadoc)
      * @see javax.swing.LookAndFeel#isNativeLookAndFeel()
      */
-    public boolean isNativeLookAndFeel() {
+    @Override
+	public boolean isNativeLookAndFeel() {
         return false;
     }
 
     /* (non-Javadoc)
      * @see javax.swing.LookAndFeel#isSupportedLookAndFeel()
      */
-    public boolean isSupportedLookAndFeel() {
+    @Override
+	public boolean isSupportedLookAndFeel() {
         return true;
     }
 
     /**
-     * This method is called once by <code>UIManager.setLookAndFeel</code> to create 
-     * the look and feel specific defaults table. Other applications, for example 
+     * This method is called once by <code>UIManager.setLookAndFeel</code> to create
+     * the look and feel specific defaults table. Other applications, for example
      * an application builder, may also call this method.
      */
-    public UIDefaults getDefaults() {
+    @Override
+	public UIDefaults getDefaults() {
         UIDefaults defaults = super.getDefaults();
         defaults.put("TextFieldUI", DefaultTextFieldUI.class.getName());
         defaults.put("TabbedPaneUI", DefaultTabbedPaneUI.class.getName());

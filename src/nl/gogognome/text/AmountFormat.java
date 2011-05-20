@@ -1,8 +1,19 @@
 /*
- * $Id: AmountFormat.java,v 1.2 2008-01-10 21:19:26 sanderk Exp $
- *
- * Copyright (C) 2006 Sander Kooijmans
- */
+    This file is part of gogolib.
+
+    gogolib is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    gogolib is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with gogolib.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package nl.gogognome.text;
 
 import java.text.DecimalFormatSymbols;
@@ -12,15 +23,15 @@ import java.util.HashMap;
 import java.util.Locale;
 
 /**
- * This class offers methods to format <code>Amount</code>s in a number of ways. 
+ * This class offers methods to format <code>Amount</code>s in a number of ways.
  *
  * @author Sander Kooijmans
  */
-public class AmountFormat 
+public class AmountFormat
 {
     /** The locale used to format amounts. */
     private Locale locale;
-    
+
     /**
      * Constructor.
      * @param locale the locale used to format amounts
@@ -28,15 +39,15 @@ public class AmountFormat
     public AmountFormat(Locale locale) {
         this.locale = locale;
     }
-    
+
 	private final static String EMPTY_STRING = "";
-	
+
 	private final static HashMap<String, Currency> SYMBOL_TO_CURRENCY_MAP = new HashMap<String, Currency>();
-	
+
 	static {
 	    SYMBOL_TO_CURRENCY_MAP.put("EUR", Currency.getInstance("EUR"));
 	}
-	
+
 	/**
 	 * Formats an amount using this <code>WidgetFactory</code>'s locale without
 	 * a currency.
@@ -47,7 +58,7 @@ public class AmountFormat
 	{
 	    return formatAmount(amount, EMPTY_STRING);
 	}
-	
+
 	/**
 	 * Formats an amount using this <code>WidgetFactory</code>'s locale with
 	 * the currency specified in the database.
@@ -57,7 +68,7 @@ public class AmountFormat
 	public String formatAmount(Amount amount) {
         return formatAmount(amount, amount.getCurrency().getSymbol(locale));
 	}
-	
+
 	/**
 	 * Formats an amount using this <code>WidgetFactory</code>'s locale.
 	 * @param amount the amount to be formatted
@@ -90,23 +101,23 @@ public class AmountFormat
             }
             sb.insert(fractionDigitIndex, dfs.getDecimalSeparator());
         }
-        
+
         if (currencySymbol != null && currencySymbol.length() > 0)
         {
             sb.insert(firstDigitIndex, ' ');
             sb.insert(firstDigitIndex, currencySymbol);
         }
-        
+
         return sb.toString();
 	}
-	
+
     /**
      * Parses a string containing an amount. The format of the amount is
      * <code>[MINUS]CUR d+[DS]d*</code> where <code>d</code> represents a digit,
      * <code>MINUS</code> stands for "-" or "-/- " (note the extra space at the
-     * end), <code>CUR</code> is the currency symbol and 
+     * end), <code>CUR</code> is the currency symbol and
      * <code>DS</code> is the decimal separator.
-     * 
+     *
      * @param amountString the string containing an amount
      * @return the amount
      * @throws ParseException if the string does not contain a valid amount
@@ -123,7 +134,7 @@ public class AmountFormat
 	            sb.replace(0, 4, "-");
 	            index++;
 	        }
-	        
+
 	        int currencyIndex = index;
 	        StringBuilder currencySymbol = new StringBuilder(10);
 	        while (Character.isLetter(sb.charAt(index)))
@@ -131,11 +142,11 @@ public class AmountFormat
 	            currencySymbol.append(sb.charAt(index));
 	            index++;
 	        }
-	        
+
 	        Currency currency = getCurrency(currencySymbol.toString());
 	        if (currency == null)
 	        {
-	            throw new ParseException("Unknown currency symbol found in \"" 
+	            throw new ParseException("Unknown currency symbol found in \""
 	                    + amountString + "\"", 0);
 	        }
 	        sb.delete(currencyIndex, index + 1);
@@ -158,9 +169,9 @@ public class AmountFormat
      * Parses a string containing an amount. The format of the amount is
      * <code>[MINUS]d+[DS]d*</code> where <code>d</code> represents a digit,
      * <code>MINUS</code> stands for "-" or "-/- " (note the extra space at the
-     * end), and 
+     * end), and
      * <code>DS</code> is the decimal separator.
-     * 
+     *
      * @param amountString the string containing an amount
      * @param currency the currency of the amount
      * @return the amount
@@ -174,7 +185,7 @@ public class AmountFormat
 	            sb.replace(0, 4, "-");
 	            index++;
 	        }
-	        
+
 	        return new Amount(sb.toString(), currency, locale);
         }
         catch (Exception e)
@@ -189,7 +200,7 @@ public class AmountFormat
             }
         }
     }
-    
+
     /**
      * Gets the <code>Currency</code> that corresponds to the specified symbol.
      * @param symbol the symbol

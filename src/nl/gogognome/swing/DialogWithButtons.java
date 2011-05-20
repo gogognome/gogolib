@@ -1,10 +1,19 @@
 /*
- * $Id: DialogWithButtons.java,v 1.13 2010-07-11 14:56:09 sanderk Exp $
- *
- * Copyright (C) 2005 Sander Kooijmans
- *
- */
+    This file is part of gogolib.
 
+    gogolib is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    gogolib is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with gogolib.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package nl.gogognome.swing;
 
 import java.awt.BorderLayout;
@@ -295,6 +304,7 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
 	 * the OK or Cancel button.
 	 * @param e the event.
 	 */
+	@Override
 	final public void actionPerformed(ActionEvent e)
 	{
 		Object source = e.getSource();
@@ -312,6 +322,7 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
 	 * This method is called when a key is pressed.
 	 * @param e the key event.
 	 */
+	@Override
 	public void keyPressed(KeyEvent e)
 	{
 		switch(e.getKeyCode())
@@ -339,6 +350,7 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
 	 * This method is called when a key is released.
 	 * @param e the key event.
 	 */
+	@Override
 	public void keyReleased(KeyEvent e)
 	{
 		// ignore this event
@@ -348,6 +360,7 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
 	 * This method is called when a key is typed.
 	 * @param e the key event.
 	 */
+	@Override
 	public void keyTyped(KeyEvent e)
 	{
 		// ignore this event
@@ -357,6 +370,7 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
 	 * This method is called when a field gains focus.
 	 * @param event the event.
 	 */
+	@Override
 	final public void focusGained(FocusEvent event)
 	{
 		Object source = event.getSource();
@@ -370,6 +384,7 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
 	 * This method is called when a field loses focus.
 	 * @param event the event.
 	 */
+	@Override
 	final public void focusLost(FocusEvent event)
 	{
 		Object source = event.getSource();
