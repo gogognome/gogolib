@@ -1,5 +1,5 @@
 /*
- * $Id: CsvFileParser.java,v 1.3 2007-09-15 18:55:13 sanderk Exp $
+ * $Id: CsvFileParser.java,v 1.4 2011-05-20 14:11:16 sanderk Exp $
  *
  * Copyright (C) 2007 Sander Kooijmans
  */
@@ -20,13 +20,13 @@ import java.util.Arrays;
  */
 public class CsvFileParser {
 
-    /** Contains the indices of the rows to be parsed. */ 
+    /** Contains the indices of the rows to be parsed. */
     private int rowIndices[];
-    
+
     /** The character that separates values in the CSV file. */
     private char separator = ',';
 
-    /** The CSV file to be parsed. */ 
+    /** The CSV file to be parsed. */
     private File file;
 
     /**
@@ -36,7 +36,7 @@ public class CsvFileParser {
     public CsvFileParser(File file) {
         this.file = file;
     }
-    
+
     /**
      * Gets the values from the CSV file.
      * @return the values. Element <code>[r][c]</code> of the returned array represents
@@ -47,31 +47,38 @@ public class CsvFileParser {
         if (file == null) {
             return new String[0][0];
         }
-        
-        BufferedReader reader = new BufferedReader(new FileReader(file));
-        ArrayList rows;
-        rows = new ArrayList(rowIndices != null ? rowIndices.length : 100);
 
-        // Sort row indices. Now we can scan rowIndices from start to end to check line numbers.
-        int rowIndicesIndex = 0;
-        if (rowIndices != null) {
-            Arrays.sort(rowIndices);
-        }
-        
-        int lineNr = 0;
-        String line = reader.readLine();
-        while (line != null) {
-            if (rowIndices == null || (rowIndicesIndex < rowIndices.length && rowIndices[rowIndicesIndex] == lineNr)) {
-                rowIndicesIndex++;
-                rows.add(splitCsvLine(line));
+        BufferedReader reader = null;
+        try {
+        	reader = new BufferedReader(new FileReader(file));
+            ArrayList<String[]> rows;
+            rows = new ArrayList<String[]>(rowIndices != null ? rowIndices.length : 100);
+
+            // Sort row indices. Now we can scan rowIndices from start to end to check line numbers.
+            int rowIndicesIndex = 0;
+            if (rowIndices != null) {
+                Arrays.sort(rowIndices);
             }
-            line = reader.readLine();
-            lineNr++;
+
+            int lineNr = 0;
+            String line = reader.readLine();
+            while (line != null) {
+                if (rowIndices == null || (rowIndicesIndex < rowIndices.length && rowIndices[rowIndicesIndex] == lineNr)) {
+                    rowIndicesIndex++;
+                    rows.add(splitCsvLine(line));
+                }
+                line = reader.readLine();
+                lineNr++;
+            }
+
+            return rows.toArray(new String[rows.size()][]);
+        } finally {
+        	if (reader != null) {
+        		reader.close();
+        	}
         }
-        
-        return (String[][]) rows.toArray(new String[rows.size()][]);
     }
-    
+
     /**
      * Gets the formatted values from the CSV file.
      * @param pattern the pattern applied to the values of each line
@@ -86,44 +93,44 @@ public class CsvFileParser {
         }
         return result;
     }
-    
+
     /**
      * Splits a string based on <code>separator</code>. Also removes quotes from the
      * resulting strings.
-     * 
+     *
      * @param line the line to be split
      * @return the split line
      */
     public String[] splitCsvLine(String line) {
-        ArrayList columns = new ArrayList();
+        ArrayList<String> columns = new ArrayList<String>();
         int index = 0;
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         boolean betweenQuotes = false;
         while (index < line.length()) {
             if (line.charAt(index) == '"') {
                 betweenQuotes = !betweenQuotes;
             } else if (!betweenQuotes && line.charAt(index) == separator) {
                 columns.add(sb.toString());
-                sb = new StringBuffer();
+                sb = new StringBuilder();
         	} else {
                 sb.append(line.charAt(index));
             }
             index++;
         }
         columns.add(sb.toString());
-        return (String[]) columns.toArray(new String[columns.size()]);
+        return columns.toArray(new String[columns.size()]);
     }
-    
+
     /**
      * Composes a value based on a pattern. Place holders of the form <code>{<i>n</i>}</code>
      * are replaced by <code>columns[<i>n</i>]</code>.
-     * 
+     *
      * @param pattern the pattern
      * @param columns the values used to substitute the place holders
      * @return the composed value
      */
     public static String composeValue(String pattern, String[] columns) {
-        StringBuffer sb = new StringBuffer(20);
+        StringBuilder sb = new StringBuilder(20);
         int index = 0;
         while (index < pattern.length()) {
             char c = pattern.charAt(index);
@@ -143,7 +150,7 @@ public class CsvFileParser {
                 index++;
             }
         }
-    
+
         return sb.toString();
     }
 
