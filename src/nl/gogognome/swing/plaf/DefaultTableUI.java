@@ -1,5 +1,5 @@
 /*
- * $Id: DefaultTableUI.java,v 1.6 2008-04-06 18:02:49 sanderk Exp $
+ * $Id: DefaultTableUI.java,v 1.7 2011-05-20 14:11:45 sanderk Exp $
  *
  * Copyright (C) 2005 Sander Kooijmans
  *
@@ -17,6 +17,7 @@ import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTableUI;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -25,46 +26,48 @@ import javax.swing.table.TableColumn;
 
 import nl.gogognome.text.TextResource;
 
-import sun.swing.DefaultLookup;
-
 /**
- * The default look and feel for a table. 
+ * The default look and feel for a table.
  */
 public class DefaultTableUI extends BasicTableUI {
-    
+
     public static ComponentUI createUI(JComponent c) {
         return new DefaultTableUI();
     }
 
-    public void installUI(JComponent c) {
+    @Override
+	public void installUI(JComponent c) {
         super.installUI(c);
         final JTable table = (JTable) c;
 
         table.setDefaultRenderer(Date.class, new DateRenderer());
-        
+
         installAlternatingBackgroundRenderers(table);
-        
+
         // Add listener that installs the alternating background renderers each time the model
         // of the table changes (not when the contents of the model change, but when a new model
         // is set in the table).
         table.addPropertyChangeListener("model", new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent evt) {
+            @Override
+			public void propertyChange(PropertyChangeEvent evt) {
                 installAlternatingBackgroundRenderers(table);
             }
         });
     }
-    
-    protected void installKeyboardActions() {
+
+    @Override
+	protected void installKeyboardActions() {
         super.installKeyboardActions();
-        InputMap inputMap = (InputMap)DefaultLookup.get(table, this, "Table.ancestorInputMap"); 
+        InputMap inputMap = SwingUtilities.getUIInputMap(table, JComponent.WHEN_FOCUSED);
         inputMap.remove(KeyStroke.getKeyStroke("ENTER"));
     }
-    
+
     private static class DateRenderer extends DefaultTableCellRenderer {
         /**
          * @see javax.swing.table.DefaultTableCellRenderer#getTableCellRendererComponent(javax.swing.JTable, java.lang.Object, boolean, boolean, int, int)
          */
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+        @Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
                 boolean hasFocus, int row, int column) {
             if (value instanceof Date) {
                 value = TextResource.getInstance().formatDate("gen.dateFormat", (Date) value);
@@ -72,7 +75,7 @@ public class DefaultTableUI extends BasicTableUI {
             return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         }
     }
-    
+
     /**
      * Install alternating background renderer for the columns.
      * @param table the table for which the renderers must be installed
@@ -86,9 +89,10 @@ public class DefaultTableUI extends BasicTableUI {
                 TableCellRenderer renderer = table.getDefaultRenderer(clazz);
                 table.setDefaultRenderer(clazz, new AlternatingBackgroundRenderer(renderer));
             }
-            
+
             table.getColumnModel().getColumn(col).addPropertyChangeListener(new PropertyChangeListener() {
-                public void propertyChange(PropertyChangeEvent evt) {
+                @Override
+				public void propertyChange(PropertyChangeEvent evt) {
                     if ("cellRenderer".equals(evt.getPropertyName())) {
                         if (!(evt.getNewValue() instanceof AlternatingBackgroundRenderer)) {
                             ((TableColumn) evt.getSource()).setCellRenderer(
