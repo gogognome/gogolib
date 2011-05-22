@@ -26,7 +26,6 @@ import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTableUI;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -67,7 +66,7 @@ public class DefaultTableUI extends BasicTableUI {
     @Override
 	protected void installKeyboardActions() {
         super.installKeyboardActions();
-        InputMap inputMap = SwingUtilities.getUIInputMap(table, JComponent.WHEN_FOCUSED);
+        InputMap inputMap = table.getInputMap();
         inputMap.remove(KeyStroke.getKeyStroke("ENTER"));
     }
 
