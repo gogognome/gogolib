@@ -81,7 +81,7 @@ public class SwingUtils {
             int gridx, int gridy) {
         return createGBConstraints(gridx, gridy, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
-                0, 0, 3, 10);
+                gridy == 0 ? 10 : 0, gridx == 0 ? 10 : 0, 3, 10);
     }
 
     public static GridBagConstraints createPanelGBConstraints(
