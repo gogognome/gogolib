@@ -25,6 +25,8 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  * This class implements a tabbed pane that can hold <code>View</code>s.
@@ -39,6 +41,8 @@ public class ViewTabbedPane extends JTabbedPane {
     /** The frame that contains this tabbed pane. */
     private JFrame parentFrame;
 
+    private boolean changeInProgress;
+
     /**
      * Constructor.
      * @param parentFrame the frame that contains this tabbed pane.
@@ -46,6 +50,13 @@ public class ViewTabbedPane extends JTabbedPane {
     public ViewTabbedPane(JFrame parentFrame) {
         super();
         this.parentFrame = parentFrame;
+        model.addChangeListener(new ChangeListener() {
+
+			@Override
+			public void stateChanged(ChangeEvent changeEvent) {
+				userSelectedView();
+			}
+		});
     }
 
     /**
@@ -53,24 +64,23 @@ public class ViewTabbedPane extends JTabbedPane {
      * @param view the view to be added
      */
     public void openView(final View view) {
-        Action closeAction = new AbstractAction() {
-            @Override
-			public void actionPerformed(ActionEvent event) {
-                remove(view);
-            }
-        };
+    	changeInProgress = true;
+    	try {
+	        Action closeAction = new AbstractAction() {
+	            @Override
+				public void actionPerformed(ActionEvent event) {
+	                remove(view);
+	            }
+	        };
 
-        view.setCloseAction(closeAction);
-        view.setParentFrame(parentFrame);
-        view.doInit();
-        addTab(view.getTitle(), view);
-        views.add(view);
-        setDefaultButtonForView(view);
-//        SwingUtilities.invokeLater(new Runnable() {
-//            public void run() {
-//                view.requestFocusInWindow();
-//            }
-//        });
+	        view.setCloseAction(closeAction);
+	        view.setParentFrame(parentFrame);
+	        view.doInit();
+	        addTab(view.getTitle(), view);
+	        views.add(view);
+    	} finally {
+    		changeInProgress = false;
+    	}
     }
 
     /**
@@ -78,32 +88,49 @@ public class ViewTabbedPane extends JTabbedPane {
      * @param view the view to be removed
      */
     public void closeView(View view) {
-        if (views.contains(view)) {
-            view.doClose();
-            remove(view);
-            views.remove(view);
-        }
+    	changeInProgress = true;
+    	try {
+	        if (views.contains(view)) {
+	            view.doClose();
+	            remove(view);
+	            views.remove(view);
+	        }
+    	} finally {
+    		changeInProgress = false;
+    	}
     }
 
     /**
      * Select the tab that contains the specified view.
      * @param view the view
      */
-    public void selectView(View view) {
-        int index = getIndexOfView(view);
-        if (index != -1) {
-            setSelectedIndex(index);
-        }
+    public void selectView(final View view) {
+    	changeInProgress = true;
+    	try {
+	        int index = getIndexOfView(view);
+	        if (index != -1) {
+	            setSelectedIndex(index);
+	            setDefaultButtonForView(view);
+	            view.requestFocusInWindow();
+	        }
+    	} finally {
+    		changeInProgress = false;
+    	}
     }
 
     /** Closes all views in the tabbed pane. */
     public void closeAllViews() {
-        for (Iterator iter = views.iterator(); iter.hasNext();) {
-            View view = (View) iter.next();
-            view.doClose();
-            super.remove(view);
-        }
-        views.clear();
+    	changeInProgress = true;
+    	try {
+	        for (Iterator<View> iter = views.iterator(); iter.hasNext();) {
+	            View view = iter.next();
+	            view.doClose();
+	            super.remove(view);
+	        }
+	        views.clear();
+    	} finally {
+    		changeInProgress = false;
+    	}
     }
 
     /**
@@ -117,10 +144,15 @@ public class ViewTabbedPane extends JTabbedPane {
     }
 
     public void remove(View view) {
-        int index = getIndexOfView(view);
-        if (index != -1) {
-            remove(index);
-        }
+    	changeInProgress = true;
+    	try {
+	        int index = getIndexOfView(view);
+	        if (index != -1) {
+	            remove(index);
+	        }
+    	} finally {
+    		changeInProgress = false;
+    	}
     }
 
     /**
@@ -159,5 +191,15 @@ public class ViewTabbedPane extends JTabbedPane {
             }
         }
         return -1;
+    }
+
+    private void userSelectedView() {
+    	if (!changeInProgress) {
+	        int index = getSelectedIndex();
+	        if (index != -1) {
+	        	View view = views.get(index);
+	            setDefaultButtonForView(view);
+	        }
+    	}
     }
 }
