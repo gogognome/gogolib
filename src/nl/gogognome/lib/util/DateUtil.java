@@ -72,12 +72,7 @@ public class DateUtil {
      */
     public static Date createDate(int year, int month, int day, int hour, int minute, int second, int millisecond) {
     	synchronized (CALENDAR) {
-    		CALENDAR.set(Calendar.YEAR, year);
-    		CALENDAR.set(Calendar.MONTH, month - 1);
-    		CALENDAR.set(Calendar.DATE, day);
-    		CALENDAR.set(Calendar.HOUR_OF_DAY, hour);
-    		CALENDAR.set(Calendar.MINUTE, minute);
-    		CALENDAR.set(Calendar.SECOND, second);
+    		CALENDAR.set(year, month - 1, day, hour, minute, second);
     		CALENDAR.set(Calendar.MILLISECOND, millisecond);
     		return CALENDAR.getTime();
     	}
