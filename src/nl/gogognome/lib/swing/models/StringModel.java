@@ -34,7 +34,7 @@ public class StringModel extends AbstractModel {
     /**
      * Sets the string of this model.
      * @param newString the new value of the string
-     * @param source the model change listener that sets the date. It will not
+     * @param source the model change listener that sets the string. It will not
      *         get notified. It may be <code>null</code>.
      */
     public void setString(String newString, ModelChangeListener source) {
