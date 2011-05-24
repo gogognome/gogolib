@@ -54,7 +54,7 @@ public class TextFieldBean extends JPanel {
 
     /**
      * Constructor.
-     * @param stringModel the stirng model that will reflect the content of the bean
+     * @param stringModel the string model that will reflect the content of the bean
      */
     public TextFieldBean(StringModel stringModel) {
         this.stringModel = stringModel;

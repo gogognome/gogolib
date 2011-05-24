@@ -24,7 +24,7 @@ import javax.swing.Icon;
 
 /**
  * This class wraps an <code>AbstractAction</code>. It allows to change
- * the behaviour of the <code>actionPerformed()</code> method dynamically.
+ * the behavior of the <code>actionPerformed()</code> method dynamically.
  *
  * @author Sander Kooijmans
  */
