@@ -14,7 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with gogolib.  If not, see <http://www.gnu.org/licenses/>.
 */
-package nl.gogognome.lib.swing.views;
+package nl.gogognome.lib.gui.beans;
 
 import java.awt.Component;
 import java.awt.GridBagLayout;
@@ -26,8 +26,6 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import nl.gogognome.lib.gui.beans.DateSelectionBean;
-import nl.gogognome.lib.gui.beans.TextFieldBean;
 import nl.gogognome.lib.swing.SwingUtils;
 import nl.gogognome.lib.swing.WidgetFactory;
 import nl.gogognome.lib.swing.models.DateModel;
