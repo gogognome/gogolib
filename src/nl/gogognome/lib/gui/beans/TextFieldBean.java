@@ -46,7 +46,7 @@ public class TextFieldBean extends JPanel {
     /** The text field in which the user can enter the string. */
     private JTextField textfield;
 
-    /** The model change listener for the stirng model. */
+    /** The model change listener for the string model. */
     private ModelChangeListener stringModelChangeListener;
 
     /** The document listener for the text field. */
@@ -65,12 +65,12 @@ public class TextFieldBean extends JPanel {
 
         textfield = new JTextField();
 
-        upstringTextField();
+        updateTextField();
         stringModelChangeListener = new ModelChangeListener() {
 
             @Override
 			public void modelChanged(AbstractModel model) {
-                upstringTextField();
+                updateTextField();
             }
 
         };
@@ -128,9 +128,9 @@ public class TextFieldBean extends JPanel {
     }
 
     /**
-     * Upstrings the text field with the value of the string model.
+     * Updates the text field with the value of the string model.
      */
-    private void upstringTextField() {
+    private void updateTextField() {
         String string = stringModel.getString();
         if (string != null) {
             textfield.setText(string);
