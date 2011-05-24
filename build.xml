@@ -60,8 +60,11 @@
 		<!-- Create a zip file containing all sources, build.xml and the jar file -->
 		<zip destfile="${distdir}/${productname}.zip">
 			<fileset dir="${distdir}" includes="${productname}.jar" />
-			<fileset dir="." includes="${srcdir}/**" />
-			<fileset dir="." includes="build.xml" />
+			<fileset dir=".">
+				<exclude name="${generateddir}/**"/>
+				<exclude name="bin/**"/>
+				<exclude name=".*/**"/>
+			</fileset>
         </zip>
 	</target>
 
