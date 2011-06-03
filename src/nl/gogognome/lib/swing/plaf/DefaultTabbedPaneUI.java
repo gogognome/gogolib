@@ -129,8 +129,12 @@ public class DefaultTabbedPaneUI extends BasicTabbedPaneUI {
         }
 
         @Override
-		public void mouseEntered(MouseEvent e) {
-            wrappedMouseListener.mouseEntered(e);
+		public void mouseEntered(MouseEvent event) {
+        	try {
+        		wrappedMouseListener.mouseEntered(event);
+        	} catch (ArrayIndexOutOfBoundsException e) {
+        		// ignore this exception. Seems to be a bug in Sun's classes.
+        	}
         }
 
         @Override
