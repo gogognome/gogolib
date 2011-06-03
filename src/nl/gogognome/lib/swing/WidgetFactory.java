@@ -16,6 +16,7 @@
 */
 package nl.gogognome.lib.swing;
 
+import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Field;
 import java.net.URL;
@@ -33,6 +34,10 @@ import javax.swing.JMenuItem;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 
 import nl.gogognome.lib.text.TextResource;
 
@@ -119,7 +124,7 @@ public class WidgetFactory {
 	/**
 	 * Creates a button.
 	 * @param id the id of the button's description in the resources.
-	 * @action the action to be performed when the button is pressed
+	 * @param the action to be performed when the button is pressed
 	 * @return the button.
 	 */
 	public JButton createButton(String id, Action action) {
@@ -127,6 +132,20 @@ public class WidgetFactory {
 	    actionWrapper.setAction(action);
 
 		return new JButton(actionWrapper);
+	}
+
+	/**
+	 * Creates a button containing an icon only.
+	 * @param id the id of the button's description in the resources.
+	 * @param the action to be performed when the button is pressed
+	 * @param size the width and height in pixels
+	 * @return the button.
+	 */
+	public JButton createIconButton(String id, Action action, int size) {
+	    JButton button = createButton(id, action);
+	    button.setText(null);
+	    button.setPreferredSize(new Dimension(size, size));
+		return button;
 	}
 
 	/**
@@ -304,6 +323,17 @@ public class WidgetFactory {
             IconCache.getInstance().addIcon(id, icon);
     	}
         return icon;
+    }
+
+    /**
+     * Creates a title border for the specified title.
+     * @param titleId the id of the title
+     * @return the title border
+     */
+    public Border createTitleBorder(String titleId) {
+    	return new CompoundBorder(
+                new TitledBorder(' '  + textResource.getString(titleId) + ' '),
+                new EmptyBorder(10, 10, 10, 10));
     }
 
     /**

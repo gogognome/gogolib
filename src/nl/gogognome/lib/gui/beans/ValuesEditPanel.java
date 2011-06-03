@@ -29,6 +29,7 @@ import javax.swing.JPanel;
 import nl.gogognome.lib.swing.SwingUtils;
 import nl.gogognome.lib.swing.WidgetFactory;
 import nl.gogognome.lib.swing.models.DateModel;
+import nl.gogognome.lib.swing.models.FileSelectionModel;
 import nl.gogognome.lib.swing.models.StringModel;
 
 /**
@@ -75,6 +76,16 @@ public class ValuesEditPanel extends JPanel {
     public void addField(String labelId, StringModel model) {
         addField(labelId, new TextFieldBean(model));
     }
+
+    /**
+     * Adds a field to select a file.
+     * @param labelId the id of the label that is put in front of the file selection bean.
+     * @param model the model controlling the file seleciton bean
+     */
+    public void addField(String labelId, FileSelectionModel model) {
+        addField(labelId, new FileSelectionBean(model));
+    }
+
 
     /**
      * Adds a field to edit a string.

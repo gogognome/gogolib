@@ -18,16 +18,23 @@ package nl.gogognome.lib.gui.beans;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import nl.gogognome.lib.swing.SwingUtils;
+import nl.gogognome.lib.swing.WidgetFactory;
 import nl.gogognome.lib.swing.models.AbstractModel;
 import nl.gogognome.lib.swing.models.FileSelectionModel;
 import nl.gogognome.lib.swing.models.ModelChangeListener;
@@ -50,6 +57,9 @@ public class FileSelectionBean extends JPanel {
 
     /** The document listener for the text field. */
     private DocumentListener documentListener;
+
+    /** File name extension filter used when a file is selected using the dialog. */
+    private FileNameExtensionFilter filter;
 
     /**
      * Constructor.
@@ -95,8 +105,20 @@ public class FileSelectionBean extends JPanel {
 
         textfield.getDocument().addDocumentListener(documentListener);
         add(textfield, SwingUtils.createGBConstraints(0,0, 1, 1, 1.0, 0.0,
-            GridBagConstraints.WEST, GridBagConstraints.NONE,
-            0, 0, 0, 0));    }
+            GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
+            0, 0, 0, 0));
+
+        Action action = new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				handleSelectFileWithDialog();
+			}
+		};
+        JButton button = WidgetFactory.getInstance().createIconButton("gen.btnChooseFile", action, 21);
+        add(button, SwingUtils.createGBConstraints(1,0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                0, 0, 0, 0));
+    }
 
     /**
      * Deinitializes this bean. It will free its resources.
@@ -142,5 +164,20 @@ public class FileSelectionBean extends JPanel {
     private void parseUserInput() {
         String string = textfield.getText();
         fileSelectionModel.setFile(new File(string), fileSelectionModelChangeListener);
+    }
+
+    /**
+     * Lets the user select a file using a file chooser dialog.
+     */
+    private void handleSelectFileWithDialog() {
+        JFileChooser chooser = new JFileChooser();
+        if (filter != null) {
+        	chooser.setFileFilter(filter);
+        }
+
+        int returnVal = chooser.showOpenDialog(getTopLevelAncestor());
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+        	fileSelectionModel.setFile(chooser.getSelectedFile(), null);
+        }
     }
 }
