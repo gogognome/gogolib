@@ -28,6 +28,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import nl.gogognome.lib.swing.views.View;
+import nl.gogognome.lib.text.TextResource;
 
 
 /**
@@ -35,8 +36,8 @@ import nl.gogognome.lib.swing.views.View;
  *
  * @author Sander Kooijmans
  */
-public class MessageDialog extends DialogWithButtons
-{
+public class MessageDialog extends DialogWithButtons {
+
 	/**
 	 * Constructor.
 	 *
@@ -45,7 +46,7 @@ public class MessageDialog extends DialogWithButtons
 	 * @param message the message to be shown to the user.
 	 */
 	public MessageDialog(Frame owner, String titleId, String message) {
-		this(owner, titleId, message, BT_OK );
+		this(owner, titleId, message, BT_OK);
 	}
 
 	/**
@@ -57,7 +58,7 @@ public class MessageDialog extends DialogWithButtons
 	 * @param buttonIds the ids of the buttons.
 	 */
 	public MessageDialog(Frame owner, String titleId, String message, String[] buttonIds) {
-		super(owner, titleId, buttonIds );
+		super(owner, titleId, buttonIds);
 		showDialog(message);
 	}
 
@@ -174,6 +175,38 @@ public class MessageDialog extends DialogWithButtons
             return new MessageDialog(owner.getParentDialog(), titleId, message);
         } else {
             return new MessageDialog(owner.getParentFrame(), titleId, message);
+        }
+    }
+
+    /**
+     * Shows an error message dialog.
+     * @param owner the owner of this dialog.
+     * @param messageId the id of the message
+     * @param args optional arguments to be filled in the placeholders of the message
+     */
+    public static MessageDialog showErrorMessage(View owner, String messageId, Object... args) {
+    	String message = TextResource.getInstance().getString(messageId, args);
+        if (owner.getParentDialog() != null) {
+            return new MessageDialog(owner.getParentDialog(), "gen.titleError", message);
+        } else {
+            return new MessageDialog(owner.getParentFrame(), "gen.titleError", message);
+        }
+    }
+
+    /**
+     * Shows an error message dialog.
+     * @param owner the owner of this dialog.
+     * @param t throwable whose message is
+     * @param messageId the id of the message
+     * @param args optional arguments to be filled in the placeholders of the message
+     */
+    public static MessageDialog showErrorMessage(View owner, Throwable t, String messageId, Object... args) {
+    	String message = TextResource.getInstance().getString(messageId, args);
+    	// TODO: Show exception in message
+        if (owner.getParentDialog() != null) {
+            return new MessageDialog(owner.getParentDialog(), "gen.titleError", message);
+        } else {
+            return new MessageDialog(owner.getParentFrame(), "gen.titleError", message);
         }
     }
 
