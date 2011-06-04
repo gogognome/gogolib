@@ -74,21 +74,21 @@ public class SwingUtils {
             int gridx, int gridy) {
         return createGBConstraints(gridx, gridy, 1, 1, 1.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
-                0, 0, 3, 0);
+                gridy == 0 ? 0 : 3, gridx == 0 ? 0 : 3, 0, 0);
     }
 
     public static GridBagConstraints createLabelGBConstraints(
             int gridx, int gridy) {
         return createGBConstraints(gridx, gridy, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
-                gridy == 0 ? 10 : 0, gridx == 0 ? 10 : 0, 3, 10);
+                gridy == 0 ? 0 : 3, gridx == 0 ? 0 : 3, 0, 0);
     }
 
     public static GridBagConstraints createPanelGBConstraints(
             int gridx, int gridy) {
         return createGBConstraints(gridx, gridy, 1, 1, 1.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                10, 10, 10, 10);
+                gridy == 0 ? 10 : 0, gridx == 0 ? 10 : 0, 10, 10);
     }
 
 }

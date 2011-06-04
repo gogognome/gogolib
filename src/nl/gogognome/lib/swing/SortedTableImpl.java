@@ -127,8 +127,8 @@ class SortedTableImpl implements SortedTable {
      * @see SortedTable#setTitle(String)
      */
     @Override
-	public void setTitle(String title) {
-        scrollPane.setBorder(new CompoundBorder(new TitledBorder(title), new EmptyBorder(5, 5, 5, 5)));
+    public void setTitle(String title) {
+        scrollPane.setBorder(WidgetFactory.getInstance().createTitleBorder(title));
     }
 
     private class ListSelectionModelWrapper implements ListSelectionModel {

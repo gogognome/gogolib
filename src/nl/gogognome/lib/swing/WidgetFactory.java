@@ -337,6 +337,16 @@ public class WidgetFactory {
     }
 
     /**
+     * Creates a title border for the specified title with extra margin.
+     * @param titleId the id of the title
+     * @return the title border
+     */
+    public Border createTitleBorderWithMargin(String titleId) {
+    	return new CompoundBorder(new EmptyBorder(10, 10, 10, 10),
+    		createTitleBorder(titleId));
+    }
+
+    /**
      * Creates a table component that allows the user to sort its rows.
      * @param tableModel the table model
      * @return the table component
