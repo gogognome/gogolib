@@ -48,6 +48,7 @@ public abstract class AbstractListSortedTableModel<T> extends AbstractSortedTabl
 
 	/**
 	 * Adds a row to the table model.
+	 * Notifies all listeners about the change in the table.
 	 * This method must be called from the AWT event thread.
 	 * @param row the row
 	 */
@@ -58,6 +59,7 @@ public abstract class AbstractListSortedTableModel<T> extends AbstractSortedTabl
 
 	/**
 	 * Removes a row from the table model.
+	 * Notifies all listeners about the change in the table.
 	 * This method must be called from the AWT event thread.
 	 * @param index the index of the row
 	 */
@@ -68,6 +70,7 @@ public abstract class AbstractListSortedTableModel<T> extends AbstractSortedTabl
 
 	/**
 	 * Updates a row.
+	 * Notifies all listeners about the change in the table.
 	 * This method must be called from the AWT event thread.
 	 * @param index the index of the row
 	 * @param row the new value of the row
