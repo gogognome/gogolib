@@ -19,13 +19,13 @@ package nl.gogognome.lib.gui.beans;
 import java.awt.Component;
 import java.awt.GridBagLayout;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import nl.gogognome.lib.gui.Deinitializable;
 import nl.gogognome.lib.swing.SwingUtils;
 import nl.gogognome.lib.swing.WidgetFactory;
 import nl.gogognome.lib.swing.models.DateModel;
@@ -38,7 +38,7 @@ import nl.gogognome.lib.swing.models.StringModel;
  * The values of the fields are managed by models (e.g., {@link StringModel}
  * or {@link DateModel}.
  */
-public class ValuesEditPanel extends JPanel {
+public class ValuesEditPanel extends JPanel implements Deinitializable {
 
     /** Contains the number of fields present in the panel. */
     private int nrFields;
@@ -57,15 +57,11 @@ public class ValuesEditPanel extends JPanel {
      * It releases its resources.
      */
     public void deinitialize() {
-        Iterator<Component> componentIter = components.iterator();
-        while (componentIter.hasNext()) {
-            Component component = componentIter.next();
-            if (component instanceof TextFieldBean) {
-                ((TextFieldBean) component).deinitialize();
-            } else if (component instanceof DateSelectionBean) {
-                ((DateSelectionBean) component).deinitialize();
-            }
-        }
+    	for (Component c : components) {
+    		if (c instanceof Deinitializable) {
+    			((Deinitializable) c).deinitialize();
+    		}
+    	}
     }
 
     /**

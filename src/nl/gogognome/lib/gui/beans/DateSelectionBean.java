@@ -32,6 +32,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import nl.gogognome.lib.gui.Deinitializable;
 import nl.gogognome.lib.swing.SwingUtils;
 import nl.gogognome.lib.swing.models.AbstractModel;
 import nl.gogognome.lib.swing.models.DateModel;
@@ -44,7 +45,7 @@ import nl.gogognome.lib.util.DateUtil;
  *
  * @author Sander Kooijmans
  */
-public class DateSelectionBean extends JPanel {
+public class DateSelectionBean extends JPanel implements Deinitializable {
 
     /** The model that stores the date of this bean. */
     private DateModel dateModel;

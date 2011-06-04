@@ -28,6 +28,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import nl.gogognome.lib.gui.Deinitializable;
 import nl.gogognome.lib.swing.SwingUtils;
 import nl.gogognome.lib.swing.models.AbstractModel;
 import nl.gogognome.lib.swing.models.ModelChangeListener;
@@ -38,7 +39,7 @@ import nl.gogognome.lib.swing.models.StringModel;
  *
  * @author Sander Kooijmans
  */
-public class TextFieldBean extends JPanel {
+public class TextFieldBean extends JPanel implements Deinitializable {
 
     /** The model that stores the string of this bean. */
     private StringModel stringModel;

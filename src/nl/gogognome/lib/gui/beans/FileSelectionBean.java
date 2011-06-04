@@ -33,6 +33,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import nl.gogognome.lib.gui.Deinitializable;
 import nl.gogognome.lib.swing.SwingUtils;
 import nl.gogognome.lib.swing.WidgetFactory;
 import nl.gogognome.lib.swing.models.AbstractModel;
@@ -44,7 +45,7 @@ import nl.gogognome.lib.swing.models.ModelChangeListener;
  *
  * @author Sander Kooijmans
  */
-public class FileSelectionBean extends JPanel {
+public class FileSelectionBean extends JPanel implements Deinitializable {
 
     /** The model that stores the selected file. */
     private FileSelectionModel fileSelectionModel;
@@ -61,6 +62,8 @@ public class FileSelectionBean extends JPanel {
     /** File name extension filter used when a file is selected using the dialog. */
     private FileNameExtensionFilter filter;
 
+    private JButton openFileChooserButton;
+
     /**
      * Constructor.
      * @param fileSelectionModel the file selection model that will reflect the content of the bean
@@ -74,7 +77,6 @@ public class FileSelectionBean extends JPanel {
 
         textfield = new JTextField();
 
-        updateTextField();
         fileSelectionModelChangeListener = new ModelChangeListener() {
 
             @Override
@@ -114,10 +116,12 @@ public class FileSelectionBean extends JPanel {
 				handleSelectFileWithDialog();
 			}
 		};
-        JButton button = WidgetFactory.getInstance().createIconButton("gen.btnChooseFile", action, 21);
-        add(button, SwingUtils.createGBConstraints(1,0, 1, 1, 0.0, 0.0,
+		openFileChooserButton = WidgetFactory.getInstance().createIconButton("gen.btnChooseFile", action, 21);
+        add(openFileChooserButton, SwingUtils.createGBConstraints(1,0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 0, 0, 0, 0));
+
+        updateTextField();
     }
 
     /**
@@ -155,6 +159,8 @@ public class FileSelectionBean extends JPanel {
     	File f = fileSelectionModel.getFile();
         String string = f != null ? f.getAbsolutePath() : "";
         textfield.setText(string);
+        textfield.setEnabled(fileSelectionModel.isEnabled());
+        openFileChooserButton.setEnabled(fileSelectionModel.isEnabled());
     }
 
     /**
