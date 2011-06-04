@@ -25,12 +25,14 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import nl.gogognome.lib.gui.Deinitializable;
+
 /**
  * A view can be shown in a dialog or in a frame.
  *
  * @author Sander Kooijmans
  */
-public abstract class View extends JPanel {
+public abstract class View extends JPanel implements Deinitializable {
 
     /** The subscribed listeners. */
     private ArrayList<ViewListener> listeners = new ArrayList<ViewListener>();
@@ -140,8 +142,13 @@ public abstract class View extends JPanel {
         }
     }
 
-    /** Initializes the view. */
+	/** Initializes the view. */
     void doInit() {
         onInit();
+    }
+
+    @Override
+    public void deinitialize() {
+    	closeAction.actionPerformed(null);
     }
 }
