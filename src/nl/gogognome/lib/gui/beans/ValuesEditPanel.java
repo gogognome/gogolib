@@ -56,7 +56,8 @@ public class ValuesEditPanel extends JPanel implements Deinitializable {
      * This method should be called after the view containing this panel is closed.
      * It releases its resources.
      */
-    public void deinitialize() {
+    @Override
+	public void deinitialize() {
     	for (Component c : components) {
     		if (c instanceof Deinitializable) {
     			((Deinitializable) c).deinitialize();
@@ -71,6 +72,17 @@ public class ValuesEditPanel extends JPanel implements Deinitializable {
      */
     public void addField(String labelId, StringModel model) {
         addField(labelId, new TextFieldBean(model));
+    }
+
+    /**
+     * Adds a field to edit a string.
+     * @param labelId the id of the label that is put in front of the text field
+     * @param model the model controlling the text field
+     * @param nrColumns the width of the text field as the number of columns.
+     *        The value 0 indicates that the width can be determined by the layout manager.
+     */
+    public void addField(String labelId, StringModel model, int nrColumns) {
+        addField(labelId, new TextFieldBean(model, nrColumns));
     }
 
     /**

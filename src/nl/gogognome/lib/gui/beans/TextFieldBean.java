@@ -53,18 +53,33 @@ public class TextFieldBean extends JPanel implements Deinitializable {
     /** The document listener for the text field. */
     private DocumentListener documentListener;
 
+
     /**
      * Constructor.
      * @param stringModel the string model that will reflect the content of the bean
      */
     public TextFieldBean(StringModel stringModel) {
+    	initBean(stringModel, 0);
+    }
+
+    /**
+     * Constructor.
+     * @param stringModel the string model that will reflect the content of the bean
+     * @param nrColumns the width of the text field as the number of columns.
+     *        The value 0 indicates that the width can be determined by the layout manager.
+     */
+    public TextFieldBean(StringModel stringModel, int nrColumns) {
+    	initBean(stringModel, nrColumns);
+    }
+
+    private void initBean(StringModel stringModel, int nrColumns) {
         this.stringModel = stringModel;
 
         setOpaque(false);
 
         setLayout(new GridBagLayout());
 
-        textfield = new JTextField();
+        textfield = new JTextField(nrColumns);
 
         updateTextField();
         stringModelChangeListener = new ModelChangeListener() {
@@ -97,13 +112,14 @@ public class TextFieldBean extends JPanel implements Deinitializable {
 
         textfield.getDocument().addDocumentListener(documentListener);
         add(textfield, SwingUtils.createGBConstraints(0,0, 1, 1, 1.0, 0.0,
-            GridBagConstraints.WEST, GridBagConstraints.NONE,
+            GridBagConstraints.WEST, nrColumns == 0 ? GridBagConstraints.HORIZONTAL : GridBagConstraints.NONE,
             0, 0, 0, 0));    }
 
     /**
      * Deinitializes this bean. It will free its resources.
      */
-    public void deinitialize() {
+    @Override
+	public void deinitialize() {
         stringModel.removeModelChangeListener(stringModelChangeListener);
         textfield.getDocument().removeDocumentListener(documentListener);
         stringModelChangeListener = null;
