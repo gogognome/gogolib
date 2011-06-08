@@ -25,7 +25,7 @@ import javax.swing.Action;
 import javax.swing.JFrame;
 
 /**
- * This class implements a view in a frame.
+ * This class implements frame that can contain at most one {@link View}.
  */
 public class ViewFrame {
 
