@@ -68,14 +68,21 @@ public class TextResource {
 	}
 
     /**
-     * Loads the resources.
+     * Loads the resources of gogolib.
      */
     private void loadResources() {
         stringResources = new ArrayList<ResourceBundle>();
-        stringResources.add(ResourceBundle.getBundle("stringresources", locale));
         stringResources.add(ResourceBundle.getBundle("gogolibstrings", locale));
     }
 
+    /**
+     * Loads a resource bundle.
+     * @param resourceBundle the name of the resource bundle
+     */
+    public void loadResourceBundle(String resourceBundle) {
+        ResourceBundle b = ResourceBundle.getBundle(resourceBundle, locale);
+        stringResources.add(0, b);
+    }
 
 	/**
 	 * Sets the locale for the string resources.
