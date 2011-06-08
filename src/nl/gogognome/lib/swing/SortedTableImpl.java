@@ -27,10 +27,9 @@ import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -98,8 +97,15 @@ class SortedTableImpl implements SortedTable {
 
             // If present, set the table cell renderer
             TableCellRenderer renderer = tableModel.getRendererForColumn(i);
-            if (renderer != null) {
-                column.setCellRenderer(new AlternatingBackgroundRenderer(renderer));
+            if (renderer == null) {
+            	renderer = new DefaultTableCellRenderer();
+            }
+            column.setCellRenderer(new AlternatingBackgroundRenderer(renderer));
+
+            // If present, set the table cell editor
+            TableCellEditor editor = tableModel.getEditorForColumn(i);
+            if (editor != null) {
+                column.setCellEditor(editor);
             }
         }
 

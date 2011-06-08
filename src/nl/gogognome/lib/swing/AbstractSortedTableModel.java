@@ -20,6 +20,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 /**
@@ -67,6 +68,12 @@ public abstract class AbstractSortedTableModel extends AbstractTableModel implem
     @Override
 	public TableCellRenderer getRendererForColumn(int column) {
         return columnDefinitions.get(column).getTableCellRenderer();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+	public TableCellEditor getEditorForColumn(int column) {
+        return columnDefinitions.get(column).getTableCellEditor();
     }
 
     /** {@inheritDoc} */
