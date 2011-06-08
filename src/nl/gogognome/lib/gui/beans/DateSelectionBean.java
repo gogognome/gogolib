@@ -115,7 +115,8 @@ public class DateSelectionBean extends JPanel implements Deinitializable {
     /**
      * Deinitializes this bean. It will free its resources.
      */
-    public void deinitialize() {
+    @Override
+	public void deinitialize() {
         dateModel.removeModelChangeListener(dateModelChangeListener);
         tfDate.getDocument().removeDocumentListener(documentListener);
         dateModelChangeListener = null;
