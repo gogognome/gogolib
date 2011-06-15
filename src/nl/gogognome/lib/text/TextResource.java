@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 
 /**
  * This class represents a text resource. It offers functionality to
@@ -41,6 +41,8 @@ public class TextResource {
 
 	/** The locale used to obtain resources and format currencies and dates. */
 	private Locale locale = Locale.getDefault();
+
+	private final static Logger LOGGER = Logger.getLogger(TextResource.class.getName());
 
 	/**
 	 * An <code>AmountFormat</code> created with <code>locale</code> as its
@@ -121,13 +123,20 @@ public class TextResource {
 	 */
 	public String getString(String id) {
         String result = null;
-        for (int i=0; result == null && i<stringResources.size(); i++) {
-            try {
-                result = stringResources.get(i).getString(id);
-            } catch (MissingResourceException e) {
-            }
+        for (ResourceBundle rb : stringResources) {
+        	if (rb.containsKey(id)) {
+        		result = rb.getString(id);
+        		break;
+        	}
+        }
+        if (result == null && !isOptionalId(id)) {
+        	LOGGER.warning("String resource " + id + " was not found. Have all resource bundles been loaded?");
         }
         return result;
+	}
+
+	private static boolean isOptionalId(String id) {
+		return id.endsWith(".mnemonic");
 	}
 
 	/**
