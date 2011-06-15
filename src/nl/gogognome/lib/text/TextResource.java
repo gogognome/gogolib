@@ -37,12 +37,18 @@ public class TextResource {
 	private static TextResource instance;
 
 	/** Contains the string resources of the user interface. */
-	private List<ResourceBundle> stringResources;
+	private List<ResourceBundle> stringResources = new ArrayList<ResourceBundle>();
 
 	/** The locale used to obtain resources and format currencies and dates. */
 	private Locale locale = Locale.getDefault();
 
 	private final static Logger LOGGER = Logger.getLogger(TextResource.class.getName());
+
+	/**
+	 * List containing the names of the loaded resource bundles. Is needed to reload
+	 * the bundles after the locale has changed.
+	 */
+	private List<String> resourceBundleNames = new ArrayList<String>();
 
 	/**
 	 * An <code>AmountFormat</code> created with <code>locale</code> as its
@@ -65,22 +71,15 @@ public class TextResource {
 
 	/** Private constructor to enforce usage of <tt>getInstance()</tt>. */
 	private TextResource() {
-        loadResources();
+        loadResourceBundle("gogolibstrings");
 	}
-
-    /**
-     * Loads the resources of gogolib.
-     */
-    private void loadResources() {
-        stringResources = new ArrayList<ResourceBundle>();
-        stringResources.add(ResourceBundle.getBundle("gogolibstrings", locale));
-    }
 
     /**
      * Loads a resource bundle.
      * @param resourceBundle the name of the resource bundle
      */
     public void loadResourceBundle(String resourceBundle) {
+    	resourceBundleNames.add(resourceBundle);
         ResourceBundle b = ResourceBundle.getBundle(resourceBundle, locale);
         stringResources.add(0, b);
     }
@@ -89,11 +88,10 @@ public class TextResource {
 	 * Sets the locale for the string resources.
 	 * @param locale the locale for the string resources
 	 */
-	public void setLocale(Locale locale)
-	{
+	public void setLocale(Locale locale) {
 	    this.locale = locale;
 	    this.amountFormat = new AmountFormat(locale);
-	    loadResources();
+	    reloadResources();
 	}
 
 	/**
@@ -186,4 +184,12 @@ public class TextResource {
 	    return sdf.format(date);
 	}
 
+    private void reloadResources() {
+        stringResources = new ArrayList<ResourceBundle>();
+        List<String> oldNames = resourceBundleNames;
+        resourceBundleNames = new ArrayList<String>();
+        for (String rb : oldNames) {
+        	loadResourceBundle(rb);
+        }
+    }
 }
