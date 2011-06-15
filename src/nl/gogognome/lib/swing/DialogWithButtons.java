@@ -272,18 +272,6 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
 	}
 
 	/**
-	 * Shows an error message dialog.
-	 *
-	 * @param titleId the id of the title.
-	 * @param messageId the id of the message.
-	 */
-	final protected void showErrorMessage( String titleId, String messageId )
-	{
-		new MessageDialog(dialog, titleId,
-			TextResource.getInstance().getString(messageId));
-	}
-
-	/**
 	 * Handles the button pressed event. This method is introduced to make sure
 	 * that <tt>selectedButton</tt> is set when <tt>handleButtonPressed()</tt>
 	 * is called. When <tt>handleButtonPressed()</tt> is overriden,

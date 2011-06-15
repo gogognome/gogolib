@@ -121,8 +121,8 @@ public class TaskWithProgressDialog implements TaskProgressListener {
 			public void run() {
     			progressDialog.setVisible(false);
 		    	if (e != null) {
-		            MessageDialog dialog = new MessageDialog(parentFrame, "gen.titleError", e);
-		            dialog.showDialog();
+		            MessageDialog.showErrorMessage(parentFrame, e,
+		            		"taskWithProgressDialog.finishedWithException");
 		    	}
     		}
     	});

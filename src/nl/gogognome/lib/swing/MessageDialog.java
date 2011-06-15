@@ -16,17 +16,19 @@
 package nl.gogognome.lib.swing;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.GridLayout;
-import java.awt.Window;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import nl.gogognome.lib.swing.views.View;
 import nl.gogognome.lib.text.TextResource;
 
 
@@ -37,6 +39,21 @@ import nl.gogognome.lib.text.TextResource;
  */
 public class MessageDialog extends DialogWithButtons {
 
+    /** Return value from class method if YES is chosen. */
+    public static final int YES_OPTION = JOptionPane.YES_OPTION;
+    /** Return value from class method if NO is chosen. */
+    public static final int NO_OPTION = JOptionPane.NO_OPTION;
+    /** Return value from class method if CANCEL is chosen. */
+    public static final int CANCEL_OPTION = JOptionPane.CANCEL_OPTION;
+    /** Return value form class method if OK is chosen. */
+    public static final int OK_OPTION = JOptionPane.OK_OPTION;
+    /** Return value from class method if user closes window without selecting
+     * anything, more than likely this should be treated as either a
+     * <code>CANCEL_OPTION</code> or <code>NO_OPTION</code>. */
+    public static final int CLOSED_OPTION = JOptionPane.CLOSED_OPTION;
+
+	private final static Logger LOGGER = Logger.getLogger(MessageDialog.class.getName());
+
 	/**
 	 * Constructor.
 	 *
@@ -44,7 +61,7 @@ public class MessageDialog extends DialogWithButtons {
 	 * @param titleId the id of the title string.
 	 * @param message the message to be shown to the user.
 	 */
-	public MessageDialog(Frame owner, String titleId, String message) {
+	private MessageDialog(Frame owner, String titleId, String message) {
 		this(owner, titleId, message, BT_OK);
 	}
 
@@ -56,7 +73,7 @@ public class MessageDialog extends DialogWithButtons {
 	 * @param message the message to be shown to the user.
 	 * @param buttonIds the ids of the buttons.
 	 */
-	public MessageDialog(Frame owner, String titleId, String message, String[] buttonIds) {
+	private MessageDialog(Frame owner, String titleId, String message, String[] buttonIds) {
 		super(owner, titleId, buttonIds);
 		showDialog(message);
 	}
@@ -68,7 +85,7 @@ public class MessageDialog extends DialogWithButtons {
 	 * @param titleId the id of the title string.
 	 * @param message the message to be shown to the user.
 	 */
-	public MessageDialog(Dialog owner, String titleId, String message) {
+	private MessageDialog(Dialog owner, String titleId, String message) {
 		this(owner, titleId, message, BT_OK);
 	}
 
@@ -80,7 +97,7 @@ public class MessageDialog extends DialogWithButtons {
 	 * @param message the message to be shown to the user.
 	 * @param buttonIds the ids of the buttons.
 	 */
-	public MessageDialog(Dialog owner, String titleId, String message, String[] buttonIds) {
+	private MessageDialog(Dialog owner, String titleId, String message, String[] buttonIds) {
 		super(owner, titleId, buttonIds);
 		showDialog(message);
 	}
@@ -92,28 +109,19 @@ public class MessageDialog extends DialogWithButtons {
      * @param titleId the id of the title string.
      * @param t throwable whose message will be shown to the user.
      */
-    public MessageDialog(Frame owner, String titleId, Throwable t) {
+    private MessageDialog(Frame owner, String titleId, Throwable t) {
         this(owner, titleId, t.getMessage(), BT_OK);
         t.printStackTrace();
     }
 
-    /**
-     * Constructor.
-     *
-     * @param owner the owner of this dialog.
-     * @param titleId the id of the title string.
-     * @param message the message to be shown to the user.
-     * @param buttonIds the ids of the buttons.
-     * @return the dialog that was shown. Use the returned dialog to find out which button was
-     *         used to close the dialog
-     */
-    public static MessageDialog showMessage(View owner, String titleId, String message, String[] buttonIds) {
-        if (owner.getParentDialog() != null) {
-            return new MessageDialog(owner.getParentDialog(), titleId, message, buttonIds);
-        } else {
-            return new MessageDialog(owner.getParentFrame(), titleId, message, buttonIds);
-        }
-    }
+	private static Container getTopLevelContainer(Component component) {
+		Container parent = component.getParent();
+		if (parent == null) {
+			return (Container) component;
+		} else {
+			return getTopLevelContainer(parent);
+		}
+	}
 
 	/**
 	 * Shows the dialog.
@@ -138,75 +146,133 @@ public class MessageDialog extends DialogWithButtons {
 
 	/**
 	 * Shows a message dialog.
-	 * @param owner the owner of this dialog. Must be a <code>JDialog</code> or <code>JFrame</code>
+     * @param parentComponent determines the <code>Frame</code>
+     *		in which the dialog is displayed; if <code>null</code>,
+     *		or if the <code>parentComponent</code> has no
+     *		<code>Frame</code>, a default <code>Frame</code> is used
 	 * @param titleId the id of the title string.
-	 * @param message the message to be shown to the user.
+	 * @param message the id of the message to be shown to the user.
+     * @param args optional arguments to be filled in the placeholders of the message
 	 */
-	public static MessageDialog showMessage(Window owner, String titleId, String message) {
-        if (owner instanceof JDialog) {
-            return new MessageDialog((JDialog) owner, titleId, message);
-        } else {
-            return new MessageDialog((JFrame) owner, titleId, message);
-        }
+	public static void showMessage(Component parentComponent, String titleId, String messageId, Object... args) {
+		TextResource tr = TextResource.getInstance();
+		JOptionPane.showMessageDialog(parentComponent, tr.getString(messageId, args), tr.getString(titleId),
+				JOptionPane.INFORMATION_MESSAGE);
 	}
-
-	/**
-	 * Shows a message dialog based on a {@link Throwable}.
-	 * @param owner the owner of this dialog. Must be a <code>JDialog</code> or <code>JFrame</code>
-	 * @param t the throwable whose message is shown
-	 */
-	public static MessageDialog showMessage(Window owner, Throwable t) {
-		String message = t.getMessage();
-		if (t.getCause() != null) {
-			message += ' ' + t.getCause().getMessage();
-		}
-		return showMessage(owner, "gen.error", message);
-	}
-
-    /**
-     * Shows a message dialog.
-     * @param owner the owner of this dialog.
-     * @param titleId the id of the title string.
-     * @param message the message to be shown to the user.
-     */
-    public static MessageDialog showMessage(View owner, String titleId, String message) {
-        if (owner.getParentDialog() != null) {
-            return new MessageDialog(owner.getParentDialog(), titleId, message);
-        } else {
-            return new MessageDialog(owner.getParentFrame(), titleId, message);
-        }
-    }
 
     /**
      * Shows an error message dialog.
-     * @param owner the owner of this dialog.
+     * @param parentComponent determines the <code>Frame</code>
+     *		in which the dialog is displayed; if <code>null</code>,
+     *		or if the <code>parentComponent</code> has no
+     *		<code>Frame</code>, a default <code>Frame</code> is used
      * @param messageId the id of the message
      * @param args optional arguments to be filled in the placeholders of the message
      */
-    public static MessageDialog showErrorMessage(View owner, String messageId, Object... args) {
-    	String message = TextResource.getInstance().getString(messageId, args);
-        if (owner.getParentDialog() != null) {
-            return new MessageDialog(owner.getParentDialog(), "gen.titleError", message);
-        } else {
-            return new MessageDialog(owner.getParentFrame(), "gen.titleError", message);
-        }
+    public static void showErrorMessage(Component parentComponent, String messageId, Object... args) {
+    	TextResource tr = TextResource.getInstance();
+    	String message = tr.getString(messageId, args);
+    	LOGGER.log(Level.WARNING, message);
+    	showErrorMessage(parentComponent, message);
     }
 
     /**
      * Shows an error message dialog.
-     * @param owner the owner of this dialog.
+     * @param parentComponent determines the <code>Frame</code>
+     *		in which the dialog is displayed; if <code>null</code>,
+     *		or if the <code>parentComponent</code> has no
+     *		<code>Frame</code>, a default <code>Frame</code> is used
      * @param t throwable whose message is
      * @param messageId the id of the message
      * @param args optional arguments to be filled in the placeholders of the message
      */
-    public static MessageDialog showErrorMessage(View owner, Throwable t, String messageId, Object... args) {
-    	String message = TextResource.getInstance().getString(messageId, args);
-    	// TODO: Show exception in message
-        if (owner.getParentDialog() != null) {
-            return new MessageDialog(owner.getParentDialog(), "gen.titleError", message);
-        } else {
-            return new MessageDialog(owner.getParentFrame(), "gen.titleError", message);
-        }
+    public static void showErrorMessage(Component parentComponent, Throwable t, String messageId, Object... args) {
+    	TextResource tr = TextResource.getInstance();
+    	List<String> lines = new ArrayList<String>();
+    	String message = tr.getString(messageId, args);
+    	lines.add(message);
+
+    	LOGGER.log(Level.WARNING, message, t);
+
+    	addStackTraceToLines(lines, t);
+
+    	showErrorMessage(parentComponent, lines.toArray());
     }
+
+    /**
+     * Shows a dialog with a yes and no button. The dialog further contains a title and a message.
+     * @param parentComponent determines the <code>Frame</code>
+     *		in which the dialog is displayed; if <code>null</code>,
+     *		or if the <code>parentComponent</code> has no
+     *		<code>Frame</code>, a default <code>Frame</code> is used
+     * @param titleId the id of the title
+     * @param messageId the id of the message
+     * @param args optional arguments to be filled in the placeholders of the message
+     * @return {@link #YES_OPTION}, {@link #NO_OPTION} or {@link #CLOSED_OPTION}.
+     */
+    public static int showYesNoQuestion(Component parentComponent, String titleId, String messageId, Object...args) {
+    	return showConfirmationDialog(JOptionPane.YES_NO_OPTION, parentComponent, messageId, titleId);
+    }
+
+    /**
+     * Shows a dialog with a yes, no and cancel button. The dialog further contains a title and a message.
+     * @param parentComponent determines the <code>Frame</code>
+     *		in which the dialog is displayed; if <code>null</code>,
+     *		or if the <code>parentComponent</code> has no
+     *		<code>Frame</code>, a default <code>Frame</code> is used
+     * @param titleId the id of the title
+     * @param messageId the id of the message
+     * @param args optional arguments to be filled in the placeholders of the message
+     * @return {@link #YES_OPTION}, {@link #NO_OPTION}, {@link #CANCEL_OPTION} or {@link #CLOSED_OPTION}.
+     */
+    public static int showYesNoCancelQuestion(Component parentComponent, String titleId, String messageId, Object...args) {
+    	return showConfirmationDialog(JOptionPane.YES_NO_CANCEL_OPTION, parentComponent, messageId, titleId);
+    }
+
+    private static int showConfirmationDialog(int type, Component parentComponent, String titleId, String messageId, Object...args) {
+    	TextResource tr = TextResource.getInstance();
+    	String title = tr.getString(titleId);
+    	String message = tr.getString(messageId, args);
+    	return JOptionPane.showConfirmDialog(parentComponent, message, title, type);
+    }
+
+	private static void addStackTraceToLines(List<String> lines, Throwable t) {
+    	while (t != null) {
+    		lines.add(t.getClass().getName() + ": " + t.getMessage());
+        	for (StackTraceElement ste : t.getStackTrace()) {
+        		lines.add(ste.toString());
+        	}
+
+        	t = getCause(t);
+    	}
+	}
+
+	private static Throwable getCause(Throwable t) {
+		Throwable cause = t.getCause();
+		if (cause == t) {
+			cause = null;
+		}
+		return cause;
+	}
+
+	private static void showErrorMessage(Component parentComponent, Object message) {
+		if (message instanceof Object[]) {
+			message = truncateMessage((Object[]) message, 20);
+		}
+
+    	JOptionPane.showMessageDialog(parentComponent, message,
+    			TextResource.getInstance().getString("gen.titleError"), JOptionPane.ERROR_MESSAGE);
+	}
+
+	private static Object[] truncateMessage(Object[] message, int maxNrLines) {
+		if (message.length > maxNrLines) {
+			Object[] newMessage = new Object[maxNrLines];
+			System.arraycopy(message, 0, newMessage, 0, maxNrLines-1);
+			newMessage[maxNrLines-1] = "...";
+			return newMessage;
+		} else {
+			return message;
+		}
+	}
 
 }
