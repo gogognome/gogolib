@@ -173,7 +173,7 @@ public class MessageDialog extends DialogWithButtons {
     	TextResource tr = TextResource.getInstance();
     	String message = tr.getString(messageId, args);
     	LOGGER.log(Level.WARNING, message);
-    	showErrorMessage(parentComponent, message);
+    	showFormattedErrorMessage(parentComponent, message);
     }
 
     /**
@@ -196,7 +196,7 @@ public class MessageDialog extends DialogWithButtons {
 
     	addStackTraceToLines(lines, t);
 
-    	showErrorMessage(parentComponent, lines.toArray());
+    	showFormattedErrorMessage(parentComponent, lines.toArray());
     }
 
     /**
@@ -255,7 +255,7 @@ public class MessageDialog extends DialogWithButtons {
 		return cause;
 	}
 
-	private static void showErrorMessage(Component parentComponent, Object message) {
+	private static void showFormattedErrorMessage(Component parentComponent, Object message) {
 		if (message instanceof Object[]) {
 			message = truncateMessage((Object[]) message, 20);
 		}
