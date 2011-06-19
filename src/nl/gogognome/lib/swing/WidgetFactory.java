@@ -16,10 +16,17 @@
 package nl.gogognome.lib.swing;
 
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import javax.imageio.ImageIO;
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -48,11 +55,16 @@ import nl.gogognome.lib.text.TextResource;
  */
 public class WidgetFactory {
 
+	private final static Logger LOGGER = Logger.getLogger(WidgetFactory.class.getName());
+
 	/** The singleton instance of this class. */
 	private static WidgetFactory instance;
 
 	/** The <code>TextResource</code> used to obtain string resources. */
 	private TextResource textResource;
+
+	private Map<String, Icon> iconCache = new HashMap<String, Icon>();
+	private Map<String, Image> imageCache = new HashMap<String, Image>();
 
 	/**
 	 * Gets the singleton instance of this class.
@@ -295,33 +307,73 @@ public class WidgetFactory {
     }
 
     /**
-     * Creates an icon. Icons are cached.
+     * Creates an icon.
+     * The id specifies a string resource. The string represents the path to the image.
+     *
+     * <p>Icons are cached.
      * @param id the id of a string resource. The string resource refers to an image resource
      * @return the icon or <code>null</code> if no icon exists with the specified id
      */
     public Icon createIcon(String id) {
-    	Icon icon = IconCache.getInstance().getIcon(id);
+    	Icon icon = iconCache.get(id);
     	if (icon == null) {
-            TextResource tr = TextResource.getInstance();
-            String iconResourceName = tr.getString(id);
-            if (iconResourceName == null) {
-                return null;
-            }
-
-            URL iconUrl = WidgetFactory.class.getResource(iconResourceName);
+            URL iconUrl = getUrlForResource(id);
             if (iconUrl == null) {
                 return null;
             }
 
-            String description = tr.getString(id + ".description");
+            String description = TextResource.getInstance().getString(id + ".description");
             if (description != null) {
                 icon = new ImageIcon(iconUrl, description);
             } else {
                 icon = new ImageIcon(iconUrl);
             }
-            IconCache.getInstance().addIcon(id, icon);
+            iconCache.put(id, icon);
     	}
         return icon;
+    }
+
+    /**
+     * Creates an image.
+     * The id specifies a string resource. The string represents the path to the image.
+     *
+     * <p>Images are cached.
+     * @param id the id of a string resource. The string resource refers to an image resource
+     * @return the icon or <code>null</code> if no icon exists with the specified id
+     */
+    public Image createImage(String id) {
+    	Image image = imageCache.get(id);
+    	if (image == null) {
+            URL imageUrl = getUrlForResource(id);
+            if (imageUrl == null) {
+                return null;
+            }
+
+            try {
+				image = ImageIO.read(imageUrl);
+			} catch (IOException e) {
+				LOGGER.log(Level.WARNING, "Failed to load image " + imageUrl + ": " + e.getMessage(), e);
+			}
+            imageCache.put(id, image);
+    	}
+        return image;
+    }
+
+    /**
+     * Gets the URL that represents a resource (e.g., an image).
+     * The id specifies a string resource. The string represents the path to the actual resource
+     * (e.g., an image).
+     * @param id the id of the resource
+     * @return the URL
+     */
+    private URL getUrlForResource(String id) {
+        TextResource tr = TextResource.getInstance();
+        String resourceName = tr.getString(id);
+        if (resourceName == null) {
+            return null;
+        } else {
+        	return getClass().getResource(resourceName);
+        }
     }
 
     /**
