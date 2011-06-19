@@ -19,9 +19,11 @@ import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -56,6 +58,8 @@ public class TextResource {
 	 */
 	private AmountFormat amountFormat = new AmountFormat(locale);
 
+	private final Set<String> optionalIdSuffixes = new HashSet<String>();
+
 	/**
 	 * Gets the singleton instance of this class.
 	 * @return the singleton instance of this class.
@@ -71,10 +75,20 @@ public class TextResource {
 
 	/** Private constructor to enforce usage of <tt>getInstance()</tt>. */
 	private TextResource() {
+		initOptionalIdSuffixes();
         loadResourceBundle("gogolibstrings");
 	}
 
-    /**
+    private void initOptionalIdSuffixes() {
+    	optionalIdSuffixes.add(".accelerator");
+    	optionalIdSuffixes.add(".contexthelp");
+    	optionalIdSuffixes.add(".description");
+    	optionalIdSuffixes.add(".keystroke");
+    	optionalIdSuffixes.add(".mnemonic");
+    	optionalIdSuffixes.add(".tooltip");
+	}
+
+	/**
      * Loads a resource bundle.
      * @param resourceBundle the name of the resource bundle
      */
@@ -133,8 +147,13 @@ public class TextResource {
         return result;
 	}
 
-	private static boolean isOptionalId(String id) {
-		return id.endsWith(".mnemonic");
+	private boolean isOptionalId(String id) {
+		int lastDotIndex = id.lastIndexOf('.');
+		if (lastDotIndex >= 0) {
+			return optionalIdSuffixes.contains(id.substring(lastDotIndex));
+		} else {
+			return false;
+		}
 	}
 
 	/**
