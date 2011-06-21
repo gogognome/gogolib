@@ -32,6 +32,14 @@ public class BooleanModel extends AbstractModel {
     /**
      * Sets the boolean of this model.
      * @param newValue the new value of the boolean
+     */
+    public void setBoolean(boolean newValue) {
+    	setBoolean(newValue, null);
+    }
+
+    /**
+     * Sets the boolean of this model.
+     * @param newValue the new value of the boolean
      * @param source the model change listener that sets the boolean. It will not
      *         get notified. It may be <code>null</code>.
      */

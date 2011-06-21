@@ -27,6 +27,7 @@ import javax.swing.JPanel;
 import nl.gogognome.lib.gui.Deinitializable;
 import nl.gogognome.lib.swing.SwingUtils;
 import nl.gogognome.lib.swing.WidgetFactory;
+import nl.gogognome.lib.swing.models.BooleanModel;
 import nl.gogognome.lib.swing.models.DateModel;
 import nl.gogognome.lib.swing.models.FileSelectionModel;
 import nl.gogognome.lib.swing.models.StringModel;
@@ -39,7 +40,9 @@ import nl.gogognome.lib.swing.models.StringModel;
  */
 public class ValuesEditPanel extends JPanel implements Deinitializable {
 
-    /** Contains the number of fields present in the panel. */
+    private static final long serialVersionUID = 1L;
+
+	/** Contains the number of fields present in the panel. */
     private int nrFields;
 
     private List<Component> components = new ArrayList<Component>();
@@ -82,6 +85,26 @@ public class ValuesEditPanel extends JPanel implements Deinitializable {
      */
     public void addField(String labelId, StringModel model, int nrColumns) {
         addField(labelId, new TextFieldBean(model, nrColumns));
+    }
+
+    /**
+     * Adds a field to edit a password.
+     * @param labelId the id of the label that is put in front of the text field
+     * @param model the model controlling the text field
+     * @param nrColumns the width of the text field as the number of columns.
+     *        The value 0 indicates that the width can be determined by the layout manager.
+     */
+    public void addPasswordField(String labelId, StringModel model, int nrColumns) {
+        addField(labelId, new PasswordBean(model, nrColumns));
+    }
+
+    /**
+     * Adds a check box.
+     * @param labelId the id of the label that is put in front of the check box
+     * @param model the model controlling the check box
+     */
+    public void addField(String labelId, BooleanModel model) {
+        addField(labelId, new CheckBoxBean(model));
     }
 
     /**
