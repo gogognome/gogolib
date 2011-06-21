@@ -18,6 +18,7 @@ package nl.gogognome.lib.swing;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URL;
@@ -445,9 +446,12 @@ public class WidgetFactory {
         int result = -1;
 		try
 		{
-			Class clazz = Class.forName("java.awt.event.KeyEvent");
-		    Field field = clazz.getField(textResource.getString(id + ".mnemonic"));
-			result = field.getInt(null);
+			String mnemonicId = id + ".mnemonic";
+			if (textResource.containsString(mnemonicId)) {
+				Class<?> clazz = KeyEvent.class;
+			    Field field = clazz.getField(textResource.getString(mnemonicId));
+				result = field.getInt(null);
+			}
 		}
 		catch (Exception e)
 		{
