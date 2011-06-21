@@ -15,6 +15,8 @@
 */
 package nl.gogognome.lib.swing;
 
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
@@ -89,5 +91,19 @@ public class SwingUtils {
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 gridy == 0 ? 10 : 0, gridx == 0 ? 10 : 0, 10, 10);
     }
+
+    /**
+     * gets the top level container of a component.
+     * @param component the component
+     * @return its top level container or null if the component has no parent
+     */
+	public static Container getTopLevelContainer(Component component) {
+		Container parent = component.getParent();
+		if (parent == null) {
+			return (Container) component;
+		} else {
+			return getTopLevelContainer(parent);
+		}
+	}
 
 }
