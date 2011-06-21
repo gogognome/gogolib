@@ -78,7 +78,7 @@ public class TextFieldBean extends JPanel implements Deinitializable {
 
         setLayout(new GridBagLayout());
 
-        textfield = new JTextField(nrColumns);
+        textfield = createTextField(nrColumns);
 
         updateTextField();
         stringModelChangeListener = new ModelChangeListener() {
@@ -112,9 +112,14 @@ public class TextFieldBean extends JPanel implements Deinitializable {
         textfield.getDocument().addDocumentListener(documentListener);
         add(textfield, SwingUtils.createGBConstraints(0,0, 1, 1, 1.0, 0.0,
             GridBagConstraints.WEST, nrColumns == 0 ? GridBagConstraints.HORIZONTAL : GridBagConstraints.NONE,
-            0, 0, 0, 0));    }
+            0, 0, 0, 0));
+    }
 
-    /**
+    protected JTextField createTextField(int nrColumns) {
+		return new JTextField(nrColumns);
+	}
+
+	/**
      * Deinitializes this bean. It will free its resources.
      */
     @Override
