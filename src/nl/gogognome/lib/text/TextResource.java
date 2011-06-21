@@ -83,6 +83,7 @@ public class TextResource {
     	optionalIdSuffixes.add(".accelerator");
     	optionalIdSuffixes.add(".contexthelp");
     	optionalIdSuffixes.add(".description");
+    	optionalIdSuffixes.add(".icon16");
     	optionalIdSuffixes.add(".keystroke");
     	optionalIdSuffixes.add(".mnemonic");
     	optionalIdSuffixes.add(".tooltip");
@@ -115,6 +116,20 @@ public class TextResource {
 	public Locale getLocale()
 	{
 	    return locale;
+	}
+
+	/**
+	 * Checks whether a string with the specified id exists.
+	 * @param id the id of the string
+	 * @return true if a string with the specified id exists; false otherwise
+	 */
+	public boolean containsString(String id) {
+        for (ResourceBundle rb : stringResources) {
+        	if (rb.containsKey(id)) {
+        		return true;
+        	}
+        }
+        return false;
 	}
 
 	/**
