@@ -16,9 +16,10 @@
 package nl.gogognome.lib.swing.views;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Rectangle;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -31,6 +32,8 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.KeyStroke;
+
+import nl.gogognome.lib.swing.SwingUtils;
 
 /**
  * This class implements a <code>JDialog</code> that can hold a <code>View</code>.
@@ -56,10 +59,11 @@ public class ViewDialog {
 
     /**
      * Constructor.
-     * @param owner the owner of this dialog. Must be a <code>JDialog</code> or a <code>JFrame</code>
+     * @param parentComponent the parent component of the dialog
      * @param view the view to be shown in this dialog
      */
-    public ViewDialog(Window owner, View view) {
+    public ViewDialog(Component parentComponent, View view) {
+    	Container owner = SwingUtils.getTopLevelContainer(parentComponent);
         if (owner instanceof JDialog) {
             initDialog(new JDialog((JDialog)owner, view.getTitle(), true), view, owner.getBounds());
         } else  if (owner instanceof JFrame){
