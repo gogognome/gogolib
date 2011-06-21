@@ -17,6 +17,7 @@ package nl.gogognome.lib.swing.views;
 
 import java.awt.Window;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.Action;
 import javax.swing.JButton;
@@ -27,13 +28,32 @@ import javax.swing.JPanel;
 import nl.gogognome.lib.gui.Deinitializable;
 
 /**
- * A view can be shown in a dialog or in a frame.
+ * A view represents a rectangular area inside a dialog or frame. A view typically
+ * implements a cohesive part of the user interface.
+ *
+ * <p>Views can be made visible inside a dialog (see {@link ViewDialog}),
+ * a frame (see {@link ViewFrame}), tabbed pane (see {@link ViewTabbedPane}) and even
+ * inside other views (see {@link ViewContainer}).
+ *
+ * <p>When a view is added to one of the aforementioned containers, its {@link #onInit()}
+ * method will be called by the container.
+ *
+ * <p>The container will call {@link #onClose()} when the container removes the view.
+ * The view can close itself by calling {@link #requestClose()}.
+ *
+ * <p>Some user interface components implement the {@link Deinitializable} interface.
+ * If your view uses such components, call {@link #addDeinitializable(Deinitializable)}
+ * for each of these components. By doing so, the deinitialize() method will be called
+ * automatically for these components when the view is closed. Otherwise, you have to
+ * think about deinitializing them in your onClose() implementation.
  *
  * @author Sander Kooijmans
  */
 public abstract class View extends JPanel implements Deinitializable {
 
-    /** The subscribed listeners. */
+	private static final long serialVersionUID = 1L;
+
+	/** The subscribed listeners. */
     private ArrayList<ViewListener> listeners = new ArrayList<ViewListener>();
 
     /**
@@ -50,6 +70,9 @@ public abstract class View extends JPanel implements Deinitializable {
 
     /** The default button of this view. */
     private JButton defaultButton;
+
+    /** Objects to be deinitialized when the view is closed. */
+    private List<Deinitializable> deinitializables = new ArrayList<Deinitializable>();
 
     /**
      * Gets the title of the view.
@@ -131,10 +154,28 @@ public abstract class View extends JPanel implements Deinitializable {
     }
 
     /**
+     * Adds an object that will be deinitialized automatically when this view is closed.
+     * @param d the {@link Deinitializable} object
+     */
+    public void addDeinitializable(Deinitializable d) {
+    	deinitializables.add(d);
+    }
+
+    /** Call this method to close the view programmatically. */
+    public void requestClose() {
+    	closeAction.actionPerformed(null);
+    }
+
+    /**
      * Closes the view and notifies listeners.
      */
     void doClose() {
         onClose();
+
+        for (Deinitializable d : deinitializables) {
+        	d.deinitialize();
+        }
+
         ViewListener[] tempListeners = listeners.toArray(new ViewListener[listeners.size()]);
         for (int i = 0; i < tempListeners.length; i++) {
             tempListeners[i].onViewClosed(this);
