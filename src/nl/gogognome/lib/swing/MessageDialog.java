@@ -16,7 +16,6 @@
 package nl.gogognome.lib.swing;
 
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.GridLayout;
@@ -114,15 +113,6 @@ public class MessageDialog extends DialogWithButtons {
         t.printStackTrace();
     }
 
-	private static Container getTopLevelContainer(Component component) {
-		Container parent = component.getParent();
-		if (parent == null) {
-			return (Container) component;
-		} else {
-			return getTopLevelContainer(parent);
-		}
-	}
-
 	/**
 	 * Shows the dialog.
 	 * @param message the message to be shown. The sequence of the characters
@@ -161,6 +151,21 @@ public class MessageDialog extends DialogWithButtons {
 	}
 
     /**
+     * Shows a warning message dialog.
+     * @param parentComponent determines the <code>Frame</code>
+     *		in which the dialog is displayed; if <code>null</code>,
+     *		or if the <code>parentComponent</code> has no
+     *		<code>Frame</code>, a default <code>Frame</code> is used
+     * @param messageId the id of the message
+     * @param args optional arguments to be filled in the placeholders of the message
+     */
+    public static void showWarningMessage(Component parentComponent, String messageId, Object... args) {
+    	TextResource tr = TextResource.getInstance();
+    	String message = tr.getString(messageId, args);
+    	showFormattedMessage(parentComponent, message, JOptionPane.WARNING_MESSAGE);
+    }
+
+    /**
      * Shows an error message dialog.
      * @param parentComponent determines the <code>Frame</code>
      *		in which the dialog is displayed; if <code>null</code>,
@@ -173,7 +178,7 @@ public class MessageDialog extends DialogWithButtons {
     	TextResource tr = TextResource.getInstance();
     	String message = tr.getString(messageId, args);
     	LOGGER.log(Level.WARNING, message);
-    	showFormattedErrorMessage(parentComponent, message);
+    	showFormattedMessage(parentComponent, message, JOptionPane.ERROR_MESSAGE);
     }
 
     /**
@@ -196,7 +201,7 @@ public class MessageDialog extends DialogWithButtons {
 
     	addStackTraceToLines(lines, t);
 
-    	showFormattedErrorMessage(parentComponent, lines.toArray());
+    	showFormattedMessage(parentComponent, lines.toArray(), JOptionPane.ERROR_MESSAGE);
     }
 
     /**
@@ -255,13 +260,13 @@ public class MessageDialog extends DialogWithButtons {
 		return cause;
 	}
 
-	private static void showFormattedErrorMessage(Component parentComponent, Object message) {
+	private static void showFormattedMessage(Component parentComponent, Object message, int messageType) {
 		if (message instanceof Object[]) {
 			message = truncateMessage((Object[]) message, 20);
 		}
 
     	JOptionPane.showMessageDialog(parentComponent, message,
-    			TextResource.getInstance().getString("gen.titleError"), JOptionPane.ERROR_MESSAGE);
+    			TextResource.getInstance().getString("gen.titleError"), messageType);
 	}
 
 	private static Object[] truncateMessage(Object[] message, int maxNrLines) {
