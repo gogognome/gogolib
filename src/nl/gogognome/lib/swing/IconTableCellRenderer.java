@@ -54,9 +54,11 @@ public class IconTableCellRenderer extends DefaultTableCellRenderer implements T
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-		int x = (getWidth() - icon.getIconWidth()) / 2;
-		int y = (getHeight() - icon.getIconHeight()) / 2;
-		icon.paintIcon(this, g, x, y);
+		if (icon != null) {
+			int x = (getWidth() - icon.getIconWidth()) / 2;
+			int y = (getHeight() - icon.getIconHeight()) / 2;
+			icon.paintIcon(this, g, x, y);
+		}
 	}
 
 	@Override
