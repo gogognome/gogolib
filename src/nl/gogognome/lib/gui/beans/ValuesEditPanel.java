@@ -30,8 +30,15 @@ import nl.gogognome.lib.swing.WidgetFactory;
 import nl.gogognome.lib.swing.models.BooleanModel;
 import nl.gogognome.lib.swing.models.DateModel;
 import nl.gogognome.lib.swing.models.FileSelectionModel;
+import nl.gogognome.lib.swing.models.ListModel;
 import nl.gogognome.lib.swing.models.StringModel;
 
+/**
+ * This class implements a panel containing a column of input fields.
+ * Each input field consists of a label and a component (typically a text field).
+ * The values of the fields are managed by models (e.g., {@link StringModel}
+ * or {@link DateModel}.
+ */
 /**
  * This class implements a panel containing a column of input fields.
  * Each input field consists of a label and a component (typically a text field).
@@ -124,6 +131,27 @@ public class ValuesEditPanel extends JPanel implements Deinitializable {
      */
     public void addField(String labelId, DateModel model) {
         addField(labelId, new DateSelectionBean(model));
+    }
+
+    /**
+     * Adds a combo box to select a single item from a list of items.
+     * @param labelId the id of the label that is put in front of the combo box
+     * @param model the model controlling the combo box
+     */
+    public <T> void addComboBoxField(String labelId, ListModel<T> model) {
+        addField(labelId, new ComboBoxBean<T>(model, null));
+    }
+
+    /**
+     * Adds a combo box to select a single item from a list of items.
+     * @param labelId the id of the label that is put in front of the combo box
+     * @param model the model controlling the combo box
+	 * @param resourcePrefix if not null, then the each item is represented by a string resource.
+	 *        The id of the item's string resource consists of this prefix followed by the
+	 *        result of toString() of the item.
+     */
+    public <T> void addComboBoxField(String labelId, ListModel<T> model, String resourcePrefix) {
+        addField(labelId, new ComboBoxBean<T>(model, resourcePrefix));
     }
 
     /**
