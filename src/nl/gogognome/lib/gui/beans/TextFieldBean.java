@@ -152,6 +152,7 @@ public class TextFieldBean extends JPanel implements Deinitializable {
      * Updates the text field with the value of the string model.
      */
     private void updateTextField() {
+    	textfield.setEnabled(stringModel.isEnabled());
         String string = stringModel.getString();
         if (string != null) {
             textfield.setText(string);
