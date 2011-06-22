@@ -85,6 +85,12 @@ public interface SortedTable {
     public int[] getSelectedRows();
 
     /**
+     * Returns the index of the selected row if exactly one row is selected.
+     * @return the index of the selcted row or -1 if not exactly one row is selected
+     */
+    public int getSingleSelectedRow();
+
+    /**
      * Sets the action that is to be performed when the user selects a row in the table.
      * @param action the action
      */

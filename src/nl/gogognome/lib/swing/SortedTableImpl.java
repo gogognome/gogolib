@@ -322,9 +322,6 @@ class SortedTableImpl implements SortedTable {
         }
     }
 
-    /**
-     * @see nl.gogognome.lib.swing.SortedTable#getSelectedRows()
-     */
     @Override
 	public int[] getSelectedRows() {
         int[] rows = table.getSelectedRows();
@@ -333,6 +330,16 @@ class SortedTableImpl implements SortedTable {
             rows[i] = tableSorter.modelIndex(rows[i]);
         }
         return rows;
+    }
+
+    @Override
+    public int getSingleSelectedRow() {
+		int[] rows = getSelectedRows();
+		if (rows.length == 1) {
+			return rows[0];
+		} else {
+			return -1;
+		}
     }
 
     /**
