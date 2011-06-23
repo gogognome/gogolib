@@ -52,7 +52,7 @@ public class ListModel<T> extends AbstractModel {
      *        get notified. It may be <code>null</code>.
 	 */
 	public void setItems(List<T> items, ModelChangeListener source) {
-		this.items = new ArrayList(items);
+		this.items = new ArrayList<T>(items);
 		notifyListeners(source);
 	}
 

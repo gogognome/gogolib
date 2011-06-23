@@ -16,6 +16,7 @@
 package nl.gogognome.lib.gui.beans;
 
 import java.awt.Component;
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,16 +30,11 @@ import nl.gogognome.lib.swing.SwingUtils;
 import nl.gogognome.lib.swing.WidgetFactory;
 import nl.gogognome.lib.swing.models.BooleanModel;
 import nl.gogognome.lib.swing.models.DateModel;
+import nl.gogognome.lib.swing.models.DoubleModel;
 import nl.gogognome.lib.swing.models.FileSelectionModel;
 import nl.gogognome.lib.swing.models.ListModel;
 import nl.gogognome.lib.swing.models.StringModel;
 
-/**
- * This class implements a panel containing a column of input fields.
- * Each input field consists of a label and a component (typically a text field).
- * The values of the fields are managed by models (e.g., {@link StringModel}
- * or {@link DateModel}.
- */
 /**
  * This class implements a panel containing a column of input fields.
  * Each input field consists of a label and a component (typically a text field).
@@ -95,6 +91,26 @@ public class ValuesEditPanel extends JPanel implements Deinitializable {
     }
 
     /**
+     * Adds a field to edit a double.
+     * @param labelId the id of the label that is put in front of the text field
+     * @param model the model controlling the text field
+     */
+    public void addField(String labelId, DoubleModel model) {
+        addField(labelId, new DoubleFieldBean(model));
+    }
+
+    /**
+     * Adds a field to edit a double.
+     * @param labelId the id of the label that is put in front of the text field
+     * @param model the model controlling the text field
+     * @param nrColumns the width of the text field as the number of columns.
+     *        The value 0 indicates that the width can be determined by the layout manager.
+     */
+    public void addField(String labelId, DoubleModel model, int nrColumns) {
+        addField(labelId, new DoubleFieldBean(model, nrColumns));
+    }
+
+    /**
      * Adds a field to edit a password.
      * @param labelId the id of the label that is put in front of the text field
      * @param model the model controlling the text field
@@ -139,7 +155,8 @@ public class ValuesEditPanel extends JPanel implements Deinitializable {
      * @param model the model controlling the combo box
      */
     public <T> void addComboBoxField(String labelId, ListModel<T> model) {
-        addField(labelId, new ComboBoxBean<T>(model, null));
+        addFieldWithConstraints(labelId, new ComboBoxBean<T>(model, null),
+        		SwingUtils.createLabelGBConstraints(1, nrFields));
     }
 
     /**
@@ -151,7 +168,8 @@ public class ValuesEditPanel extends JPanel implements Deinitializable {
 	 *        result of toString() of the item.
      */
     public <T> void addComboBoxField(String labelId, ListModel<T> model, String resourcePrefix) {
-        addField(labelId, new ComboBoxBean<T>(model, resourcePrefix));
+        addFieldWithConstraints(labelId, new ComboBoxBean<T>(model, resourcePrefix),
+        		SwingUtils.createLabelGBConstraints(1, nrFields));
     }
 
     /**
@@ -161,9 +179,13 @@ public class ValuesEditPanel extends JPanel implements Deinitializable {
      * @param component the component
      */
     public void addField(String labelId, JComponent component) {
+    	addFieldWithConstraints(labelId, component, SwingUtils.createTextFieldGBConstraints(1, nrFields));
+    }
+
+    private void addFieldWithConstraints(String labelId, JComponent component, GridBagConstraints constraints) {
         JLabel label = WidgetFactory.getInstance().createLabel(labelId, component);
         add(label, SwingUtils.createLabelGBConstraints(0, nrFields));
-        add(component, SwingUtils.createTextFieldGBConstraints(1, nrFields));
+        add(component, constraints);
         nrFields++;
 
         components.add(component);

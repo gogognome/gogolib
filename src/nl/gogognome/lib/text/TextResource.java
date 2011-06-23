@@ -15,7 +15,11 @@
 */
 package nl.gogognome.lib.text;
 
+import java.text.DecimalFormat;
 import java.text.MessageFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,13 +40,16 @@ import java.util.logging.Logger;
 public class TextResource {
 
 	/** The singleton instance of this class. */
-	private static TextResource instance;
+	private static TextResource instance = new TextResource();
 
 	/** Contains the string resources of the user interface. */
 	private List<ResourceBundle> stringResources = new ArrayList<ResourceBundle>();
 
 	/** The locale used to obtain resources and format currencies and dates. */
 	private Locale locale = Locale.getDefault();
+
+	/** Number format for the current locale. */
+	private NumberFormat numberFormat = DecimalFormat.getNumberInstance(Locale.getDefault());
 
 	private final static Logger LOGGER = Logger.getLogger(TextResource.class.getName());
 
@@ -64,12 +71,7 @@ public class TextResource {
 	 * Gets the singleton instance of this class.
 	 * @return the singleton instance of this class.
 	 */
-	public static synchronized TextResource getInstance()
-	{
-		if (instance == null)
-		{
-			instance = new TextResource();
-		}
+	public static TextResource getInstance() {
 		return instance;
 	}
 
@@ -106,6 +108,7 @@ public class TextResource {
 	public void setLocale(Locale locale) {
 	    this.locale = locale;
 	    this.amountFormat = new AmountFormat(locale);
+	    this.numberFormat = DecimalFormat.getNumberInstance(locale);
 	    reloadResources();
 	}
 
@@ -216,6 +219,30 @@ public class TextResource {
 	public String formatDate(String formatId, Date date) {
 	    SimpleDateFormat sdf = new SimpleDateFormat(getString(formatId), locale);
 	    return sdf.format(date);
+	}
+
+	/**
+	 * Formats a double as a string.
+	 * @param d the double to be formatted
+	 * @return the formatted date
+	 */
+	public String formatDouble(Double d) {
+		return numberFormat.format(d);
+	}
+
+	/**
+	 * Parses a string containing a representation of a double.
+	 * @param s the string
+	 * @return the double value
+	 * @throws ParseException if the string does not represent a valid double
+	 */
+	public double parseDouble(String s) throws ParseException {
+		ParsePosition position = new ParsePosition(0);
+		Number number = numberFormat.parse(s, position);
+		if (position.getIndex() < s.length()) {
+			throw new ParseException("Double contains illegal characters", position.getIndex());
+		}
+		return number.doubleValue();
 	}
 
     private void reloadResources() {
