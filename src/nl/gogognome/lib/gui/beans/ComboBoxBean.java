@@ -15,23 +15,32 @@
 */
 package nl.gogognome.lib.gui.beans;
 
+import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.List;
 
 import javax.swing.JComboBox;
+import javax.swing.JList;
+import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
 import nl.gogognome.lib.swing.models.AbstractModel;
 import nl.gogognome.lib.swing.models.ListModel;
 import nl.gogognome.lib.swing.models.ModelChangeListener;
-import nl.gogognome.lib.text.TextResource;
 
 /**
  * This class implements a bean for selecting an item in a list of items.
  *
  * @author Sander Kooijmans
  */
+/**
+ * This class implements a bean for selecting an item in a list of items.
+ *
+ * @author Sander Kooijmans
+ */
 public class ComboBoxBean<T> extends JComboBox implements Bean {
+
+	private static final long serialVersionUID = 1L;
 
 	private List<T> items;
 
@@ -41,19 +50,13 @@ public class ComboBoxBean<T> extends JComboBox implements Bean {
 
 	private ItemListener itemListener;
 
-	private String resourcePrefix;
-
 	/**
 	 * Constructor.
 	 * @param listModel the list model containing the items and managing the selected item
-	 * @param resourcePrefix if not null, then the each item is represented by a string resource.
-	 *        The id of the item's string resource consists of this prefix followed by the
-	 *        result of toString() of the item.
 	 */
-	public ComboBoxBean(ListModel<T> listModel, String resourcePrefix) {
+	public ComboBoxBean(ListModel<T> listModel) {
 		super();
 		this.listModel = listModel;
-		this.resourcePrefix = resourcePrefix;
 	}
 
 	@Override
@@ -80,22 +83,15 @@ public class ComboBoxBean<T> extends JComboBox implements Bean {
 		addItemListener(itemListener);
 	}
 
+	public void setItemFormatter(ObjectFormatter<T> itemFormatter) {
+		setRenderer(new ItemFormatterRenderer<T>(itemFormatter));
+	}
+
 	private void updateItems() {
 		items = listModel.getItems();
 		for (T item : listModel.getItems()) {
-			addItem(getItemToBeDisplayed(item));
+			addItem(item);
 		}
-	}
-
-	private Object getItemToBeDisplayed(Object item) {
-		TextResource tr = TextResource.getInstance();
-		if (resourcePrefix != null) {
-			String id = resourcePrefix + item.toString();
-			if (tr.containsString(id)) {
-				item = tr.getString(id);
-			}
-		}
-		return item;
 	}
 
 	private void onModelChanged() {
@@ -120,5 +116,27 @@ public class ComboBoxBean<T> extends JComboBox implements Bean {
 	public void deinitialize() {
 		listModel.removeModelChangeListener(modelChangeListener);
 		removeItemListener(itemListener);
+	}
+}
+
+class ItemFormatterRenderer<T> extends BasicComboBoxRenderer {
+
+	private static final long serialVersionUID = 1L;
+
+	private ObjectFormatter<T> itemFormatter;
+
+	public ItemFormatterRenderer(ObjectFormatter<T> itemFormatter) {
+		super();
+		this.itemFormatter = itemFormatter;
+	}
+
+	@Override
+	public Component getListCellRendererComponent(JList list, Object value,
+			int index, boolean isSelected, boolean cellHasFocus) {
+
+		String formattedValue = itemFormatter.format((T) value);
+
+		return super.getListCellRendererComponent(list, formattedValue, index, isSelected,
+				cellHasFocus);
 	}
 }

@@ -66,16 +66,7 @@ public class BeanFactory {
      * @return the combo box bean
      */
     public <T> ComboBoxBean<T> createComboBoxBean(ListModel<T> model) {
-    	return createComboBoxBean(model, null);
-    }
-
-    /**
-     * Creates a combo box bean for the specified model.
-     * @param model the model
-     * @return the combo box bean
-     */
-    public <T> ComboBoxBean<T> createComboBoxBean(ListModel<T> model, String resourcePrefix) {
-    	ComboBoxBean<T> bean = new ComboBoxBean<T>(model, resourcePrefix);
+    	ComboBoxBean<T> bean = new ComboBoxBean<T>(model);
     	bean.initBean();
     	return bean;
     }

@@ -156,21 +156,10 @@ public class ValuesEditPanel extends JPanel implements Deinitializable {
      * @param labelId the id of the label that is put in front of the combo box
      * @param model the model controlling the combo box
      */
-    public <T> void addComboBoxField(String labelId, ListModel<T> model) {
-        addFieldWithConstraints(labelId, beanFactory.createComboBoxBean(model),
-        		SwingUtils.createLabelGBConstraints(1, nrFields));
-    }
-
-    /**
-     * Adds a combo box to select a single item from a list of items.
-     * @param labelId the id of the label that is put in front of the combo box
-     * @param model the model controlling the combo box
-	 * @param resourcePrefix if not null, then the each item is represented by a string resource.
-	 *        The id of the item's string resource consists of this prefix followed by the
-	 *        result of toString() of the item.
-     */
-    public <T> void addComboBoxField(String labelId, ListModel<T> model, String resourcePrefix) {
-        addFieldWithConstraints(labelId, beanFactory.createComboBoxBean(model, resourcePrefix),
+    public <T> void addComboBoxField(String labelId, ListModel<T> model, ObjectFormatter<T> itemFormatter) {
+    	ComboBoxBean<T> bean = beanFactory.createComboBoxBean(model);
+    	bean.setItemFormatter(itemFormatter);
+        addFieldWithConstraints(labelId, bean,
         		SwingUtils.createLabelGBConstraints(1, nrFields));
     }
 
