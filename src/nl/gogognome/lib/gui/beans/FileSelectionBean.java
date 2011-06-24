@@ -32,7 +32,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import nl.gogognome.lib.gui.Deinitializable;
 import nl.gogognome.lib.swing.SwingUtils;
 import nl.gogognome.lib.swing.WidgetFactory;
 import nl.gogognome.lib.swing.models.AbstractModel;
@@ -44,7 +43,7 @@ import nl.gogognome.lib.swing.models.ModelChangeListener;
  *
  * @author Sander Kooijmans
  */
-public class FileSelectionBean extends JPanel implements Deinitializable {
+public class FileSelectionBean extends JPanel implements Bean {
 
     /** The model that stores the selected file. */
     private FileSelectionModel fileSelectionModel;
@@ -69,7 +68,10 @@ public class FileSelectionBean extends JPanel implements Deinitializable {
      */
     public FileSelectionBean(FileSelectionModel fileSelectionModel) {
         this.fileSelectionModel = fileSelectionModel;
+    }
 
+    @Override
+	public void initBean() {
         setOpaque(false);
 
         setLayout(new GridBagLayout());

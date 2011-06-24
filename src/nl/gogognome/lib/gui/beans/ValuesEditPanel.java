@@ -50,6 +50,8 @@ public class ValuesEditPanel extends JPanel implements Deinitializable {
 
     private List<Component> components = new ArrayList<Component>();
 
+    private BeanFactory beanFactory = BeanFactory.getInstance();
+
     /**
      * Constructor.
      */
@@ -76,7 +78,7 @@ public class ValuesEditPanel extends JPanel implements Deinitializable {
      * @param model the model controlling the text field
      */
     public void addField(String labelId, StringModel model) {
-        addField(labelId, new TextFieldBean(model));
+        addField(labelId, beanFactory.createTextFieldBean(model));
     }
 
     /**
@@ -87,7 +89,7 @@ public class ValuesEditPanel extends JPanel implements Deinitializable {
      *        The value 0 indicates that the width can be determined by the layout manager.
      */
     public void addField(String labelId, StringModel model, int nrColumns) {
-        addField(labelId, new TextFieldBean(model, nrColumns));
+        addField(labelId, beanFactory.createTextFieldBean(model, nrColumns));
     }
 
     /**
@@ -96,7 +98,7 @@ public class ValuesEditPanel extends JPanel implements Deinitializable {
      * @param model the model controlling the text field
      */
     public void addField(String labelId, DoubleModel model) {
-        addField(labelId, new DoubleFieldBean(model));
+        addField(labelId, beanFactory.createDoubleFieldBean(model));
     }
 
     /**
@@ -107,7 +109,7 @@ public class ValuesEditPanel extends JPanel implements Deinitializable {
      *        The value 0 indicates that the width can be determined by the layout manager.
      */
     public void addField(String labelId, DoubleModel model, int nrColumns) {
-        addField(labelId, new DoubleFieldBean(model, nrColumns));
+        addField(labelId, beanFactory.createDoubleFieldBean(model, nrColumns));
     }
 
     /**
@@ -118,7 +120,7 @@ public class ValuesEditPanel extends JPanel implements Deinitializable {
      *        The value 0 indicates that the width can be determined by the layout manager.
      */
     public void addPasswordField(String labelId, StringModel model, int nrColumns) {
-        addField(labelId, new PasswordBean(model, nrColumns));
+        addField(labelId, beanFactory.createPasswordBean(model, nrColumns));
     }
 
     /**
@@ -127,7 +129,7 @@ public class ValuesEditPanel extends JPanel implements Deinitializable {
      * @param model the model controlling the check box
      */
     public void addField(String labelId, BooleanModel model) {
-        addField(labelId, new CheckBoxBean(model));
+        addField(labelId, beanFactory.createCheckBoxBean(model));
     }
 
     /**
@@ -136,7 +138,7 @@ public class ValuesEditPanel extends JPanel implements Deinitializable {
      * @param model the model controlling the file seleciton bean
      */
     public void addField(String labelId, FileSelectionModel model) {
-        addField(labelId, new FileSelectionBean(model));
+        addField(labelId, beanFactory.createFileSelectionBean(model));
     }
 
 
@@ -146,7 +148,7 @@ public class ValuesEditPanel extends JPanel implements Deinitializable {
      * @param model the model controlling the text field
      */
     public void addField(String labelId, DateModel model) {
-        addField(labelId, new DateSelectionBean(model));
+        addField(labelId, beanFactory.createDateSelectionBean(model));
     }
 
     /**
@@ -155,7 +157,7 @@ public class ValuesEditPanel extends JPanel implements Deinitializable {
      * @param model the model controlling the combo box
      */
     public <T> void addComboBoxField(String labelId, ListModel<T> model) {
-        addFieldWithConstraints(labelId, new ComboBoxBean<T>(model, null),
+        addFieldWithConstraints(labelId, beanFactory.createComboBoxBean(model),
         		SwingUtils.createLabelGBConstraints(1, nrFields));
     }
 
@@ -168,7 +170,7 @@ public class ValuesEditPanel extends JPanel implements Deinitializable {
 	 *        result of toString() of the item.
      */
     public <T> void addComboBoxField(String labelId, ListModel<T> model, String resourcePrefix) {
-        addFieldWithConstraints(labelId, new ComboBoxBean<T>(model, resourcePrefix),
+        addFieldWithConstraints(labelId, beanFactory.createComboBoxBean(model, resourcePrefix),
         		SwingUtils.createLabelGBConstraints(1, nrFields));
     }
 

@@ -41,7 +41,7 @@ public class TextFieldBean extends AbstractTextFieldBean<StringModel> {
      * @param nrColumns the width of the text field as the number of columns.
      *        The value 0 indicates that the width can be determined by the layout manager.
      */
-    public TextFieldBean(StringModel stringModel, int nrColumns) {
+    protected TextFieldBean(StringModel stringModel, int nrColumns) {
     	super(stringModel, nrColumns);
     }
 

@@ -28,17 +28,20 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import nl.gogognome.lib.gui.Deinitializable;
 import nl.gogognome.lib.swing.SwingUtils;
 import nl.gogognome.lib.swing.models.AbstractModel;
 import nl.gogognome.lib.swing.models.ModelChangeListener;
 
 /**
- * Base class for a text field bean.
+ * Base class for a text field bean. Make sure that after instantiation
+ * first the method {@link #initBean()} is called.
  *
  * @author Sander Kooijmans
  */
-public abstract class AbstractTextFieldBean<M extends AbstractModel> extends JPanel implements Deinitializable {
+public abstract class AbstractTextFieldBean<M extends AbstractModel> extends JPanel
+		implements Bean {
+
+	private static final long serialVersionUID = 1L;
 
 	protected M model;
 
@@ -51,12 +54,14 @@ public abstract class AbstractTextFieldBean<M extends AbstractModel> extends JPa
     /** Listener for changes made by the user. */
     private DocumentListener documentListener;
 
+    private int nrColumns;
+
     /**
      * Constructor.
      * @param model the model that will reflect the content of the bean
      */
-    public AbstractTextFieldBean(M model) {
-    	initBean(model, 0);
+    protected AbstractTextFieldBean(M model) {
+    	this(model, 0);
     }
 
     /**
@@ -65,13 +70,13 @@ public abstract class AbstractTextFieldBean<M extends AbstractModel> extends JPa
      * @param nrColumns the width of the text field as the number of columns.
      *        The value 0 indicates that the width can be determined by the layout manager.
      */
-    public AbstractTextFieldBean(M model, int nrColumns) {
-    	initBean(model, nrColumns);
+    protected AbstractTextFieldBean(M model, int nrColumns) {
+    	this.model = model;
+    	this.nrColumns = nrColumns;
     }
 
-    private void initBean(M model, int nrColumns) {
-        this.model = model;
-
+    @Override
+	public void initBean() {
         setOpaque(false);
 
         setLayout(new GridBagLayout());

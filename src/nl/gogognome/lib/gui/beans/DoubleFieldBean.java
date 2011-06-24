@@ -33,7 +33,7 @@ public class DoubleFieldBean extends AbstractTextFieldBean<DoubleModel> {
      * Constructor.
      * @param doubleModel the double model that will reflect the content of the bean
      */
-    public DoubleFieldBean(DoubleModel doubleModel) {
+    protected DoubleFieldBean(DoubleModel doubleModel) {
     	super(doubleModel);
     }
 
@@ -43,7 +43,7 @@ public class DoubleFieldBean extends AbstractTextFieldBean<DoubleModel> {
      * @param nrColumns the width of the text field as the number of columns.
      *        The value 0 indicates that the width can be determined by the layout manager.
      */
-    public DoubleFieldBean(DoubleModel doubleModel, int nrColumns) {
+    protected DoubleFieldBean(DoubleModel doubleModel, int nrColumns) {
     	super(doubleModel, nrColumns);
     }
 

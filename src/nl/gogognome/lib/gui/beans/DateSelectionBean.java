@@ -15,165 +15,83 @@
 */
 package nl.gogognome.lib.gui.beans;
 
-import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.event.FocusListener;
+import java.awt.event.ActionEvent;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.border.LineBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JButton;
 
-import nl.gogognome.lib.gui.Deinitializable;
 import nl.gogognome.lib.swing.SwingUtils;
-import nl.gogognome.lib.swing.models.AbstractModel;
+import nl.gogognome.lib.swing.WidgetFactory;
 import nl.gogognome.lib.swing.models.DateModel;
 import nl.gogognome.lib.swing.models.ModelChangeListener;
+import nl.gogognome.lib.swing.views.ViewPopup;
 import nl.gogognome.lib.text.TextResource;
-import nl.gogognome.lib.util.DateUtil;
 
 /**
  * This class implements a bean for selecting a <code>Date</code>.
  *
  * @author Sander Kooijmans
  */
-public class DateSelectionBean extends JPanel implements Deinitializable {
+public class DateSelectionBean extends AbstractTextFieldBean<DateModel> {
 
-    /** The model that stores the date of this bean. */
-    private DateModel dateModel;
-
-    /** The text field in which the user can enter the date. */
-    private JTextField tfDate;
-
-    /** The date format used to format and parse dates. */
-    private SimpleDateFormat dateFormat;
-
-    /** The model change listener for the date model. */
-    private ModelChangeListener dateModelChangeListener;
-
-    /** The document listener for the text field. */
-    private DocumentListener documentListener;
+	private static final long serialVersionUID = 1L;
 
     /**
      * Constructor.
      * @param dateModel the date model that will reflect the content of the bean
      */
-    public DateSelectionBean(DateModel dateModel) {
-        this.dateModel = dateModel;
-
-        setOpaque(false);
-
-        dateFormat = new SimpleDateFormat(TextResource.getInstance().getString("gen.dateFormat"));
-        dateFormat.setLenient(false);
-
-        setLayout(new GridBagLayout());
-
-        tfDate = new JTextField(10);
-
-        updateTextField();
-        dateModelChangeListener = new ModelChangeListener() {
-
-            @Override
-			public void modelChanged(AbstractModel model) {
-                updateTextField();
-            }
-
-        };
-        dateModel.addModelChangeListener(dateModelChangeListener);
-
-        documentListener = new DocumentListener() {
-
-            @Override
-			public void changedUpdate(DocumentEvent evt) {
-                parseUserInput();
-            }
-
-            @Override
-			public void insertUpdate(DocumentEvent evt) {
-                parseUserInput();
-            }
-
-            @Override
-			public void removeUpdate(DocumentEvent evt) {
-                parseUserInput();
-            }
-        };
-
-        tfDate.getDocument().addDocumentListener(documentListener);
-        add(tfDate, SwingUtils.createGBConstraints(0,0, 1, 1, 1.0, 0.0,
-            GridBagConstraints.WEST, GridBagConstraints.NONE,
-            0, 0, 0, 0));    }
-
-    /**
-     * Deinitializes this bean. It will free its resources.
-     */
-    @Override
-	public void deinitialize() {
-        dateModel.removeModelChangeListener(dateModelChangeListener);
-        tfDate.getDocument().removeDocumentListener(documentListener);
-        dateModelChangeListener = null;
-        documentListener = null;
-        dateModel = null;
-        dateFormat = null;
-        tfDate = null;
+    protected DateSelectionBean(DateModel dateModel) {
+    	super(dateModel, 10);
     }
 
-    /**
-     * @see JComponent#addFocusListener(FocusListener)
-     */
     @Override
-    public void addFocusListener(FocusListener listener) {
-        tfDate.addFocusListener(listener);
+    public void initBean() {
+    	super.initBean();
+    	WidgetFactory wf = WidgetFactory.getInstance();
+    	JButton button = wf.createIconButton("gen.btnCalendar", createCalendarAction(), 21);
+    	add(button);
     }
 
-    /**
-     * @see JComponent#removeFocusListener(FocusListener)
-     */
-    @Override
-    public void removeFocusListener(FocusListener listener) {
-        tfDate.removeFocusListener(listener);
-    }
-
-    /**
-     * Updates the text field with the value of the date model.
-     */
-    private void updateTextField() {
-        Date date = dateModel.getDate();
+	@Override
+    protected String getStringFromModel() {
+        Date date = model.getDate();
         if (date != null) {
-            tfDate.setText(dateFormat.format(date));
+            return TextResource.getInstance().formatDate("gen.dateFormat", date);
         } else {
-            tfDate.setText("");
+            return "";
         }
     }
 
-    /**
-     * Parses the date that is entered by the user. If the entered text is a valid
-     * date, then the date model is updated.
-     */
-    private void parseUserInput() {
+    @Override
+    protected void parseUserInput(String text,
+    		ModelChangeListener modelChangeListener) throws ParseException {
+    	Date date = null;
         try {
-            Date date = dateFormat.parse(tfDate.getText());
-            if (DateUtil.getField(date, Calendar.YEAR) < 1900) {
-                throw new ParseException("Year is smaller than 1900", 0);
-            }
-            dateModel.setDate(date, dateModelChangeListener);
-            tfDate.setBorder(new LineBorder(Color.GRAY));
-        } catch (ParseException ignore) {
-            if (dateModel.getDate() != null) {
-                dateModel.setDate(null, dateModelChangeListener);
-            }
-            if (tfDate.getText().length() > 0) {
-                tfDate.setBorder(new LineBorder(Color.RED));
-            } else {
-                tfDate.setBorder(new LineBorder(Color.GRAY));
-            }
+            date = TextResource.getInstance().parseDate("gen.dateFormat", text);
+        } finally {
+        	// Set the date in the finally block. This ensures that the
+        	// model is cleared in case a ParseException is thrown
+            model.setDate(date, modelChangeListener);
         }
     }
+
+	private void showCalendarPopup() {
+		CalendarView calendarPanel = new CalendarView(model);
+		ViewPopup viewPopup = new ViewPopup(calendarPanel);
+		viewPopup.show(this, SwingUtils.getScreenLocation(this));
+	}
+
+    private Action createCalendarAction() {
+		return new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				showCalendarPopup();
+			}
+		};
+	}
+
+
 }

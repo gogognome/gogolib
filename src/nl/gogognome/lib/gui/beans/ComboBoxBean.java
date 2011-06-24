@@ -21,7 +21,6 @@ import java.util.List;
 
 import javax.swing.JComboBox;
 
-import nl.gogognome.lib.gui.Deinitializable;
 import nl.gogognome.lib.swing.models.AbstractModel;
 import nl.gogognome.lib.swing.models.ListModel;
 import nl.gogognome.lib.swing.models.ModelChangeListener;
@@ -32,7 +31,7 @@ import nl.gogognome.lib.text.TextResource;
  *
  * @author Sander Kooijmans
  */
-public class ComboBoxBean<T> extends JComboBox implements Deinitializable {
+public class ComboBoxBean<T> extends JComboBox implements Bean {
 
 	private List<T> items;
 
@@ -55,7 +54,10 @@ public class ComboBoxBean<T> extends JComboBox implements Deinitializable {
 		super();
 		this.listModel = listModel;
 		this.resourcePrefix = resourcePrefix;
+	}
 
+	@Override
+	public void initBean() {
 		updateItems();
 
 		setSelectedIndex(listModel.getSingleSelectedIndex());

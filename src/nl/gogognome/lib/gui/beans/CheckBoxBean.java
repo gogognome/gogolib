@@ -24,7 +24,6 @@ import java.awt.event.ItemListener;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
-import nl.gogognome.lib.gui.Deinitializable;
 import nl.gogognome.lib.swing.SwingUtils;
 import nl.gogognome.lib.swing.models.AbstractModel;
 import nl.gogognome.lib.swing.models.BooleanModel;
@@ -35,7 +34,7 @@ import nl.gogognome.lib.swing.models.ModelChangeListener;
  *
  * @author Sander Kooijmans
  */
-public class CheckBoxBean extends JPanel implements Deinitializable {
+public class CheckBoxBean extends JPanel implements Bean {
 
     /** The model that stores the boolean of this bean. */
     private BooleanModel booleanModel;
@@ -55,7 +54,10 @@ public class CheckBoxBean extends JPanel implements Deinitializable {
      */
     public CheckBoxBean(BooleanModel booleanModel) {
         this.booleanModel = booleanModel;
+    }
 
+    @Override
+	public void initBean() {
         setOpaque(false);
 
         setLayout(new GridBagLayout());

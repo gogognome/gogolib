@@ -15,6 +15,7 @@
 */
 package nl.gogognome.lib.text;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
@@ -211,14 +212,40 @@ public class TextResource {
 	}
 
 	/**
+	 * Gets a date format.
+	 * @param formatId the id of the string resource that describes the format of the date
+	 * @return the date format
+	 */
+	public DateFormat getDateFormat(String formatId) {
+		return new SimpleDateFormat(getString(formatId), locale);
+	}
+
+	/**
 	 * Formats a date.
 	 * @param formatId the id of the string resource that describes the format of the date
 	 * @param date the date to be formatted
 	 * @return the formatted date
 	 */
 	public String formatDate(String formatId, Date date) {
-	    SimpleDateFormat sdf = new SimpleDateFormat(getString(formatId), locale);
-	    return sdf.format(date);
+	    DateFormat df = getDateFormat(formatId);
+	    return df.format(date);
+	}
+
+	/**
+	 * Parses a string containing a representation of a date.
+	 * @param formatId the id of the string resource that describes the format of the date
+	 * @param s the string
+	 * @return the date
+	 * @throws ParseException if the string does not represent a valid date
+	 */
+	public Date parseDate(String formatId, String s) throws ParseException {
+		ParsePosition position = new ParsePosition(0);
+	    DateFormat df = getDateFormat(formatId);
+	    Date date = df.parse(s, position);
+		if (position.getIndex() < s.length()) {
+			throw new ParseException("Date contains illegal characters", position.getIndex());
+		}
+		return date;
 	}
 
 	/**

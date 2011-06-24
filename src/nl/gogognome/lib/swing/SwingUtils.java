@@ -19,6 +19,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.Point;
 
 /**
  * This class offers a variety of methods that are useful when writing
@@ -106,4 +107,18 @@ public class SwingUtils {
 		}
 	}
 
+	/**
+	 * Gets coordinates of a component as screen locations.
+	 * @param c the component
+	 * @return the coordinates
+	 */
+	public static Point getScreenLocation(Component c) {
+		Point p = c.getLocation();
+		while (c.getParent() != null) {
+			c = c.getParent();
+			Point parentLocation = c.getLocation();
+			p.translate(parentLocation.x, parentLocation.y);
+		}
+		return p;
+	}
 }
