@@ -41,9 +41,7 @@ import javax.swing.event.ChangeListener;
 
 import nl.gogognome.lib.gui.Deinitializable;
 import nl.gogognome.lib.swing.SwingUtils;
-import nl.gogognome.lib.swing.models.AbstractModel;
 import nl.gogognome.lib.swing.models.DateModel;
-import nl.gogognome.lib.swing.models.ModelChangeListener;
 import nl.gogognome.lib.swing.views.OkCancelButtonPanel;
 import nl.gogognome.lib.swing.views.View;
 import nl.gogognome.lib.text.TextResource;
@@ -54,7 +52,7 @@ import nl.gogognome.lib.util.DateUtil;
  *
  * @author Sander Kooijmans
  */
-class CalendarView extends View implements ModelChangeListener, ChangeListener {
+class CalendarView extends View implements ChangeListener {
 
 	private static final long serialVersionUID = 1L;
 
@@ -92,6 +90,7 @@ class CalendarView extends View implements ModelChangeListener, ChangeListener {
 
 	@Override
 	public void onClose() {
+		removeListners();
 	}
 
 	@Override
@@ -183,13 +182,10 @@ class CalendarView extends View implements ModelChangeListener, ChangeListener {
 	}
 
 	@Override
-	public void modelChanged(AbstractModel model) {
-	}
-
-	@Override
 	public void stateChanged(ChangeEvent changeevent) {
 		calendar.set(Calendar.MONTH, getSelectedMonth());
 		calendar.set(Calendar.YEAR, getSelectedYear());
+		currentDay = Math.min(currentDay, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
 		updateDaysOfMonth();
 		repaint();
 	}
@@ -212,7 +208,7 @@ class CalendarView extends View implements ModelChangeListener, ChangeListener {
 
 	private void onOk() {
 		Date date = DateUtil.createDate(getSelectedYear(), getSelectedMonth() + 1, currentDay);
-		dateModel.setDate(date, this);
+		dateModel.setDate(date, null);
 		requestClose();
 	}
 

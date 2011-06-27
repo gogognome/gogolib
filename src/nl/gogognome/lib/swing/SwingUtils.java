@@ -17,6 +17,7 @@ package nl.gogognome.lib.swing;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dialog;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Point;
@@ -100,7 +101,7 @@ public class SwingUtils {
      */
 	public static Container getTopLevelContainer(Component component) {
 		Container parent = component.getParent();
-		if (parent == null) {
+		if (parent == null || (component instanceof Dialog)) {
 			return (Container) component;
 		} else {
 			return getTopLevelContainer(parent);
@@ -112,9 +113,9 @@ public class SwingUtils {
 	 * @param c the component
 	 * @return the coordinates
 	 */
-	public static Point getScreenLocation(Component c) {
+	public static Point getCoordinatesRelativeToTopLevelContainer(Component c) {
 		Point p = c.getLocation();
-		while (c.getParent() != null) {
+		while (c.getParent() != null && !(c.getParent() instanceof Dialog)) {
 			c = c.getParent();
 			Point parentLocation = c.getLocation();
 			p.translate(parentLocation.x, parentLocation.y);

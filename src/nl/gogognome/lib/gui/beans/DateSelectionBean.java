@@ -81,7 +81,7 @@ public class DateSelectionBean extends AbstractTextFieldBean<DateModel> {
 	private void showCalendarPopup() {
 		CalendarView calendarPanel = new CalendarView(model);
 		ViewPopup viewPopup = new ViewPopup(calendarPanel);
-		viewPopup.show(this, SwingUtils.getScreenLocation(this));
+		viewPopup.show(this, SwingUtils.getCoordinatesRelativeToTopLevelContainer(this));
 	}
 
     private Action createCalendarAction() {
