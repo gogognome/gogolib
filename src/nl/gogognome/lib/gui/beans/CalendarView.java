@@ -100,6 +100,9 @@ class CalendarView extends View implements ChangeListener {
 
 	private void initModels() {
 		calendar = Calendar.getInstance(TextResource.getInstance().getLocale());
+		if (dateModel.getDate() != null) {
+			calendar.setTime(dateModel.getDate());
+		}
 		currentDay = calendar.get(Calendar.DAY_OF_MONTH);
 		firstDayOfWeek = calendar.getFirstDayOfWeek();
 	}
