@@ -178,7 +178,7 @@ public class FileSelectionBean extends JPanel implements Bean {
      * Lets the user select a file using a file chooser dialog.
      */
     private void handleSelectFileWithDialog() {
-        JFileChooser chooser = new JFileChooser();
+        JFileChooser chooser = new JFileChooser(fileSelectionModel.getFile());
         if (filter != null) {
         	chooser.setFileFilter(filter);
         }
