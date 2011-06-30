@@ -68,6 +68,17 @@ public abstract class AbstractListSortedTableModel<T> extends AbstractSortedTabl
 	}
 
 	/**
+	 * Removes all rows from the table model.
+	 * Notifies all listeners about the change in the table.
+	 * This method must be called from the AWT event thread.
+	 */
+	public void clear() {
+		int oldSize = rows.size();
+		rows.clear();
+		fireTableRowsDeleted(0, oldSize);
+	}
+
+	/**
 	 * Updates a row.
 	 * Notifies all listeners about the change in the table.
 	 * This method must be called from the AWT event thread.
