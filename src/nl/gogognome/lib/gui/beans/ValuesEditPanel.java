@@ -148,7 +148,8 @@ public class ValuesEditPanel extends JPanel implements Deinitializable {
      * @param model the model controlling the text field
      */
     public void addField(String labelId, DateModel model) {
-        addField(labelId, beanFactory.createDateSelectionBean(model));
+        addFieldWithConstraints(labelId, beanFactory.createDateSelectionBean(model),
+        		SwingUtils.createLabelGBConstraints(1, nrFields));
     }
 
     /**
