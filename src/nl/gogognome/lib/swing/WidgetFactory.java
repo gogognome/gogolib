@@ -380,11 +380,12 @@ public class WidgetFactory {
     /**
      * Creates a title border for the specified title.
      * @param titleId the id of the title
+	 * @param arguments the arguments
      * @return the title border
      */
-    public Border createTitleBorder(String titleId) {
+    public Border createTitleBorder(String titleId, Object... args) {
     	return new CompoundBorder(
-                new TitledBorder(' '  + textResource.getString(titleId) + ' '),
+                new TitledBorder(' '  + textResource.getString(titleId, args) + ' '),
                 new EmptyBorder(10, 10, 10, 10));
     }
 
