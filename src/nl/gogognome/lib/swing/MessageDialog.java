@@ -231,7 +231,7 @@ public class MessageDialog extends DialogWithButtons {
      * @return {@link #YES_OPTION}, {@link #NO_OPTION}, {@link #CANCEL_OPTION} or {@link #CLOSED_OPTION}.
      */
     public static int showYesNoCancelQuestion(Component parentComponent, String titleId, String messageId, Object...args) {
-    	return showConfirmationDialog(JOptionPane.YES_NO_CANCEL_OPTION, parentComponent, messageId, titleId);
+    	return showConfirmationDialog(JOptionPane.YES_NO_CANCEL_OPTION, parentComponent, titleId, messageId, args);
     }
 
     private static int showConfirmationDialog(int type, Component parentComponent, String titleId, String messageId, Object...args) {
