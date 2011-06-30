@@ -20,10 +20,10 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.List;
 
-import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
+import nl.gogognome.lib.swing.JComboBoxWithKeyboardInput;
 import nl.gogognome.lib.swing.models.AbstractModel;
 import nl.gogognome.lib.swing.models.ListModel;
 import nl.gogognome.lib.swing.models.ModelChangeListener;
@@ -38,7 +38,7 @@ import nl.gogognome.lib.swing.models.ModelChangeListener;
  *
  * @author Sander Kooijmans
  */
-public class ComboBoxBean<T> extends JComboBox implements Bean {
+public class ComboBoxBean<T> extends JComboBoxWithKeyboardInput implements Bean {
 
 	private static final long serialVersionUID = 1L;
 
@@ -49,6 +49,8 @@ public class ComboBoxBean<T> extends JComboBox implements Bean {
 	private ModelChangeListener modelChangeListener;
 
 	private ItemListener itemListener;
+
+	private ObjectFormatter<T> itemFormatter;
 
 	/**
 	 * Constructor.
@@ -63,7 +65,10 @@ public class ComboBoxBean<T> extends JComboBox implements Bean {
 	public void initBean() {
 		updateItems();
 
-		setSelectedIndex(listModel.getSingleSelectedIndex());
+		int index = listModel.getSingleSelectedIndex();
+		if (0 <= index && index < getItemCount()) {
+			setSelectedIndex(index);
+		}
 
 		modelChangeListener = new ModelChangeListener() {
 			@Override
@@ -84,13 +89,20 @@ public class ComboBoxBean<T> extends JComboBox implements Bean {
 	}
 
 	public void setItemFormatter(ObjectFormatter<T> itemFormatter) {
+		this.itemFormatter = itemFormatter;
 		setRenderer(new ItemFormatterRenderer<T>(itemFormatter));
+		updateItems();
 	}
 
 	private void updateItems() {
+		removeAllItems();
 		items = listModel.getItems();
 		for (T item : listModel.getItems()) {
-			addItem(item);
+			if (itemFormatter != null) {
+				addItemWithStringRepresentation(item, itemFormatter.format(item));
+			} else {
+				addItem(item);
+			}
 		}
 	}
 
@@ -114,6 +126,7 @@ public class ComboBoxBean<T> extends JComboBox implements Bean {
 
 	@Override
 	public void deinitialize() {
+		super.deinitialize();
 		listModel.removeModelChangeListener(modelChangeListener);
 		removeItemListener(itemListener);
 	}
