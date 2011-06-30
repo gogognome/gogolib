@@ -49,9 +49,11 @@ public class StringMatcher {
 		this.pattern = pattern;
 		this.ignoreCase = ignoreCase;
 
-		// Preprocessing
-		computeLast();
-		computeMatch();
+		if (!pattern.isEmpty()) {
+			// Preprocessing
+			computeLast();
+			computeMatch();
+		}
 	}
 
 	/**
@@ -60,6 +62,10 @@ public class StringMatcher {
 	 * @param text the text
 	 */
 	public int match(String text) {
+		if (pattern.isEmpty()) {
+			return 0;
+		}
+
 		// Searching
 		int i = pattern.length() - 1;
 		int j = pattern.length() - 1;

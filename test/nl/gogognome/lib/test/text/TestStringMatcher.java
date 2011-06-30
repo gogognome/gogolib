@@ -44,4 +44,16 @@ public class TestStringMatcher extends TestCase {
 		assertEquals(21, stringMatcher.match("abcdbcddfgasabcabsdasabCAbc"));
 	}
 
+	public void testMatcherForEmptyString() {
+		StringMatcher stringMatcher = new StringMatcher("", true);
+		assertEquals(0, stringMatcher.match(""));
+		assertEquals(0, stringMatcher.match("a"));
+		assertEquals(0, stringMatcher.match("abcab"));
+
+		stringMatcher = new StringMatcher("", false);
+		assertEquals(0, stringMatcher.match(""));
+		assertEquals(0, stringMatcher.match("a"));
+		assertEquals(0, stringMatcher.match("abcab"));
+	}
+
 }
