@@ -48,7 +48,6 @@ public class DefaultTableUI extends BasicTableUI {
         final JTable table = (JTable) c;
 
         table.setDefaultRenderer(Date.class, new DateRenderer());
-
         installAlternatingBackgroundRenderers(table);
 
         // Add listener that installs the alternating background renderers each time the model
@@ -90,7 +89,7 @@ public class DefaultTableUI extends BasicTableUI {
     private static void installAlternatingBackgroundRenderers(JTable table) {
         HashSet<Class<?>> classes = new HashSet<Class<?>>();
         for (int col=0; col<table.getColumnCount(); col++) {
-            Class clazz = table.getColumnClass(col);
+            Class<?> clazz = table.getColumnClass(col);
             if (!classes.contains(clazz)) {
                 classes.add(clazz);
                 TableCellRenderer renderer = table.getDefaultRenderer(clazz);
