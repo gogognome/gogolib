@@ -43,6 +43,14 @@ public class DateModel extends AbstractModel {
     /**
      * Sets the date of this model.
      * @param newDate the new value of the date
+     */
+    public void setDate(Date newDate) {
+    	setDate(newDate, null);
+    }
+
+    /**
+     * Sets the date of this model.
+     * @param newDate the new value of the date
      * @param source the model change listener that sets the date. It will not
      *         get notified. It may be <code>null</code>.
      */
