@@ -19,9 +19,12 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import javax.swing.JComboBox;
+
+import nl.gogognome.lib.gui.Deinitializable;
+import nl.gogognome.lib.text.StringMatcher;
 
 /**
  * This class extends the standard combo box implementation with keyboard input:
@@ -29,33 +32,50 @@ import javax.swing.JComboBox;
  *
  * @author Sander Kooijmans
  */
-public class JComboBoxWithKeyboardInput extends JComboBox implements KeyListener, FocusListener
-{
-    /**
+public class JComboBoxWithKeyboardInput extends JComboBox
+		implements KeyListener, FocusListener, Deinitializable {
+
+	private static final long serialVersionUID = 1L;
+
+	/**
      * Contains the string representation of the parties in the <code>parties</code>
      * field. All strings are converted to lower case to make case-insensitive
      * searches easy.
      */
-    private Vector itemStrings = new Vector();
+    private ArrayList<String> itemStrings = new ArrayList<String>();
 
 	/** The substring entered by the user. */
-	private StringBuffer substring = new StringBuffer();
+	private StringBuilder substring = new StringBuilder();
 
     /**
      * Constructor.
      */
-    public JComboBoxWithKeyboardInput()
-    {
+    public JComboBoxWithKeyboardInput() {
         super();
 		addKeyListener(this);
 		addFocusListener(this);
     }
 
     @Override
-	public void addItem(Object item)
-    {
-        super.addItem(item);
-        itemStrings.addElement(item.toString().toLowerCase());
+    public void deinitialize() {
+    	removeKeyListener(this);
+    	removeFocusListener(this);
+    }
+
+    @Override
+	public void addItem(Object item) {
+    	addItemWithStringRepresentation(item, item.toString());
+    }
+
+    protected void addItemWithStringRepresentation(Object item, String representation) {
+    	super.addItem(item);
+        itemStrings.add(representation);
+    }
+
+    @Override
+    public void removeAllItems() {
+    	super.removeAllItems();
+    	itemStrings.clear();
     }
 
 	/**
@@ -63,19 +83,14 @@ public class JComboBoxWithKeyboardInput extends JComboBox implements KeyListener
 	 * @param e the key event.
 	 */
 	@Override
-	public void keyPressed(KeyEvent e)
-	{
+	public void keyPressed(KeyEvent e) {
 		char c = e.getKeyChar();
-		if (Character.isLetterOrDigit(c) )
-		{
-			substring.append( Character.toLowerCase(c) );
+		if (Character.isLetterOrDigit(c)) {
+			substring.append(Character.toLowerCase(c));
 			selectItemWithSubstring(substring.toString());
-		}
-		else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE)
-		{
-			if (substring.length() > 0)
-			{
-				substring.deleteCharAt( substring.length()-1 );
+		} else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+			if (substring.length() > 0)	{
+				substring.deleteCharAt(substring.length()-1);
 				selectItemWithSubstring(substring.toString());
 			}
 		}
@@ -88,11 +103,10 @@ public class JComboBoxWithKeyboardInput extends JComboBox implements KeyListener
 	 *
 	 * @param s the string that should be matched as substring.
 	 */
-	private void selectItemWithSubstring( String s ) {
-		for (int i=0; i<itemStrings.size(); i++)
-		{
-			if (((String)itemStrings.elementAt(i)).indexOf(s) != -1)
-			{
+	private void selectItemWithSubstring(String s) {
+		StringMatcher matcher = new StringMatcher(s, true);
+		for (int i=0; i<itemStrings.size(); i++) {
+			if (matcher.match(itemStrings.get(i)) != -1) {
 				setSelectedIndex(i);
 				return;
 			}
@@ -104,8 +118,7 @@ public class JComboBoxWithKeyboardInput extends JComboBox implements KeyListener
 	 * @param e the key event.
 	 */
 	@Override
-	public void keyReleased(KeyEvent e)
-	{
+	public void keyReleased(KeyEvent e) {
 		// ignore this event
 	}
 
@@ -114,8 +127,7 @@ public class JComboBoxWithKeyboardInput extends JComboBox implements KeyListener
 	 * @param e the key event.
 	 */
 	@Override
-	public void keyTyped(KeyEvent e)
-	{
+	public void keyTyped(KeyEvent e) {
 		// ignore this event
 	}
 
@@ -124,8 +136,7 @@ public class JComboBoxWithKeyboardInput extends JComboBox implements KeyListener
 	 * @param event the event.
 	 */
 	@Override
-	public void focusGained(FocusEvent event)
-	{
+	public void focusGained(FocusEvent event) {
 		substring.delete(0, substring.length());
 	}
 
@@ -134,8 +145,7 @@ public class JComboBoxWithKeyboardInput extends JComboBox implements KeyListener
 	 * @param event the event.
 	 */
 	@Override
-	public void focusLost(FocusEvent event)
-	{
+	public void focusLost(FocusEvent event)	{
 		// ignore
 	}
 }
