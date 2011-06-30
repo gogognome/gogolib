@@ -183,7 +183,7 @@ public class TextResource {
 	 * @return the string from the resources or <code>null</code> if no string was
 	 *         found in the resources.
 	 */
-	public String getString(String id, Object[] arguments) {
+	public String getString(String id, Object... arguments) {
 	    String result;
         String s = getString(id);
         if (s != null) {
@@ -197,10 +197,6 @@ public class TextResource {
             result = null;
         }
 	    return result;
-	}
-
-	public String getString(String id, Object argument) {
-	    return getString(id, new Object[] { argument } );
 	}
 
 	public String getString(String id, int argument) {
