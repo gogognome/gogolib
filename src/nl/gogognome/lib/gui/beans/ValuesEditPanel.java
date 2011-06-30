@@ -182,4 +182,20 @@ public class ValuesEditPanel extends JPanel implements Deinitializable {
 
         components.add(component);
     }
+
+    @Override
+    public void requestFocus() {
+    	if (!components.isEmpty()) {
+    		components.get(0).requestFocus();
+    	}
+    }
+
+    @Override
+    public boolean requestFocusInWindow() {
+    	if (!components.isEmpty()) {
+    		return components.get(0).requestFocusInWindow();
+    	} else {
+    		return false;
+    	}
+    }
 }

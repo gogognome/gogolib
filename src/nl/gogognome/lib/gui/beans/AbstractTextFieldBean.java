@@ -194,4 +194,14 @@ public abstract class AbstractTextFieldBean<M extends AbstractModel> extends JPa
      */
     protected abstract void parseUserInput(String text, ModelChangeListener modelChangeListener)
     	throws ParseException;
+
+    @Override
+    public void requestFocus() {
+    	textfield.requestFocus();
+    }
+
+    @Override
+    public boolean requestFocusInWindow() {
+    	return textfield.requestFocusInWindow();
+    }
 }
