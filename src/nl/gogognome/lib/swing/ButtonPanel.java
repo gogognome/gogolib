@@ -139,7 +139,7 @@ public class ButtonPanel extends JPanel {
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 0, 0, 0, 0));
             } else {
                 add(button, SwingUtils.createGBConstraints(0, getComponentCount(), 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.NONE, 5, 5, 5, 5));
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 5, 5, 5, 5));
                 add(label, SwingUtils.createGBConstraints(0, getComponentCount(), 1, 1, 1.0, 1.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 0, 0, 0, 0));
             }
