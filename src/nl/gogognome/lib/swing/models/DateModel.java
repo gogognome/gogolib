@@ -28,6 +28,14 @@ public class DateModel extends AbstractModel {
 
     private Date date;
 
+    public DateModel() {
+    	this(null);
+    }
+
+    public DateModel(Date date) {
+    	this.date = date;
+    }
+
     public Date getDate() {
         return date;
     }

@@ -28,6 +28,11 @@ public class FileSelectionModel extends AbstractModel {
 
 	private File file;
 
+
+	public FileSelectionModel() {
+		this(null);
+	}
+
 	public FileSelectionModel(File file) {
 		super();
 		this.file = file;
