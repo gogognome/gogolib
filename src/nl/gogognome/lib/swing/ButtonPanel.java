@@ -15,6 +15,14 @@
 */
 package nl.gogognome.lib.swing;
 
+import static javax.swing.SwingConstants.BOTTOM;
+import static javax.swing.SwingConstants.CENTER;
+import static javax.swing.SwingConstants.HORIZONTAL;
+import static javax.swing.SwingConstants.LEFT;
+import static javax.swing.SwingConstants.RIGHT;
+import static javax.swing.SwingConstants.TOP;
+import static javax.swing.SwingConstants.VERTICAL;
+
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -63,12 +71,12 @@ public class ButtonPanel extends JPanel {
         super();
         this.location = location;
         this.orientation = orientation;
-        if (orientation != SwingConstants.HORIZONTAL && orientation != SwingConstants.VERTICAL) {
+        if (orientation != HORIZONTAL && orientation != VERTICAL) {
             throw new IllegalArgumentException("Invalid orientation: " + orientation);
         }
         setLayout(new GridBagLayout());
         switch(location) {
-        case SwingConstants.CENTER:
+        case CENTER:
             if (orientation == SwingConstants.HORIZONTAL) {
                 add(new JLabel(), SwingUtils.createGBConstraints(0, 0, 1, 1, 1.0, 1.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 0, 0, 0, 0));
@@ -82,7 +90,7 @@ public class ButtonPanel extends JPanel {
             }
             break;
 
-        case SwingConstants.LEFT:
+        case LEFT:
             if (orientation != SwingConstants.HORIZONTAL) {
                 throw new IllegalArgumentException("The location LEFT is only allowed for HORIZONTAL orientation.");
             }
@@ -90,7 +98,7 @@ public class ButtonPanel extends JPanel {
                 GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 0, 0, 0, 0));
             break;
 
-        case SwingConstants.RIGHT:
+        case RIGHT:
             if (orientation != SwingConstants.HORIZONTAL) {
                 throw new IllegalArgumentException("The location RIGHT is only allowed for HORIZONTAL orientation.");
             }
@@ -98,7 +106,7 @@ public class ButtonPanel extends JPanel {
                 GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 0, 0, 0, 0));
             break;
 
-        case SwingConstants.TOP:
+        case TOP:
             if (orientation != SwingConstants.VERTICAL) {
                 throw new IllegalArgumentException("The location TOP is only allowed for VERTICAL orientation.");
             }
@@ -106,7 +114,7 @@ public class ButtonPanel extends JPanel {
                 GridBagConstraints.CENTER, GridBagConstraints.VERTICAL, 0, 0, 0, 0));
             break;
 
-        case SwingConstants.BOTTOM:
+        case BOTTOM:
             if (orientation != SwingConstants.VERTICAL) {
                 throw new IllegalArgumentException("The location BOTTOM is only allowed for VERTICAL orientation.");
             }
@@ -126,32 +134,36 @@ public class ButtonPanel extends JPanel {
      */
     @Override
     public Component add(Component button) {
+        boolean firstButton = getComponentCount() == 1;
+    	int leftTopInset = (location == LEFT || location == TOP) && firstButton ? 0 : 5;
+    	int rightBottomInset = (location == RIGHT || location == BOTTOM) && firstButton ? 0 : 5;
+
         switch(location) {
-        case SwingConstants.CENTER:
-        case SwingConstants.LEFT:
-        case SwingConstants.TOP:
+        case CENTER:
+        case LEFT:
+        case TOP:
             // Remove the label, add the button and add the label as right-most element in the row
             remove(label);
             if (orientation == SwingConstants.HORIZONTAL) {
                 add(button, SwingUtils.createGBConstraints(getComponentCount(), 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.NONE, 5, 5, 5, 5));
+                    GridBagConstraints.CENTER, GridBagConstraints.NONE, 5, leftTopInset, 5, rightBottomInset));
                 add(label, SwingUtils.createGBConstraints(getComponentCount(), 0, 1, 1, 1.0, 1.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 0, 0, 0, 0));
             } else {
                 add(button, SwingUtils.createGBConstraints(0, getComponentCount(), 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 5, 5, 5, 5));
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, leftTopInset, 5, rightBottomInset, 5));
                 add(label, SwingUtils.createGBConstraints(0, getComponentCount(), 1, 1, 1.0, 1.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 0, 0, 0, 0));
             }
             break;
 
-        case SwingConstants.RIGHT:
+        case RIGHT:
             add(button, SwingUtils.createGBConstraints(getComponentCount(), 0, 1, 1, 0.0, 0.0,
-                GridBagConstraints.CENTER, GridBagConstraints.NONE, 5, 5, 5, 5));
+                GridBagConstraints.CENTER, GridBagConstraints.NONE, 5, 5, 5, rightBottomInset));
             break;
-        case SwingConstants.BOTTOM:
+        case BOTTOM:
             add(button, SwingUtils.createGBConstraints(0, getComponentCount(), 1, 1, 0.0, 0.0,
-                GridBagConstraints.CENTER, GridBagConstraints.NONE, 5, 5, 5, 5));
+                GridBagConstraints.CENTER, GridBagConstraints.NONE, 5, 5, 5, rightBottomInset));
             break;
         }
         return button;
