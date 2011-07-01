@@ -15,6 +15,9 @@
 */
 package nl.gogognome.lib.swing.plaf;
 
+import java.awt.Component;
+
+import javax.swing.JTabbedPane;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -86,8 +89,26 @@ public class DefaultLookAndFeel extends MetalLookAndFeel {
 	public UIDefaults getDefaults() {
         UIDefaults defaults = super.getDefaults();
         defaults.put("TextFieldUI", DefaultTextFieldUI.class.getName());
-        defaults.put("TabbedPaneUI", DefaultTabbedPaneUI.class.getName());
+        if (!isSupportsTabComponents()) {
+        	defaults.put("TabbedPaneUI", DefaultTabbedPaneUI.class.getName());
+        }
         defaults.put("TableUI", DefaultTableUI.class.getName());
         return defaults;
     }
+
+    /**
+     * Checks whether the class JTabbedPane has the method setTabComponentAt(int, Component).
+     * This method is present since Java 6.
+     * @return true if the method is present; false otherwise
+     */
+	public static boolean isSupportsTabComponents() {
+		try {
+			JTabbedPane.class.getMethod("setTabComponentAt", int.class, Component.class);
+			return true;
+		} catch (SecurityException e) {
+			return false;
+		} catch (NoSuchMethodException e) {
+			return false;
+		}
+	}
 }

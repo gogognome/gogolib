@@ -26,8 +26,6 @@ import java.awt.event.MouseListener;
 
 import javax.swing.Icon;
 import javax.swing.JComponent;
-import javax.swing.JTabbedPane;
-import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
@@ -45,13 +43,6 @@ public class DefaultTabbedPaneUI extends BasicTabbedPaneUI {
 
     public static ComponentUI createUI(JComponent c) {
         return INSTANCE;
-    }
-
-    @Override
-	public void installUI(JComponent c) {
-        JTabbedPane tabbedPane = (JTabbedPane)c;
-        super.installUI(tabbedPane);
-        tabbedPane.setBorder(new EmptyBorder(5, 5, 5, 5));
     }
 
     @Override

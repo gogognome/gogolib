@@ -16,6 +16,7 @@
 package nl.gogognome.lib.swing.views;
 
 import java.awt.Container;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -23,9 +24,14 @@ import java.util.Iterator;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import nl.gogognome.lib.swing.WidgetFactory;
+import nl.gogognome.lib.swing.plaf.DefaultLookAndFeel;
 
 /**
  * This class implements a tabbed pane that can hold <code>View</code>s.
@@ -76,13 +82,16 @@ public class ViewTabbedPane extends JTabbedPane {
 	        view.setParentFrame(parentFrame);
 	        view.doInit();
 	        addTab(view.getTitle(), view);
+	        if (DefaultLookAndFeel.isSupportsTabComponents()) {
+	    		setTabComponentAt(getTabCount() - 1, new CloseableTab(view, closeAction));
+	        }
 	        views.add(view);
     	} finally {
     		changeInProgress = false;
     	}
     }
 
-    /**
+	/**
      * Removes a view from the tabbed pane.
      * @param view the view to be removed
      */
@@ -201,4 +210,21 @@ public class ViewTabbedPane extends JTabbedPane {
 	        }
     	}
     }
+
+    private class CloseableTab extends JPanel {
+
+    	CloseableTab(View view, Action closeAction) {
+    		setOpaque(false);
+    		setLayout(new FlowLayout());
+
+    		WidgetFactory wf = WidgetFactory.getInstance();
+
+    		JLabel label = new JLabel(view.getTitle());
+    		label.setOpaque(false);
+
+    		add(label);
+    		add(wf.createIconButton("gen.closeTab", closeAction, 16));
+    	}
+    }
 }
+
