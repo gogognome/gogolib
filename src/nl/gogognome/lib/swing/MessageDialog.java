@@ -135,6 +135,21 @@ public class MessageDialog extends DialogWithButtons {
 	}
 
 	/**
+	 * Shows an info message dialog.
+     * @param parentComponent determines the <code>Frame</code>
+     *		in which the dialog is displayed; if <code>null</code>,
+     *		or if the <code>parentComponent</code> has no
+     *		<code>Frame</code>, a default <code>Frame</code> is used
+	 * @param message the id of the message to be shown to the user.
+     * @param args optional arguments to be filled in the placeholders of the message
+	 */
+	public static void showInfoMessage(Component parentComponent, String messageId, Object... args) {
+		TextResource tr = TextResource.getInstance();
+		JOptionPane.showMessageDialog(parentComponent, tr.getString(messageId, args), 
+				tr.getString("gen.titleMessage"), JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	/**
 	 * Shows a message dialog.
      * @param parentComponent determines the <code>Frame</code>
      *		in which the dialog is displayed; if <code>null</code>,
