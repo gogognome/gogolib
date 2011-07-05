@@ -15,7 +15,6 @@
 */
 package nl.gogognome.lib.swing.plaf;
 
-import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Date;
@@ -27,11 +26,12 @@ import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTableUI;
-import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
-import nl.gogognome.lib.text.TextResource;
+import nl.gogognome.lib.swing.DateRenderer;
+import nl.gogognome.lib.swing.InitialValueSelectingCellEditor;
 
 /**
  * The default look and feel for a table.
@@ -48,6 +48,8 @@ public class DefaultTableUI extends BasicTableUI {
         final JTable table = (JTable) c;
 
         table.setDefaultRenderer(Date.class, new DateRenderer());
+
+        installInitialValueSelectingCellEditors(table);
         installAlternatingBackgroundRenderers(table);
 
         // Add listener that installs the alternating background renderers each time the model
@@ -61,25 +63,25 @@ public class DefaultTableUI extends BasicTableUI {
         });
     }
 
-    @Override
+    private static void installInitialValueSelectingCellEditors(JTable table) {
+    	installInitialValueSelectingCellEditorsForClass(String.class, table);
+    	installInitialValueSelectingCellEditorsForClass(Integer.class, table);
+    	installInitialValueSelectingCellEditorsForClass(Long.class, table);
+    	installInitialValueSelectingCellEditorsForClass(Float.class, table);
+    	installInitialValueSelectingCellEditorsForClass(Double.class, table);
+	}
+
+	private static void installInitialValueSelectingCellEditorsForClass(Class<?> clazz, JTable table) {
+		TableCellEditor editor = table.getDefaultEditor(clazz);
+		editor = new InitialValueSelectingCellEditor(editor);
+		table.setDefaultEditor(clazz, editor);
+	}
+
+	@Override
 	protected void installKeyboardActions() {
         super.installKeyboardActions();
         InputMap inputMap = table.getInputMap();
         inputMap.remove(KeyStroke.getKeyStroke("ENTER"));
-    }
-
-    private static class DateRenderer extends DefaultTableCellRenderer {
-        /**
-         * @see javax.swing.table.DefaultTableCellRenderer#getTableCellRendererComponent(javax.swing.JTable, java.lang.Object, boolean, boolean, int, int)
-         */
-        @Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                boolean hasFocus, int row, int column) {
-            if (value instanceof Date) {
-                value = TextResource.getInstance().formatDate("gen.dateFormat", (Date) value);
-            }
-            return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-        }
     }
 
     /**
