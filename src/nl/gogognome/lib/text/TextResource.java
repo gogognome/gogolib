@@ -199,14 +199,6 @@ public class TextResource {
 	    return result;
 	}
 
-	public String getString(String id, int argument) {
-	    return getString(id, Integer.toString(argument));
-	}
-
-	public String getString(String id, float argument) {
-	    return getString(id, new Float(argument));
-	}
-
 	/**
 	 * Gets a date format.
 	 * @param formatId the id of the string resource that describes the format of the date
