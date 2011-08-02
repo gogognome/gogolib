@@ -112,7 +112,7 @@ class CalendarView extends View implements ChangeListener {
 		add(createMonthYearPanel(), BorderLayout.NORTH);
 
 		DaysOfMonthPanel p = new DaysOfMonthPanel();
-		addDeinitializable(p);
+		addCloseable(p);
 		add(p, BorderLayout.CENTER);
 
 		add(new OkCancelButtonPanel(createOkAction(), closeAction), BorderLayout.SOUTH);

@@ -18,16 +18,16 @@ package nl.gogognome.lib.swing;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.event.TableModelListener;
-
 /**
- * Abstract class for {@link SortedTableModel}. The rows of the table model
- * are stored in a list. This class offers methods to modify the list.
- * Modifications of the list are signalled the registered {@link TableModelListener}s.
+ * Abstract class for table model implementations. This class
+ * uses ColumnDefinitions to define the table columns. In addition it stores
+ * the rows of the table model in a list. This class offers methods to modify the list.
+ * Modifications of the list are signaled the registered TableModelListeners.
+ *
  * @param <T> the type of rows
+ * @author Sander Kooijmans
  */
-public abstract class AbstractListSortedTableModel<T> extends AbstractSortedTableModel {
-
+public abstract class AbstractListTableModel<T> extends AbstractTableModel {
 	private List<T> rows;
 
     /**
@@ -35,7 +35,7 @@ public abstract class AbstractListSortedTableModel<T> extends AbstractSortedTabl
      * @param columnDefinitions the column definitions
      * @param initialRows the initial rows
      */
-    public AbstractListSortedTableModel(List<ColumnDefinition> columnDefinitions, List<T> initialRows) {
+    public AbstractListTableModel(List<ColumnDefinition> columnDefinitions, List<T> initialRows) {
         super(columnDefinitions);
         rows = new ArrayList<T>(initialRows);
     }
@@ -75,7 +75,7 @@ public abstract class AbstractListSortedTableModel<T> extends AbstractSortedTabl
 	public void clear() {
 		int oldSize = rows.size();
 		rows.clear();
-		fireTableRowsDeleted(0, oldSize);
+		fireTableDataChanged();
 	}
 
 	/**
@@ -91,6 +91,16 @@ public abstract class AbstractListSortedTableModel<T> extends AbstractSortedTabl
 	}
 
 	/**
+	 * Updates all rows of the table.
+	 * @param newRows the new rows
+	 */
+	public void replaceRows(List<T> newRows) {
+		rows.clear();
+		rows.addAll(newRows);
+		fireTableDataChanged();
+	}
+
+	/**
 	 * Gets a row.
 	 * @param index the index of the row
 	 * @return the row
@@ -98,4 +108,5 @@ public abstract class AbstractListSortedTableModel<T> extends AbstractSortedTabl
 	public T getRow(int index) {
 		return rows.get(index);
 	}
+
 }

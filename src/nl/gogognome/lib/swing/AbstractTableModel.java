@@ -18,16 +18,16 @@ package nl.gogognome.lib.swing;
 import java.util.Comparator;
 import java.util.List;
 
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 /**
- * Abstract class for {@link SortedTableModel} implementations.
+ * Abstract class for table model implementations. This class
+ * uses ColumnDefinitions to define the table columns.
  *
  * @author Sander Kooijmans
  */
-public abstract class AbstractSortedTableModel extends AbstractTableModel implements SortedTableModel {
+public abstract class AbstractTableModel extends javax.swing.table.AbstractTableModel {
 
     /** The column definitions. */
     private List<ColumnDefinition> columnDefinitions;
@@ -36,7 +36,7 @@ public abstract class AbstractSortedTableModel extends AbstractTableModel implem
      * Constructor.
      * @param columnDefinitions the column definitions
      */
-    public AbstractSortedTableModel(List<ColumnDefinition> columnDefinitions) {
+    public AbstractTableModel(List<ColumnDefinition> columnDefinitions) {
         super();
         this.columnDefinitions = columnDefinitions;
     }
@@ -52,25 +52,21 @@ public abstract class AbstractSortedTableModel extends AbstractTableModel implem
     }
 
     /** {@inheritDoc} */
-    @Override
 	public int getColumnWidth(int column) {
         return columnDefinitions.get(column).getWidthInPixels();
     }
 
     /** {@inheritDoc} */
-    @Override
 	public Comparator<Object> getComparator(int column) {
         return columnDefinitions.get(column).getComparator();
     }
 
     /** {@inheritDoc} */
-    @Override
 	public TableCellRenderer getRendererForColumn(int column) {
         return columnDefinitions.get(column).getTableCellRenderer();
     }
 
     /** {@inheritDoc} */
-    @Override
 	public TableCellEditor getEditorForColumn(int column) {
         return columnDefinitions.get(column).getTableCellEditor();
     }
@@ -89,4 +85,5 @@ public abstract class AbstractSortedTableModel extends AbstractTableModel implem
     public ColumnDefinition getColumnDefinition(int column) {
         return columnDefinitions.get(column);
     }
+
 }

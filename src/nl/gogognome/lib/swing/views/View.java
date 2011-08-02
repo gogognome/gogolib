@@ -42,7 +42,7 @@ import nl.gogognome.lib.gui.Closeable;
  * The view can close itself by calling {@link #requestClose()}.
  *
  * <p>Some user interface components implement the {@link Closeable} interface.
- * If your view uses such components, call {@link #addDeinitializable(Closeable)}
+ * If your view uses such components, call {@link #addCloseable(Closeable)}
  * for each of these components. By doing so, the deinitialize() method will be called
  * automatically for these components when the view is closed. Otherwise, you have to
  * think about deinitializing them in your onClose() implementation.
@@ -154,10 +154,10 @@ public abstract class View extends JPanel implements Closeable {
     }
 
     /**
-     * Adds an object that will be deinitialized automatically when this view is closed.
-     * @param d the {@link Closeable} object
+     * Adds an object that will be closed automatically when this view is closed.
+     * @param d the Closeable object
      */
-    public void addDeinitializable(Closeable d) {
+    public void addCloseable(Closeable d) {
     	deinitializables.add(d);
     }
 

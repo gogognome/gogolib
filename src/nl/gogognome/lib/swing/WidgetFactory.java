@@ -22,6 +22,7 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URL;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -45,6 +46,7 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.TableRowSorter;
 
 import nl.gogognome.lib.text.TextResource;
 
@@ -384,8 +386,17 @@ public class WidgetFactory {
      * @return the title border
      */
     public Border createTitleBorder(String titleId, Object... args) {
-    	return new CompoundBorder(
-                new TitledBorder(' '  + textResource.getString(titleId, args) + ' '),
+    	return  new TitledBorder(' '  + textResource.getString(titleId, args) + ' ');
+    }
+
+    /**
+     * Creates a title border for the specified title.
+     * @param titleId the id of the title
+	 * @param arguments the arguments
+     * @return the title border
+     */
+    public Border createTitleBorderWithPadding(String titleId, Object... args) {
+    	return new CompoundBorder(createTitleBorder(titleId, args),
                 new EmptyBorder(10, 10, 10, 10));
     }
 
@@ -394,48 +405,48 @@ public class WidgetFactory {
      * @param titleId the id of the title
      * @return the title border
      */
-    public Border createTitleBorderWithMargin(String titleId) {
+    public Border createTitleBorderWithMarginAndPadding(String titleId) {
     	return new CompoundBorder(new EmptyBorder(10, 10, 10, 10),
-    		createTitleBorder(titleId));
+    		createTitleBorderWithPadding(titleId));
     }
 
     /**
-     * Creates a table component that allows the user to sort its rows.
+     * Creates a non-sortable table based on the specified table model.
+     * The columns of the table are defined by the ColumnDefinitions
+     * of the table model.
      * @param tableModel the table model
-     * @return the table component
+     * @return the table
      */
-    public SortedTable createSortedTable(SortedTableModel tableModel) {
-        return new SortedTableImpl(tableModel, false, JTable.AUTO_RESIZE_ALL_COLUMNS);
+    public JTable createTable(AbstractTableModel tableModel) {
+    	JTable table = new JTable(tableModel);
+    	return table;
     }
 
     /**
-     * Creates a table component that allows the user to sort its rows.
+     * Creates a sortable table based on the specified table model.
+     * The columns of the table are defined by the ColumnDefinitions
+     * of the table model.
      * @param tableModel the table model
-     * @param autoResizeMode the auto resize mode of the table
-     * @return the table component
+     * @return the table
      */
-    public SortedTable createSortedTable(SortedTableModel tableModel, int autoResizeMode) {
-        return new SortedTableImpl(tableModel, false, autoResizeMode);
+    public JTable createSortedTable(AbstractTableModel tableModel) {
+    	JTable table = new JTable(tableModel);
+    	TableRowSorter<AbstractTableModel> sorter = new TableRowSorter<AbstractTableModel>(tableModel);
+    	initSorterForTableModel(sorter, tableModel);
+    	table.setRowSorter(sorter);
+    	return table;
     }
 
-    /**
-     * Creates a table component that does not allow the user to sort its rows.
-     * @param tableModel the table model
-     * @return the table component
-     */
-    public SortedTable createUnsortedTable(SortedTableModel tableModel) {
-        return new SortedTableImpl(tableModel, true, JTable.AUTO_RESIZE_ALL_COLUMNS);
-    }
-
-    /**
-     * Creates a table component that does not allow the user to sort its rows.
-     * @param tableModel the table model
-     * @param autoResizeMode the auto resize mode of the table
-     * @return the table component
-     */
-    public SortedTable createUnsortedTable(SortedTableModel tableModel, int autoResizeMode) {
-        return new SortedTableImpl(tableModel, true, autoResizeMode);
-    }
+	private void initSorterForTableModel(TableRowSorter<AbstractTableModel> sorter,
+			AbstractTableModel tableModel) {
+		for (int c=0; c<tableModel.getColumnCount(); c++) {
+    		ColumnDefinition colDef = tableModel.getColumnDefinition(c);
+    		Comparator<?> comparator =  colDef.getComparator();
+    		if (comparator != null) {
+    			sorter.setComparator(c, comparator);
+    		}
+    	}
+	}
 
     /**
      * Gets the mnemonic for the specified resource.
