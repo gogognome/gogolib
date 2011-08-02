@@ -125,8 +125,8 @@ public class ComboBoxBean<T> extends JComboBoxWithKeyboardInput implements Bean 
 	}
 
 	@Override
-	public void deinitialize() {
-		super.deinitialize();
+	public void close() {
+		super.close();
 		listModel.removeModelChangeListener(modelChangeListener);
 		removeItemListener(itemListener);
 	}

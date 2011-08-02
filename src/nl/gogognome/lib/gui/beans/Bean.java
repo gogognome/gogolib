@@ -15,13 +15,13 @@
 */
 package nl.gogognome.lib.gui.beans;
 
-import nl.gogognome.lib.gui.Deinitializable;
+import nl.gogognome.lib.gui.Closeable;
 
 /**
  * Interface for a bean.
  *
  * @author Sander Kooijmans
  */
-interface Bean extends Deinitializable {
+interface Bean extends Closeable {
 	public void initBean();
 }

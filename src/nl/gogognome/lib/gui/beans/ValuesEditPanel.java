@@ -25,7 +25,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import nl.gogognome.lib.gui.Deinitializable;
+import nl.gogognome.lib.gui.Closeable;
 import nl.gogognome.lib.swing.SwingUtils;
 import nl.gogognome.lib.swing.WidgetFactory;
 import nl.gogognome.lib.swing.models.BooleanModel;
@@ -41,7 +41,7 @@ import nl.gogognome.lib.swing.models.StringModel;
  * The values of the fields are managed by models (e.g., {@link StringModel}
  * or {@link DateModel}.
  */
-public class ValuesEditPanel extends JPanel implements Deinitializable {
+public class ValuesEditPanel extends JPanel implements Closeable {
 
     private static final long serialVersionUID = 1L;
 
@@ -64,10 +64,10 @@ public class ValuesEditPanel extends JPanel implements Deinitializable {
      * It releases its resources.
      */
     @Override
-	public void deinitialize() {
+	public void close() {
     	for (Component c : components) {
-    		if (c instanceof Deinitializable) {
-    			((Deinitializable) c).deinitialize();
+    		if (c instanceof Closeable) {
+    			((Closeable) c).close();
     		}
     	}
     }

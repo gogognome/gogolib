@@ -25,7 +25,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import nl.gogognome.lib.gui.Deinitializable;
+import nl.gogognome.lib.gui.Closeable;
 
 /**
  * A view represents a rectangular area inside a dialog or frame. A view typically
@@ -41,15 +41,15 @@ import nl.gogognome.lib.gui.Deinitializable;
  * <p>The container will call {@link #onClose()} when the container removes the view.
  * The view can close itself by calling {@link #requestClose()}.
  *
- * <p>Some user interface components implement the {@link Deinitializable} interface.
- * If your view uses such components, call {@link #addDeinitializable(Deinitializable)}
+ * <p>Some user interface components implement the {@link Closeable} interface.
+ * If your view uses such components, call {@link #addDeinitializable(Closeable)}
  * for each of these components. By doing so, the deinitialize() method will be called
  * automatically for these components when the view is closed. Otherwise, you have to
  * think about deinitializing them in your onClose() implementation.
  *
  * @author Sander Kooijmans
  */
-public abstract class View extends JPanel implements Deinitializable {
+public abstract class View extends JPanel implements Closeable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -72,7 +72,7 @@ public abstract class View extends JPanel implements Deinitializable {
     private JButton defaultButton;
 
     /** Objects to be deinitialized when the view is closed. */
-    private List<Deinitializable> deinitializables = new ArrayList<Deinitializable>();
+    private List<Closeable> deinitializables = new ArrayList<Closeable>();
 
     /**
      * Gets the title of the view.
@@ -155,9 +155,9 @@ public abstract class View extends JPanel implements Deinitializable {
 
     /**
      * Adds an object that will be deinitialized automatically when this view is closed.
-     * @param d the {@link Deinitializable} object
+     * @param d the {@link Closeable} object
      */
-    public void addDeinitializable(Deinitializable d) {
+    public void addDeinitializable(Closeable d) {
     	deinitializables.add(d);
     }
 
@@ -172,8 +172,8 @@ public abstract class View extends JPanel implements Deinitializable {
     void doClose() {
         onClose();
 
-        for (Deinitializable d : deinitializables) {
-        	d.deinitialize();
+        for (Closeable d : deinitializables) {
+        	d.close();
         }
 
         ViewListener[] tempListeners = listeners.toArray(new ViewListener[listeners.size()]);
@@ -188,7 +188,7 @@ public abstract class View extends JPanel implements Deinitializable {
     }
 
     @Override
-    public void deinitialize() {
+    public void close() {
     	closeAction.actionPerformed(null);
     }
 }

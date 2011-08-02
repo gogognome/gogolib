@@ -16,13 +16,13 @@
 package nl.gogognome.lib.gui;
 
 /**
- * This interface contains a method to deinitialize a component.
+ * This interface contains a method to close a component.
  * @author Sander Kooijmans
  */
-public interface Deinitializable {
+public interface Closeable {
 
 	/**
-	 * Call this method to deinitialize the component. The component can free its resources.
+	 * Call this method to close the component. The component can free its resources.
 	 */
-	public void deinitialize();
+	public void close();
 }

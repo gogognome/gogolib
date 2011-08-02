@@ -86,7 +86,7 @@ public class CheckBoxBean extends JPanel implements Bean {
      * Deinitializes this bean. It will free its resources.
      */
     @Override
-	public void deinitialize() {
+	public void close() {
         booleanModel.removeModelChangeListener(modelChangeListener);
         checkBox.removeItemListener(itemListener);
         modelChangeListener = null;

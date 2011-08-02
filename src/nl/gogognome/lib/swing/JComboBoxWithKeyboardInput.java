@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 import javax.swing.JComboBox;
 
-import nl.gogognome.lib.gui.Deinitializable;
+import nl.gogognome.lib.gui.Closeable;
 import nl.gogognome.lib.text.StringMatcher;
 
 /**
@@ -33,7 +33,7 @@ import nl.gogognome.lib.text.StringMatcher;
  * @author Sander Kooijmans
  */
 public class JComboBoxWithKeyboardInput extends JComboBox
-		implements KeyListener, FocusListener, Deinitializable {
+		implements KeyListener, FocusListener, Closeable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -57,7 +57,7 @@ public class JComboBoxWithKeyboardInput extends JComboBox
     }
 
     @Override
-    public void deinitialize() {
+    public void close() {
     	removeKeyListener(this);
     	removeFocusListener(this);
     }

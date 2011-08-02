@@ -129,7 +129,7 @@ public class FileSelectionBean extends JPanel implements Bean {
      * Deinitializes this bean. It will free its resources.
      */
     @Override
-	public void deinitialize() {
+	public void close() {
         fileSelectionModel.removeModelChangeListener(fileSelectionModelChangeListener);
         textfield.getDocument().removeDocumentListener(documentListener);
         fileSelectionModelChangeListener = null;

@@ -126,7 +126,7 @@ public abstract class AbstractTextFieldBean<M extends AbstractModel> extends JPa
      * Deinitializes this bean. It will free its resources.
      */
     @Override
-	public void deinitialize() {
+	public void close() {
         model.removeModelChangeListener(modelChangeListener);
         textfield.getDocument().removeDocumentListener(documentListener);
         modelChangeListener = null;

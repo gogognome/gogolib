@@ -39,7 +39,7 @@ import javax.swing.JSpinner;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import nl.gogognome.lib.gui.Deinitializable;
+import nl.gogognome.lib.gui.Closeable;
 import nl.gogognome.lib.swing.SwingUtils;
 import nl.gogognome.lib.swing.models.DateModel;
 import nl.gogognome.lib.swing.views.OkCancelButtonPanel;
@@ -224,7 +224,7 @@ class CalendarView extends View implements ChangeListener {
 		};
 	}
 
-	private class DaysOfMonthPanel extends JPanel implements MouseListener, Deinitializable {
+	private class DaysOfMonthPanel extends JPanel implements MouseListener, Closeable {
 
 		private final static int CELL_WIDTH = 22;
 		private final static int CELL_HEIGHT = 22;
@@ -234,7 +234,7 @@ class CalendarView extends View implements ChangeListener {
 		}
 
 		@Override
-		public void deinitialize() {
+		public void close() {
 			removeMouseListener(this);
 		}
 
