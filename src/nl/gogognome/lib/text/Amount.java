@@ -40,7 +40,7 @@ public class Amount
      * Maps a <code>Currency</code> to an <code>Amount</code> that represents
      * the value zero in that currency.
      */
-    private static HashMap currencyToZeroMap = new HashMap();
+    private static HashMap<Currency, Amount> currencyToZeroMap = new HashMap<Currency, Amount>();
 
     /**
      * Constructs an amount.
@@ -100,7 +100,7 @@ public class Amount
      */
     public static Amount getZero(Currency currency)
     {
-        Amount result = (Amount)currencyToZeroMap.get(currency);
+        Amount result = currencyToZeroMap.get(currency);
         if (result == null)
         {
             result = new Amount(new BigInteger("0"), currency);
