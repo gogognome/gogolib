@@ -18,9 +18,12 @@ package nl.gogognome.lib.swing;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dialog;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.Window;
 
 import javax.swing.JTable;
 
@@ -176,4 +179,14 @@ public class SwingUtils {
         table.getSelectionModel().setSelectionInterval(row, row);
 	}
 
+	/**
+	 * Puts the window in the center of the screen.
+	 * @param window the window
+	 */
+	public static void center(Window window) {
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		int x = (screenSize.width - window.getWidth()) / 2;
+		int y = (screenSize.height - window.getHeight()) / 2;
+		window.setLocation(x, y);
+	}
 }
