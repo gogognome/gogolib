@@ -31,6 +31,8 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import nl.gogognome.lib.util.Factory;
+
 /**
  * This class represents a text resource. It offers functionality to
  * obtain texts from resource files. It also offers easy methods to
@@ -39,10 +41,6 @@ import java.util.logging.Logger;
  * @author Sander Kooijmans
  */
 public class TextResource {
-
-	/** The singleton instance of this class. */
-	private static TextResource instance = new TextResource();
-
 	/** Contains the string resources of the user interface. */
 	private List<ResourceBundle> stringResources = new ArrayList<ResourceBundle>();
 
@@ -73,11 +71,10 @@ public class TextResource {
 	 * @return the singleton instance of this class.
 	 */
 	public static TextResource getInstance() {
-		return instance;
+		return Factory.getInstance(TextResource.class);
 	}
 
-	/** Private constructor to enforce usage of <tt>getInstance()</tt>. */
-	private TextResource() {
+	public TextResource() {
 		initOptionalIdSuffixes();
         loadResourceBundle("gogolibstrings");
 	}

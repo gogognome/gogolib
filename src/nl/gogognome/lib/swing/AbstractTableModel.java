@@ -51,27 +51,22 @@ public abstract class AbstractTableModel extends javax.swing.table.AbstractTable
         return columnDefinitions.get(column).getClassOfValues();
     }
 
-    /** {@inheritDoc} */
 	public int getColumnWidth(int column) {
         return columnDefinitions.get(column).getWidthInPixels();
     }
 
-    /** {@inheritDoc} */
 	public Comparator<Object> getComparator(int column) {
         return columnDefinitions.get(column).getComparator();
     }
 
-    /** {@inheritDoc} */
 	public TableCellRenderer getRendererForColumn(int column) {
         return columnDefinitions.get(column).getTableCellRenderer();
     }
 
-    /** {@inheritDoc} */
 	public TableCellEditor getEditorForColumn(int column) {
         return columnDefinitions.get(column).getTableCellEditor();
     }
 
-    /** {@inheritDoc} */
     @Override
 	public int getColumnCount() {
         return columnDefinitions.size();

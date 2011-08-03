@@ -26,6 +26,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import nl.gogognome.lib.gui.Closeable;
+import nl.gogognome.lib.swing.WidgetFactory;
+import nl.gogognome.lib.text.TextResource;
+import nl.gogognome.lib.util.Factory;
 
 /**
  * A view represents a rectangular area inside a dialog or frame. A view typically
@@ -53,7 +56,6 @@ public abstract class View extends JPanel implements Closeable {
 
 	private static final long serialVersionUID = 1L;
 
-	/** The subscribed listeners. */
     private ArrayList<ViewListener> listeners = new ArrayList<ViewListener>();
 
     /**
@@ -62,17 +64,15 @@ public abstract class View extends JPanel implements Closeable {
      */
     protected Action closeAction;
 
-    /** The parent frame that contains this view. */
     private JFrame parentFrame;
-
-    /** The parent dialog that contains this view. */
     private JDialog parentDialog;
-
-    /** The default button of this view. */
     private JButton defaultButton;
 
-    /** Objects to be deinitialized when the view is closed. */
-    private List<Closeable> deinitializables = new ArrayList<Closeable>();
+    /** Objects to be closed when the view is closed. */
+    private List<Closeable> closeables = new ArrayList<Closeable>();
+
+    protected TextResource textResource = Factory.getInstance(TextResource.class);
+    protected WidgetFactory widgetFactory = Factory.getInstance(WidgetFactory.class);
 
     /**
      * Gets the title of the view.
@@ -158,7 +158,7 @@ public abstract class View extends JPanel implements Closeable {
      * @param d the Closeable object
      */
     public void addCloseable(Closeable d) {
-    	deinitializables.add(d);
+    	closeables.add(d);
     }
 
     /** Call this method to close the view programmatically. */
@@ -172,7 +172,7 @@ public abstract class View extends JPanel implements Closeable {
     void doClose() {
         onClose();
 
-        for (Closeable d : deinitializables) {
+        for (Closeable d : closeables) {
         	d.close();
         }
 

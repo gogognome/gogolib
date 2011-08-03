@@ -39,6 +39,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
@@ -46,9 +47,14 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 
 import nl.gogognome.lib.text.TextResource;
+import nl.gogognome.lib.util.Factory;
 
 /**
  * This class is a factory for buttons, menus, menu items, text fields and
@@ -60,9 +66,6 @@ public class WidgetFactory {
 
 	private final static Logger LOGGER = Logger.getLogger(WidgetFactory.class.getName());
 
-	/** The singleton instance of this class. */
-	private static WidgetFactory instance;
-
 	/** The <code>TextResource</code> used to obtain string resources. */
 	private TextResource textResource;
 
@@ -70,22 +73,15 @@ public class WidgetFactory {
 	private Map<String, Image> imageCache = new HashMap<String, Image>();
 
 	/**
-	 * Gets the singleton instance of this class.
 	 * @return the singleton instance of this class.
 	 */
-	public static synchronized WidgetFactory getInstance()
-	{
-		if (instance == null)
-		{
-			instance = new WidgetFactory();
-		}
-		return instance;
+	public static WidgetFactory getInstance() {
+		return Factory.getInstance(WidgetFactory.class);
 	}
 
-	/** Private constructor to enforce usage of <tt>getInstance()</tt>. */
-	private WidgetFactory()
+	public WidgetFactory(TextResource textResource)
 	{
-		textResource = TextResource.getInstance();
+		this.textResource = textResource;
 	}
 
 	/**
@@ -419,6 +415,7 @@ public class WidgetFactory {
      */
     public JTable createTable(AbstractTableModel tableModel) {
     	JTable table = new JTable(tableModel);
+    	initTableColumns(table, tableModel);
     	return table;
     }
 
@@ -432,10 +429,35 @@ public class WidgetFactory {
     public JTable createSortedTable(AbstractTableModel tableModel) {
     	JTable table = new JTable(tableModel);
     	TableRowSorter<AbstractTableModel> sorter = new TableRowSorter<AbstractTableModel>(tableModel);
+    	initTableColumns(table, tableModel);
     	initSorterForTableModel(sorter, tableModel);
     	table.setRowSorter(sorter);
     	return table;
     }
+
+	private void initTableColumns(JTable table, AbstractTableModel tableModel) {
+        TableColumnModel columnModel = table.getColumnModel();
+        int nrCols = tableModel.getColumnCount();
+
+        for (int i=0; i<nrCols; i++) {
+            // Set column width
+            int colWidth = tableModel.getColumnWidth(i);
+            TableColumn column = columnModel.getColumn(i);
+            column.setPreferredWidth(colWidth);
+
+            // If present, set the table cell renderer
+            TableCellRenderer renderer = tableModel.getRendererForColumn(i);
+            if (renderer != null) {
+            	column.setCellRenderer(renderer);
+            }
+
+            // If present, set the table cell editor
+            TableCellEditor editor = tableModel.getEditorForColumn(i);
+            if (editor != null) {
+                column.setCellEditor(editor);
+            }
+        }
+	}
 
 	private void initSorterForTableModel(TableRowSorter<AbstractTableModel> sorter,
 			AbstractTableModel tableModel) {
@@ -447,6 +469,30 @@ public class WidgetFactory {
     		}
     	}
 	}
+
+    /**
+     * Creates a scroll pane for the table.
+     * @param table the table
+     * @return the scroll pane
+     */
+    public JScrollPane createScrollPane(JTable table) {
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setOpaque(false);
+        return scrollPane;
+    }
+
+    /**
+     * Creates a scroll pane for the table with a titled border.
+     * @param table the table
+     * @param titleId the id of the title
+	 * @param arguments the arguments
+     * @return the scroll pane
+     */
+    public JScrollPane createScrollPane(JTable table, String titleId, Object... args) {
+        JScrollPane scrollPane = createScrollPane(table);
+        scrollPane.setBorder(createTitleBorder(titleId, args));
+        return scrollPane;
+    }
 
     /**
      * Gets the mnemonic for the specified resource.
