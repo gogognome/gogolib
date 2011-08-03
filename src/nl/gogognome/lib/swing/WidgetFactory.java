@@ -15,6 +15,7 @@
 */
 package nl.gogognome.lib.swing;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionListener;
@@ -464,25 +465,25 @@ public class WidgetFactory {
 	}
 
     /**
-     * Creates a scroll pane for the table.
-     * @param table the table
+     * Creates a scroll pane for the component.
+     * @param component the component
      * @return the scroll pane
      */
-    public JScrollPane createScrollPane(JTable table) {
-        JScrollPane scrollPane = new JScrollPane(table);
+    public JScrollPane createScrollPane(Component component) {
+        JScrollPane scrollPane = new JScrollPane(component);
         scrollPane.setOpaque(false);
         return scrollPane;
     }
 
     /**
-     * Creates a scroll pane for the table with a titled border.
-     * @param table the table
+     * Creates a scroll pane for the component with a titled border.
+     * @param component the component
      * @param titleId the id of the title
 	 * @param arguments the arguments
      * @return the scroll pane
      */
-    public JScrollPane createScrollPane(JTable table, String titleId, Object... args) {
-        JScrollPane scrollPane = createScrollPane(table);
+    public JScrollPane createScrollPane(JTable component, String titleId, Object... args) {
+        JScrollPane scrollPane = createScrollPane(component);
         scrollPane.setBorder(createTitleBorder(titleId, args));
         return scrollPane;
     }
