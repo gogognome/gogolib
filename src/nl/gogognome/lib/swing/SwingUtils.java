@@ -21,17 +21,8 @@ import java.awt.Dialog;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Point;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
-import javax.swing.Action;
 import javax.swing.JTable;
-
-import nl.gogognome.lib.gui.Closeable;
 
 /**
  * This class offers a variety of methods that are useful when writing
@@ -185,62 +176,4 @@ public class SwingUtils {
         table.getSelectionModel().setSelectionInterval(row, row);
 	}
 
-	/**
-	 * Adds listeners to a table that will execute the specified action
-	 * when the user selects a row in the table. The user selects a row
-	 * by pressing enter after a row has been selected, or by double
-	 * clicking a row.
-	 *
-	 * After the table is no longer needed, call close() on the returned
-	 * SelectionAction tom remove the listeners from the table.
-	 *
-	 * @param table the table
-	 * @param action the action
-	 * @return the SelectAction object needed to remove the listeners from the table
-	 */
-	public static SelectionAction addSelectionAction(JTable table, final Action action) {
-		SelectionAction selectionAction = new SelectionAction();
-
-		selectionAction.table = table;
-
-		selectionAction.keyListener = new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    action.actionPerformed(null);
-                }
-            }
-        };
-        table.addKeyListener(selectionAction.keyListener);
-
-        selectionAction.mouseListener = new MouseAdapter() {
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    action.actionPerformed(null);
-                }
-            }
-        };
-        table.addMouseListener(selectionAction.mouseListener);
-
-        return selectionAction;
-	}
-
-	/**
-	 * This class holds the listeners that have been registered
-	 * to a JTable by the method addSelectionAction().
-	 * Call close() on this class to remove the listeners
-	 * from the table.
-	 */
-	public static class SelectionAction implements Closeable {
-		private KeyListener keyListener;
-		private MouseListener mouseListener;
-		private JTable table;
-
-		@Override
-		public void close() {
-			table.removeKeyListener(keyListener);
-			table.removeMouseListener(mouseListener);
-		}
-	}
 }
