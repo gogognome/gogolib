@@ -21,6 +21,7 @@ import javax.swing.SwingConstants;
 
 import nl.gogognome.lib.swing.ButtonPanel;
 import nl.gogognome.lib.swing.WidgetFactory;
+import nl.gogognome.lib.util.Factory;
 
 /**
  * Button panel containing an ok and cancel button.
@@ -44,7 +45,7 @@ public class OkCancelButtonPanel extends ButtonPanel {
 	}
 
 	private void addComponents(Action okAction, Action cancelAction) {
-		WidgetFactory wf = WidgetFactory.getInstance();
+		WidgetFactory wf = Factory.getInstance(WidgetFactory.class);
 		okButton = wf.createButton("gen.ok", okAction);
 		add(okButton);
 		add(wf.createButton("gen.cancel", cancelAction));

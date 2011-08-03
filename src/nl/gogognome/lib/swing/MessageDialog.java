@@ -29,6 +29,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import nl.gogognome.lib.text.TextResource;
+import nl.gogognome.lib.util.Factory;
 
 
 /**
@@ -144,8 +145,8 @@ public class MessageDialog extends DialogWithButtons {
      * @param args optional arguments to be filled in the placeholders of the message
 	 */
 	public static void showInfoMessage(Component parentComponent, String messageId, Object... args) {
-		TextResource tr = TextResource.getInstance();
-		JOptionPane.showMessageDialog(parentComponent, tr.getString(messageId, args), 
+		TextResource tr = Factory.getInstance(TextResource.class);
+		JOptionPane.showMessageDialog(parentComponent, tr.getString(messageId, args),
 				tr.getString("gen.titleMessage"), JOptionPane.INFORMATION_MESSAGE);
 	}
 
@@ -160,7 +161,7 @@ public class MessageDialog extends DialogWithButtons {
      * @param args optional arguments to be filled in the placeholders of the message
 	 */
 	public static void showMessage(Component parentComponent, String titleId, String messageId, Object... args) {
-		TextResource tr = TextResource.getInstance();
+		TextResource tr = Factory.getInstance(TextResource.class);
 		JOptionPane.showMessageDialog(parentComponent, tr.getString(messageId, args), tr.getString(titleId),
 				JOptionPane.INFORMATION_MESSAGE);
 	}
@@ -175,7 +176,7 @@ public class MessageDialog extends DialogWithButtons {
      * @param args optional arguments to be filled in the placeholders of the message
      */
     public static void showWarningMessage(Component parentComponent, String messageId, Object... args) {
-    	TextResource tr = TextResource.getInstance();
+    	TextResource tr = Factory.getInstance(TextResource.class);
     	String message = tr.getString(messageId, args);
     	showFormattedMessage(parentComponent, message, JOptionPane.WARNING_MESSAGE);
     }
@@ -190,7 +191,7 @@ public class MessageDialog extends DialogWithButtons {
      * @param args optional arguments to be filled in the placeholders of the message
      */
     public static void showErrorMessage(Component parentComponent, String messageId, Object... args) {
-    	TextResource tr = TextResource.getInstance();
+    	TextResource tr = Factory.getInstance(TextResource.class);
     	String message = tr.getString(messageId, args);
     	LOGGER.log(Level.WARNING, message);
     	showFormattedMessage(parentComponent, message, JOptionPane.ERROR_MESSAGE);
@@ -207,7 +208,7 @@ public class MessageDialog extends DialogWithButtons {
      * @param args optional arguments to be filled in the placeholders of the message
      */
     public static void showErrorMessage(Component parentComponent, Throwable t, String messageId, Object... args) {
-    	TextResource tr = TextResource.getInstance();
+    	TextResource tr = Factory.getInstance(TextResource.class);
     	List<String> lines = new ArrayList<String>();
     	String message = tr.getString(messageId, args);
     	lines.add(message);
@@ -250,7 +251,7 @@ public class MessageDialog extends DialogWithButtons {
     }
 
     private static int showConfirmationDialog(int type, Component parentComponent, String titleId, String messageId, Object...args) {
-    	TextResource tr = TextResource.getInstance();
+    	TextResource tr = Factory.getInstance(TextResource.class);
     	String title = tr.getString(titleId);
     	String message = tr.getString(messageId, args);
     	return JOptionPane.showConfirmDialog(parentComponent, message, title, type);
@@ -281,7 +282,7 @@ public class MessageDialog extends DialogWithButtons {
 		}
 
     	JOptionPane.showMessageDialog(parentComponent, message,
-    			TextResource.getInstance().getString("gen.titleError"), messageType);
+    			Factory.getInstance(TextResource.class).getString("gen.titleError"), messageType);
 	}
 
 	private static Object[] truncateMessage(Object[] message, int maxNrLines) {

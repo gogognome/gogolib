@@ -46,6 +46,7 @@ import nl.gogognome.lib.swing.views.OkCancelButtonPanel;
 import nl.gogognome.lib.swing.views.View;
 import nl.gogognome.lib.text.TextResource;
 import nl.gogognome.lib.util.DateUtil;
+import nl.gogognome.lib.util.Factory;
 
 /**
  * Panel showing a calendar. It lets the user pick a date.
@@ -99,7 +100,7 @@ class CalendarView extends View implements ChangeListener {
 	}
 
 	private void initModels() {
-		calendar = Calendar.getInstance(TextResource.getInstance().getLocale());
+		calendar = Calendar.getInstance(textResource.getLocale());
 		if (dateModel.getDate() != null) {
 			calendar.setTime(dateModel.getDate());
 		}
@@ -343,7 +344,7 @@ class MonthSpinnerModel extends AbstractSpinnerModel {
 
 	public MonthSpinnerModel(int initialValue) {
 		values = new Month[12];
-		TextResource tr = TextResource.getInstance();
+		TextResource tr = Factory.getInstance(TextResource.class);
 		for (int i=Calendar.JANUARY; i<=Calendar.DECEMBER; i++) {
 			values[i] = new Month(i, tr.getString("CalendarView." + i));
 		}

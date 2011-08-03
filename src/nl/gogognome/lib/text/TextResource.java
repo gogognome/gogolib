@@ -31,8 +31,6 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import nl.gogognome.lib.util.Factory;
-
 /**
  * This class represents a text resource. It offers functionality to
  * obtain texts from resource files. It also offers easy methods to
@@ -41,40 +39,21 @@ import nl.gogognome.lib.util.Factory;
  * @author Sander Kooijmans
  */
 public class TextResource {
-	/** Contains the string resources of the user interface. */
-	private List<ResourceBundle> stringResources = new ArrayList<ResourceBundle>();
+	private final Locale locale;
+	private final NumberFormat numberFormat;
+	private final List<ResourceBundle> stringResources = new ArrayList<ResourceBundle>();
 
-	/** The locale used to obtain resources and format currencies and dates. */
-	private Locale locale = Locale.getDefault();
-
-	/** Number format for the current locale. */
-	private NumberFormat numberFormat = DecimalFormat.getNumberInstance(Locale.getDefault());
+	private final Set<String> optionalIdSuffixes = new HashSet<String>();
 
 	private final static Logger LOGGER = Logger.getLogger(TextResource.class.getName());
 
 	/**
-	 * List containing the names of the loaded resource bundles. Is needed to reload
-	 * the bundles after the locale has changed.
+	 * Constructs a text resource for the specified locale.
+	 * @param locale the localse
 	 */
-	private List<String> resourceBundleNames = new ArrayList<String>();
-
-	/**
-	 * An <code>AmountFormat</code> created with <code>locale</code> as its
-	 * locale.
-	 */
-	private AmountFormat amountFormat = new AmountFormat(locale);
-
-	private final Set<String> optionalIdSuffixes = new HashSet<String>();
-
-	/**
-	 * Gets the singleton instance of this class.
-	 * @return the singleton instance of this class.
-	 */
-	public static TextResource getInstance() {
-		return Factory.getInstance(TextResource.class);
-	}
-
-	public TextResource() {
+	public TextResource(Locale locale) {
+		this.locale = locale;
+	    this.numberFormat = DecimalFormat.getNumberInstance(locale);
 		initOptionalIdSuffixes();
         loadResourceBundle("gogolibstrings");
 	}
@@ -94,21 +73,9 @@ public class TextResource {
      * @param resourceBundle the name of the resource bundle
      */
     public void loadResourceBundle(String resourceBundle) {
-    	resourceBundleNames.add(resourceBundle);
         ResourceBundle b = ResourceBundle.getBundle(resourceBundle, locale);
         stringResources.add(0, b);
     }
-
-	/**
-	 * Sets the locale for the string resources.
-	 * @param locale the locale for the string resources
-	 */
-	public void setLocale(Locale locale) {
-	    this.locale = locale;
-	    this.amountFormat = new AmountFormat(locale);
-	    this.numberFormat = DecimalFormat.getNumberInstance(locale);
-	    reloadResources();
-	}
 
 	/**
 	 * Gets the locale for the string resources.
@@ -131,16 +98,6 @@ public class TextResource {
         	}
         }
         return false;
-	}
-
-	/**
-	 * Gets the <code>AmountFormat</code> with the same <code>Locale</code>
-	 * as this <code>TextResource</code>.
-	 * @return the <code>AmountFormat</code>
-	 */
-	public AmountFormat getAmountFormat()
-	{
-	    return amountFormat;
 	}
 
 	/**
@@ -256,13 +213,4 @@ public class TextResource {
 		}
 		return number.doubleValue();
 	}
-
-    private void reloadResources() {
-        stringResources = new ArrayList<ResourceBundle>();
-        List<String> oldNames = resourceBundleNames;
-        resourceBundleNames = new ArrayList<String>();
-        for (String rb : oldNames) {
-        	loadResourceBundle(rb);
-        }
-    }
 }

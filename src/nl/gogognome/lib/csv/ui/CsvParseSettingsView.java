@@ -47,9 +47,7 @@ import javax.swing.table.AbstractTableModel;
 import nl.gogognome.lib.csv.CsvFileParser;
 import nl.gogognome.lib.swing.ButtonPanel;
 import nl.gogognome.lib.swing.SwingUtils;
-import nl.gogognome.lib.swing.WidgetFactory;
 import nl.gogognome.lib.swing.views.View;
-import nl.gogognome.lib.text.TextResource;
 
 /**
  * This class implements a view that allows the user to select a CSV file, select lines
@@ -112,17 +110,16 @@ public class CsvParseSettingsView extends View {
      */
     private Component createPanel() {
         JPanel mainPanel = new JPanel(new GridBagLayout());
-        WidgetFactory wf = WidgetFactory.getInstance();
 
         // Create file panel
         JPanel filePanel = new JPanel(new GridBagLayout());
-        filePanel.add(wf.createLabel("csvParseSettingsView.filename"),
+        filePanel.add(widgetFactory.createLabel("csvParseSettingsView.filename"),
             SwingUtils.createLabelGBConstraints(0, 0));
 
-        tfFileName = wf.createTextField(30);
+        tfFileName = widgetFactory.createTextField(30);
         filePanel.add(tfFileName, SwingUtils.createTextFieldGBConstraints(1, 0));
 
-        JButton button = wf.createButton("gen.btSelectFile", new AbstractAction() {
+        JButton button = widgetFactory.createButton("gen.btSelectFile", new AbstractAction() {
             @Override
 			public void actionPerformed(ActionEvent event) {
                 onChoseFile();
@@ -139,12 +136,12 @@ public class CsvParseSettingsView extends View {
         JScrollPane scrollPane = new JScrollPane(table);
         tablePanel.add(scrollPane, BorderLayout.CENTER);
         tablePanel.setBorder(new CompoundBorder(
-                new TitledBorder(TextResource.getInstance().getString("csvParseSettingsView.tableBorderTitle")),
+                new TitledBorder(textResource.getString("csvParseSettingsView.tableBorderTitle")),
                 new EmptyBorder(5, 10, 0, 10)));
 
         // Create output format panel
         JPanel outputFormatPanel = new JPanel(new GridBagLayout());
-        outputFormatPanel.add(wf.createLabel("csvParseSettingsView.format"),
+        outputFormatPanel.add(widgetFactory.createLabel("csvParseSettingsView.format"),
                 SwingUtils.createLabelGBConstraints(0, 0));
         tfOutputFormat = new JTextField("{2} {1}\\n{3}\\n{4} {5}");
         tfOutputFormat.addFocusListener(new FocusAdapter() {
@@ -156,7 +153,7 @@ public class CsvParseSettingsView extends View {
         outputFormatPanel.add(tfOutputFormat,
                 SwingUtils.createTextFieldGBConstraints(1, 0));
 
-        outputFormatPanel.add(wf.createLabel("csvParseSettingsView.sample"),
+        outputFormatPanel.add(widgetFactory.createLabel("csvParseSettingsView.sample"),
                 SwingUtils.createGBConstraints(0, 1, 1, 1, 0.0, 0.0,
                         GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                         5, 0, 0, 0));
@@ -169,13 +166,13 @@ public class CsvParseSettingsView extends View {
         updateSample();
 
         outputFormatPanel.setBorder(new CompoundBorder(
-                new TitledBorder(TextResource.getInstance().getString("csvParseSettingsView.outputFormatBorderTitle")),
+                new TitledBorder(textResource.getString("csvParseSettingsView.outputFormatBorderTitle")),
                 new EmptyBorder(5, 10, 0, 10)));
 
         // Create panel with ok and cancel buttons
         JPanel buttonPanel = new JPanel(new FlowLayout());
         buttonPanel = new ButtonPanel(SwingConstants.RIGHT);
-        JButton okButton = wf.createButton(idOkButton, new AbstractAction() {
+        JButton okButton = widgetFactory.createButton(idOkButton, new AbstractAction() {
             @Override
 			public void actionPerformed(ActionEvent e) {
                 idPressedButton = idOkButton;
@@ -183,7 +180,7 @@ public class CsvParseSettingsView extends View {
             }
         });
         buttonPanel.add(okButton);
-        JButton cancelButton = wf.createButton(idCancelButton, new AbstractAction() {
+        JButton cancelButton = widgetFactory.createButton(idCancelButton, new AbstractAction() {
             @Override
 			public void actionPerformed(ActionEvent e) {
                 idPressedButton = idCancelButton;
@@ -221,7 +218,7 @@ public class CsvParseSettingsView extends View {
         if (index < rows.length) {
             sample = CsvFileParser.composeValue(format, values[rows[index]]);
         } else {
-            sample = TextResource.getInstance().getString("csvParseSettingsView.emptySelection");
+            sample = textResource.getString("csvParseSettingsView.emptySelection");
         }
         sample = sample.replaceAll("\\\\n", "\n");
 
@@ -299,7 +296,7 @@ public class CsvParseSettingsView extends View {
 
     @Override
 	public String getTitle() {
-        return TextResource.getInstance().getString("csvParseSettingsView.title");
+        return textResource.getString("csvParseSettingsView.title");
     }
 
     @Override
@@ -324,7 +321,7 @@ public class CsvParseSettingsView extends View {
 
             @Override
 			public String getDescription() {
-                return TextResource.getInstance().getString("csvParseSettingsView.csvFile");
+                return textResource.getString("csvParseSettingsView.csvFile");
             }
 
         });

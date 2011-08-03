@@ -72,13 +72,6 @@ public class WidgetFactory {
 	private Map<String, Icon> iconCache = new HashMap<String, Icon>();
 	private Map<String, Image> imageCache = new HashMap<String, Image>();
 
-	/**
-	 * @return the singleton instance of this class.
-	 */
-	public static WidgetFactory getInstance() {
-		return Factory.getInstance(WidgetFactory.class);
-	}
-
 	public WidgetFactory(TextResource textResource)
 	{
 		this.textResource = textResource;
@@ -321,7 +314,7 @@ public class WidgetFactory {
                 return null;
             }
 
-            String description = TextResource.getInstance().getString(id + ".description");
+            String description = Factory.getInstance(TextResource.class).getString(id + ".description");
             if (description != null) {
                 icon = new ImageIcon(iconUrl, description);
             } else {
@@ -366,7 +359,7 @@ public class WidgetFactory {
      * @return the URL
      */
     private URL getUrlForResource(String id) {
-        TextResource tr = TextResource.getInstance();
+        TextResource tr = Factory.getInstance(TextResource.class);
         String resourceName = tr.getString(id);
         if (resourceName == null) {
             return null;

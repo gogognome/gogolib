@@ -37,6 +37,7 @@ import nl.gogognome.lib.swing.WidgetFactory;
 import nl.gogognome.lib.swing.models.AbstractModel;
 import nl.gogognome.lib.swing.models.FileSelectionModel;
 import nl.gogognome.lib.swing.models.ModelChangeListener;
+import nl.gogognome.lib.util.Factory;
 
 /**
  * This class implements a bean for selecting a file.
@@ -117,7 +118,7 @@ public class FileSelectionBean extends JPanel implements Bean {
 				handleSelectFileWithDialog();
 			}
 		};
-		openFileChooserButton = WidgetFactory.getInstance().createIconButton("gen.btnChooseFile", action, 21);
+		openFileChooserButton = Factory.getInstance(WidgetFactory.class).createIconButton("gen.btnChooseFile", action, 21);
         add(openFileChooserButton, SwingUtils.createGBConstraints(1,0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 0, 0, 0, 0));

@@ -34,6 +34,7 @@ import nl.gogognome.lib.swing.models.DoubleModel;
 import nl.gogognome.lib.swing.models.FileSelectionModel;
 import nl.gogognome.lib.swing.models.ListModel;
 import nl.gogognome.lib.swing.models.StringModel;
+import nl.gogognome.lib.util.Factory;
 
 /**
  * This class implements a panel containing a column of input fields.
@@ -175,7 +176,7 @@ public class ValuesEditPanel extends JPanel implements Closeable {
     }
 
     private void addFieldWithConstraints(String labelId, JComponent component, GridBagConstraints constraints) {
-        JLabel label = WidgetFactory.getInstance().createLabel(labelId, component);
+        JLabel label = Factory.getInstance(WidgetFactory.class).createLabel(labelId, component);
         add(label, SwingUtils.createLabelGBConstraints(0, nrFields));
         add(component, constraints);
         nrFields++;

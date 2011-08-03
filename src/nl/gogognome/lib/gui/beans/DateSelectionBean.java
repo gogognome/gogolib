@@ -29,6 +29,7 @@ import nl.gogognome.lib.swing.models.DateModel;
 import nl.gogognome.lib.swing.models.ModelChangeListener;
 import nl.gogognome.lib.swing.views.ViewPopup;
 import nl.gogognome.lib.text.TextResource;
+import nl.gogognome.lib.util.Factory;
 
 /**
  * This class implements a bean for selecting a <code>Date</code>.
@@ -50,7 +51,7 @@ public class DateSelectionBean extends AbstractTextFieldBean<DateModel> {
     @Override
     public void initBean() {
     	super.initBean();
-    	WidgetFactory wf = WidgetFactory.getInstance();
+    	WidgetFactory wf = Factory.getInstance(WidgetFactory.class);
     	JButton button = wf.createIconButton("gen.btnCalendar", createCalendarAction(), 21);
     	add(button);
     }
@@ -59,7 +60,7 @@ public class DateSelectionBean extends AbstractTextFieldBean<DateModel> {
     protected String getStringFromModel() {
         Date date = model.getDate();
         if (date != null) {
-            return TextResource.getInstance().formatDate("gen.dateFormat", date);
+            return Factory.getInstance(TextResource.class).formatDate("gen.dateFormat", date);
         } else {
             return "";
         }
@@ -70,7 +71,7 @@ public class DateSelectionBean extends AbstractTextFieldBean<DateModel> {
     		ModelChangeListener modelChangeListener) throws ParseException {
     	Date date = null;
         try {
-            date = TextResource.getInstance().parseDate("gen.dateFormat", text);
+            date = Factory.getInstance(TextResource.class).parseDate("gen.dateFormat", text);
         } finally {
         	// Set the date in the finally block. This ensures that the
         	// model is cleared in case a ParseException is thrown

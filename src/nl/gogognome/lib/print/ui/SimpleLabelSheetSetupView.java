@@ -48,6 +48,7 @@ import nl.gogognome.lib.swing.SwingUtils;
 import nl.gogognome.lib.swing.WidgetFactory;
 import nl.gogognome.lib.swing.views.View;
 import nl.gogognome.lib.text.TextResource;
+import nl.gogognome.lib.util.Factory;
 
 /**
  * This class implements a view for setting up <code>SimpleLabelSheet</code>s
@@ -112,7 +113,7 @@ public class SimpleLabelSheetSetupView extends View {
 
     @Override
 	public String getTitle() {
-        return TextResource.getInstance().getString("simplelabelsheetsetupdialog.title");
+        return Factory.getInstance(TextResource.class).getString("simplelabelsheetsetupdialog.title");
     }
 
     @Override
@@ -136,8 +137,7 @@ public class SimpleLabelSheetSetupView extends View {
      * @return the panel
      */
     private JPanel createPanel() {
-        WidgetFactory wf = WidgetFactory.getInstance();
-        TextResource tr = TextResource.getInstance();
+        TextResource tr = Factory.getInstance(TextResource.class);
 
         mainPanel = new JPanel(new GridBagLayout());
 
@@ -163,12 +163,12 @@ public class SimpleLabelSheetSetupView extends View {
         }
 
         ButtonPanel buttonPanel = new ButtonPanel(SwingConstants.CENTER);
-        btPreviousSheet = wf.createButton("simplelabelsheetsetupdialog.btPrevSheet", new AbstractAction() {
+        btPreviousSheet = widgetFactory.createButton("simplelabelsheetsetupdialog.btPrevSheet", new AbstractAction() {
             @Override
 			public void actionPerformed(ActionEvent event) {
                 if (currentSheet > 0) {
                     currentSheet--;
-                    titledBorder.setTitle(TextResource.getInstance().getString(
+                    titledBorder.setTitle(Factory.getInstance(TextResource.class).getString(
                         "simplelabelsheetsetupdialog.currentPage", currentSheet+1));
                     initSheet();
                     mainPanel.repaint();
@@ -176,12 +176,12 @@ public class SimpleLabelSheetSetupView extends View {
             }
         });
 
-        btNextSheet = wf.createButton("simplelabelsheetsetupdialog.btNextSheet", new AbstractAction() {
+        btNextSheet = widgetFactory.createButton("simplelabelsheetsetupdialog.btNextSheet", new AbstractAction() {
             @Override
 			public void actionPerformed(ActionEvent event) {
                 if (currentSheet+1 < labelSheets.size()) {
                     currentSheet++;
-                    titledBorder.setTitle(TextResource.getInstance().getString(
+                    titledBorder.setTitle(Factory.getInstance(TextResource.class).getString(
                         "simplelabelsheetsetupdialog.currentPage", currentSheet+1));
                     initSheet();
                     mainPanel.repaint();
@@ -197,7 +197,7 @@ public class SimpleLabelSheetSetupView extends View {
 
         // Create panel with ok and cancel buttons
         buttonPanel = new ButtonPanel(SwingConstants.RIGHT);
-        JButton okButton = wf.createButton(idOkButton, new AbstractAction() {
+        JButton okButton = widgetFactory.createButton(idOkButton, new AbstractAction() {
             @Override
 			public void actionPerformed(ActionEvent e) {
                 idPressedButton = idOkButton;
@@ -206,7 +206,7 @@ public class SimpleLabelSheetSetupView extends View {
             }
         });
         buttonPanel.add(okButton);
-        JButton cancelButton = wf.createButton(idCancelButton, new AbstractAction() {
+        JButton cancelButton = widgetFactory.createButton(idCancelButton, new AbstractAction() {
             @Override
 			public void actionPerformed(ActionEvent e) {
                 idPressedButton = idCancelButton;
@@ -279,7 +279,8 @@ public class SimpleLabelSheetSetupView extends View {
         }
 
         // Check whether the sheets contain sufficient available labels.
-        lbNrSheets.setText(TextResource.getInstance().getString("simplelabelsheetsetupdialog.lbNrSheets", labelSheets.size()));
+        lbNrSheets.setText(Factory.getInstance(TextResource.class)
+        		.getString("simplelabelsheetsetupdialog.lbNrSheets", labelSheets.size()));
         btPreviousSheet.setEnabled(currentSheet > 0);
         btNextSheet.setEnabled(currentSheet+1 < labelSheets.size());
     }
@@ -334,7 +335,7 @@ public class SimpleLabelSheetSetupView extends View {
 
         public LabelButton(Action action) {
             super();
-            actionWrapper = WidgetFactory.getInstance().createAction(
+            actionWrapper = Factory.getInstance(WidgetFactory.class).createAction(
                 "simplelabelsheetsetupdialog.btLabel");
             actionWrapper.setAction(action);
 

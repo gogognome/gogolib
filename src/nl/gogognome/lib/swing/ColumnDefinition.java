@@ -21,6 +21,7 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 import nl.gogognome.lib.text.TextResource;
+import nl.gogognome.lib.util.Factory;
 
 /**
  * This class defines a column in a table.
@@ -71,7 +72,7 @@ public class ColumnDefinition {
     }
 
     public String getName() {
-        return TextResource.getInstance().getString(id);
+        return Factory.getInstance(TextResource.class).getString(id);
     }
 
     public Class<?> getClassOfValues() {

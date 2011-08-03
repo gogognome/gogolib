@@ -32,6 +32,7 @@ import javax.swing.event.ChangeListener;
 
 import nl.gogognome.lib.swing.WidgetFactory;
 import nl.gogognome.lib.swing.plaf.DefaultLookAndFeel;
+import nl.gogognome.lib.util.Factory;
 
 /**
  * This class implements a tabbed pane that can hold <code>View</code>s.
@@ -217,7 +218,7 @@ public class ViewTabbedPane extends JTabbedPane {
     		setOpaque(false);
     		setLayout(new FlowLayout());
 
-    		WidgetFactory wf = WidgetFactory.getInstance();
+    		WidgetFactory wf = Factory.getInstance(WidgetFactory.class);
 
     		JLabel label = new JLabel(view.getTitle());
     		label.setOpaque(false);

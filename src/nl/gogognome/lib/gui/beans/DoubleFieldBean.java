@@ -20,6 +20,7 @@ import java.text.ParseException;
 import nl.gogognome.lib.swing.models.DoubleModel;
 import nl.gogognome.lib.swing.models.ModelChangeListener;
 import nl.gogognome.lib.text.TextResource;
+import nl.gogognome.lib.util.Factory;
 import nl.gogognome.lib.util.StringUtil;
 
 /**
@@ -52,7 +53,7 @@ public class DoubleFieldBean extends AbstractTextFieldBean<DoubleModel> {
     	if (model.isNull()) {
     		return "";
     	} else {
-    		return TextResource.getInstance().formatDouble(model.getDouble());
+    		return Factory.getInstance(TextResource.class).formatDouble(model.getDouble());
     	}
     }
 
@@ -62,7 +63,7 @@ public class DoubleFieldBean extends AbstractTextFieldBean<DoubleModel> {
     	if (StringUtil.isNullOrEmpty(text)) {
     		model.setDouble(null);
     	} else {
-	    	double d = TextResource.getInstance().parseDouble(text);
+	    	double d = Factory.getInstance(TextResource.class).parseDouble(text);
 	    	model.setDouble(d, modelChangeListener);
     	}
     }

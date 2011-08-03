@@ -20,7 +20,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class implements a factory that can be used to
+ * This class implements a factory that can be used
+ * for dependency injection.
+ *
  * @author Sander Kooijmans
  */
 public class Factory {

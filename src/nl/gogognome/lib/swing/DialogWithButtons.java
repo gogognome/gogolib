@@ -41,6 +41,7 @@ import javax.swing.text.JTextComponent;
 
 import nl.gogognome.lib.swing.views.View;
 import nl.gogognome.lib.text.TextResource;
+import nl.gogognome.lib.util.Factory;
 
 /**
  * This abstract class implements the framework for a dialog with one or more buttons.
@@ -84,7 +85,7 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
 	 */
 	protected DialogWithButtons(Frame frame, String titleId, String[] buttonIds) {
 		initDialog(new JDialog(frame,
-		    TextResource.getInstance().getString(titleId), true), buttonIds, frame.getBounds());
+				Factory.getInstance(TextResource.class).getString(titleId), true), buttonIds, frame.getBounds());
 	}
 
 	/**
@@ -95,7 +96,7 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
 	 */
 	protected DialogWithButtons(Dialog dialog, String titleId, String[] buttonIds) {
 		initDialog(new JDialog(dialog,
-		    TextResource.getInstance().getString(titleId), true), buttonIds,
+				Factory.getInstance(TextResource.class).getString(titleId), true), buttonIds,
 			dialog.getBounds());
 	}
 
@@ -107,7 +108,7 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
      */
     protected DialogWithButtons(View view, String titleId, String[] buttonIds) {
         initDialog(new JDialog(view.getParentWindow(),
-            TextResource.getInstance().getString(titleId), Dialog.ModalityType.APPLICATION_MODAL),
+        		Factory.getInstance(TextResource.class).getString(titleId), Dialog.ModalityType.APPLICATION_MODAL),
             buttonIds, view.getParentWindow().getBounds());
     }
 
@@ -124,7 +125,7 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
 		this.parentBounds = parentBounds;
 		buttons = new JButton[buttonIds.length];
 		for (int i=0; i<buttonIds.length; i++) {
-			buttons[i] = WidgetFactory.getInstance().createButton(buttonIds[i], null);
+			buttons[i] = Factory.getInstance(WidgetFactory.class).createButton(buttonIds[i], null);
 			buttons[i].addActionListener(this);
 		}
 		selectedButton = -1;
