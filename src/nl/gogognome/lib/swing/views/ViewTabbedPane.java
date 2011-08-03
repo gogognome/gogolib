@@ -79,7 +79,7 @@ public class ViewTabbedPane extends JTabbedPane {
 	        };
 
 	        view.setCloseAction(closeAction);
-	        view.setParentFrame(parentFrame);
+	        view.setParentWindow(parentFrame);
 	        view.doInit();
 	        addTab(view.getTitle(), view);
 	        if (DefaultLookAndFeel.isSupportsTabComponents()) {

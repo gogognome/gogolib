@@ -118,7 +118,7 @@ public class ViewDialog {
             }
         };
 
-        view.setParentDialog(dialog);
+        view.setParentWindow(dialog);
         view.setCloseAction(closeAction);
         view.doInit();
         dialog.getContentPane().add(view, BorderLayout.CENTER);

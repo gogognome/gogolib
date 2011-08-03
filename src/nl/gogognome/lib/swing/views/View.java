@@ -64,8 +64,7 @@ public abstract class View extends JPanel implements Closeable {
      */
     protected Action closeAction;
 
-    private JFrame parentFrame;
-    private JDialog parentDialog;
+    private Window parentWindow;
     private JButton defaultButton;
 
     /** Objects to be closed when the view is closed. */
@@ -104,32 +103,12 @@ public abstract class View extends JPanel implements Closeable {
         this.closeAction = closeAction;
     }
 
-    public void setParentFrame(JFrame frame) {
-        parentFrame = frame;
+    public void setParentWindow(Window parentWindow) {
+        this.parentWindow = parentWindow;
     }
 
-    /**
-     * Returns the parent container of the view.
-     * @return the parent container of the view
-     */
     public Window getParentWindow() {
-        if (parentDialog != null) {
-            return parentDialog;
-        } else {
-            return parentFrame;
-        }
-    }
-
-    public JFrame getParentFrame() {
-        return parentFrame;
-    }
-
-    public void setParentDialog(JDialog dialog) {
-        parentDialog = dialog;
-    }
-
-    public JDialog getParentDialog() {
-        return parentDialog;
+    	return parentWindow;
     }
 
     public void addViewListener(ViewListener listener) {
@@ -146,10 +125,10 @@ public abstract class View extends JPanel implements Closeable {
      */
     public void setDefaultButton(JButton button) {
         defaultButton = button;
-        if (parentFrame != null) {
-            parentFrame.getRootPane().setDefaultButton(button);
-        } else if (parentDialog != null) {
-            parentDialog.getRootPane().setDefaultButton(button);
+        if (parentWindow instanceof JFrame) {
+            ((JFrame) parentWindow).getRootPane().setDefaultButton(button);
+        } else if (parentWindow instanceof JDialog) {
+        	((JDialog) parentWindow).getRootPane().setDefaultButton(button);
         }
     }
 

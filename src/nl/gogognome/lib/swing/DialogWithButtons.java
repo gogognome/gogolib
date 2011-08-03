@@ -106,15 +106,9 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
      * @param buttonIds the ids of the buttons.
      */
     protected DialogWithButtons(View view, String titleId, String[] buttonIds) {
-        if (view.getParentFrame() != null) {
-            initDialog(new JDialog(view.getParentFrame(),
-                TextResource.getInstance().getString(titleId), true),
-                buttonIds, view.getParentFrame().getBounds());
-        } else {
-            initDialog(new JDialog(view.getParentDialog(),
-                TextResource.getInstance().getString(titleId), true), buttonIds,
-                view.getParentDialog().getBounds());
-        }
+        initDialog(new JDialog(view.getParentWindow(),
+            TextResource.getInstance().getString(titleId), Dialog.ModalityType.APPLICATION_MODAL),
+            buttonIds, view.getParentWindow().getBounds());
     }
 
 	/**

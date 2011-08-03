@@ -17,8 +17,8 @@ package nl.gogognome.lib.task.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.Point;
+import java.awt.Window;
 
 import javax.swing.BorderFactory;
 import javax.swing.JDialog;
@@ -40,30 +40,20 @@ import nl.gogognome.lib.task.TaskProgressListener;
  */
 public class TaskWithProgressDialog implements TaskProgressListener {
 
-    /** The parent frame that contains this view. */
-    private Frame parentFrame;
-
-    /** The parent dialog that contains this view. */
-    private JDialog parentDialog;
+    private Window parentWindow;
 
     private JProgressBar progressBar;
     private JDialog progressDialog;
 
     private String description;
 
-    public TaskWithProgressDialog(Frame parentFrame, String description) {
-    	this.parentFrame = parentFrame;
-    	this.description = description;
-    }
-
-    public TaskWithProgressDialog(JDialog parentDialog, String description) {
-    	this.parentDialog = parentDialog;
+    public TaskWithProgressDialog(Window parentWindow, String description) {
+    	this.parentWindow = parentWindow;
     	this.description = description;
     }
 
     public TaskWithProgressDialog(View view, String description) {
-    	this.parentDialog = view.getParentDialog();
-    	this.parentFrame = view.getParentFrame();
+    	this.parentWindow = view.getParentWindow();
     	this.description = description;
     }
 
@@ -75,11 +65,8 @@ public class TaskWithProgressDialog implements TaskProgressListener {
     public Object execute(Task task) {
     	WorkerThread thread = new WorkerThread(task, description, this);
     	thread.start();
-    	if (parentFrame != null) {
-    		progressDialog = new JDialog(parentFrame);
-    	} else {
-    		progressDialog = new JDialog(parentDialog);
-    	}
+   		progressDialog = new JDialog(parentWindow);
+
     	progressBar = new JProgressBar(0, 100);
     	JPanel panel = new JPanel(new BorderLayout());
     	progressDialog.setLayout(new BorderLayout());
@@ -92,18 +79,8 @@ public class TaskWithProgressDialog implements TaskProgressListener {
     	progressDialog.setResizable(false);
 
     	// Put dialog in center of parent frame or dialog.
-    	Dimension d;
-    	Point location;
-    	if (parentFrame != null) {
-	    	d = parentFrame.getSize();
-	    	location = parentFrame.getLocation();
-    	} else if (parentDialog != null) {
-    		d = parentDialog.getSize();
-    		location = parentDialog.getLocation();
-    	} else {
-    		d = new Dimension(400, 400);
-    		location = new Point(200,200);
-    	}
+    	Dimension d = parentWindow.getSize();;
+    	Point location = parentWindow.getLocation();
     	location.translate((int)(d.getWidth() / 2), (int)(d.getHeight() / 2));
     	progressDialog.setLocation(location);
 
@@ -121,7 +98,7 @@ public class TaskWithProgressDialog implements TaskProgressListener {
 			public void run() {
     			progressDialog.setVisible(false);
 		    	if (e != null) {
-		            MessageDialog.showErrorMessage(parentFrame, e,
+		            MessageDialog.showErrorMessage(parentWindow, e,
 		            		"taskWithProgressDialog.finishedWithException");
 		    	}
     		}
