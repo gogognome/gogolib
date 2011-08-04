@@ -28,14 +28,7 @@ import nl.gogognome.lib.swing.models.StringModel;
  * @author Sander Kooijmans
  */
 public class BeanFactory {
-
-	private final static BeanFactory INSTANCE = new BeanFactory();
-
-	public static BeanFactory getInstance() {
-		return INSTANCE;
-	}
-
-	private BeanFactory() {
+	public BeanFactory() {
 	}
 
     /**
@@ -139,5 +132,4 @@ public class BeanFactory {
     	bean.initBean();
     	return bean;
     }
-
 }

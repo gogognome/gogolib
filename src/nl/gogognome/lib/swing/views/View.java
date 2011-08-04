@@ -26,6 +26,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import nl.gogognome.lib.gui.Closeable;
+import nl.gogognome.lib.gui.beans.BeanFactory;
 import nl.gogognome.lib.swing.WidgetFactory;
 import nl.gogognome.lib.text.TextResource;
 import nl.gogognome.lib.util.Factory;
@@ -72,6 +73,7 @@ public abstract class View extends JPanel implements Closeable {
 
     protected TextResource textResource = Factory.getInstance(TextResource.class);
     protected WidgetFactory widgetFactory = Factory.getInstance(WidgetFactory.class);
+    protected BeanFactory beanFactory = Factory.getInstance(BeanFactory.class);
 
     /**
      * Gets the title of the view.

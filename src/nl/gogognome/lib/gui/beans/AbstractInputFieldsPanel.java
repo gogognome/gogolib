@@ -26,7 +26,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import nl.gogognome.lib.gui.Closeable;
-import nl.gogognome.lib.swing.SwingUtils;
 import nl.gogognome.lib.swing.WidgetFactory;
 import nl.gogognome.lib.swing.models.BooleanModel;
 import nl.gogognome.lib.swing.models.DateModel;
@@ -37,27 +36,20 @@ import nl.gogognome.lib.swing.models.StringModel;
 import nl.gogognome.lib.util.Factory;
 
 /**
- * This class implements a panel containing a column of input fields.
- * Each input field consists of a label and a component (typically a text field).
- * The values of the fields are managed by models (e.g., {@link StringModel}
- * or {@link DateModel}.
+ * Base class for the InputFieldsColumn and InputFieldsRow.
+ *
+ * @author Sander Kooijmans
  */
-public class ValuesEditPanel extends JPanel implements Closeable {
+public abstract class AbstractInputFieldsPanel extends JPanel implements Closeable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-	/** Contains the number of fields present in the panel. */
-    private int nrFields;
+	protected List<Component> components = new ArrayList<Component>();
+    private BeanFactory beanFactory = Factory.getInstance(BeanFactory.class);
 
-    private List<Component> components = new ArrayList<Component>();
-
-    private BeanFactory beanFactory = BeanFactory.getInstance();
-
-    /**
-     * Constructor.
-     */
-    public ValuesEditPanel() {
+    public AbstractInputFieldsPanel() {
         super(new GridBagLayout());
+        setOpaque(false);
     }
 
     /**
@@ -79,7 +71,7 @@ public class ValuesEditPanel extends JPanel implements Closeable {
      * @param model the model controlling the text field
      */
     public void addField(String labelId, StringModel model) {
-        addField(labelId, beanFactory.createTextFieldBean(model));
+        addVariableSizeField(labelId, beanFactory.createTextFieldBean(model));
     }
 
     /**
@@ -90,7 +82,7 @@ public class ValuesEditPanel extends JPanel implements Closeable {
      *        The value 0 indicates that the width can be determined by the layout manager.
      */
     public void addField(String labelId, StringModel model, int nrColumns) {
-        addField(labelId, beanFactory.createTextFieldBean(model, nrColumns));
+        addVariableSizeField(labelId, beanFactory.createTextFieldBean(model, nrColumns));
     }
 
     /**
@@ -99,7 +91,7 @@ public class ValuesEditPanel extends JPanel implements Closeable {
      * @param model the model controlling the text field
      */
     public void addField(String labelId, DoubleModel model) {
-        addField(labelId, beanFactory.createDoubleFieldBean(model));
+        addVariableSizeField(labelId, beanFactory.createDoubleFieldBean(model));
     }
 
     /**
@@ -110,7 +102,7 @@ public class ValuesEditPanel extends JPanel implements Closeable {
      *        The value 0 indicates that the width can be determined by the layout manager.
      */
     public void addField(String labelId, DoubleModel model, int nrColumns) {
-        addField(labelId, beanFactory.createDoubleFieldBean(model, nrColumns));
+        addVariableSizeField(labelId, beanFactory.createDoubleFieldBean(model, nrColumns));
     }
 
     /**
@@ -121,7 +113,7 @@ public class ValuesEditPanel extends JPanel implements Closeable {
      *        The value 0 indicates that the width can be determined by the layout manager.
      */
     public void addPasswordField(String labelId, StringModel model, int nrColumns) {
-        addField(labelId, beanFactory.createPasswordBean(model, nrColumns));
+        addVariableSizeField(labelId, beanFactory.createPasswordBean(model, nrColumns));
     }
 
     /**
@@ -130,7 +122,7 @@ public class ValuesEditPanel extends JPanel implements Closeable {
      * @param model the model controlling the check box
      */
     public void addField(String labelId, BooleanModel model) {
-        addField(labelId, beanFactory.createCheckBoxBean(model));
+        addVariableSizeField(labelId, beanFactory.createCheckBoxBean(model));
     }
 
     /**
@@ -139,9 +131,19 @@ public class ValuesEditPanel extends JPanel implements Closeable {
      * @param model the model controlling the file seleciton bean
      */
     public void addField(String labelId, FileSelectionModel model) {
-        addField(labelId, beanFactory.createFileSelectionBean(model));
+        addVariableSizeField(labelId, beanFactory.createFileSelectionBean(model));
     }
 
+    /**
+     * Adds a component. Use this method to add components for which the general
+     * models (StringModel, DateModel etc.) cannot be used.
+     * @param labelId the id of the label that is put in front of the component
+     * @param component the component
+     */
+    public void addVariableSizeField(String labelId, JComponent component) {
+        addLabelAndFieldWithConstraints(labelId, component,
+        		getVariableSizeFieldConstraints());
+    }
 
     /**
      * Adds a field to edit a string.
@@ -149,8 +151,8 @@ public class ValuesEditPanel extends JPanel implements Closeable {
      * @param model the model controlling the text field
      */
     public void addField(String labelId, DateModel model) {
-        addFieldWithConstraints(labelId, beanFactory.createDateSelectionBean(model),
-        		SwingUtils.createLabelGBConstraints(1, nrFields));
+        addLabelAndFieldWithConstraints(labelId, beanFactory.createDateSelectionBean(model),
+        		getFixedSizeFieldConstraints());
     }
 
     /**
@@ -161,28 +163,19 @@ public class ValuesEditPanel extends JPanel implements Closeable {
     public <T> void addComboBoxField(String labelId, ListModel<T> model, ObjectFormatter<T> itemFormatter) {
     	ComboBoxBean<T> bean = beanFactory.createComboBoxBean(model);
     	bean.setItemFormatter(itemFormatter);
-        addFieldWithConstraints(labelId, bean,
-        		SwingUtils.createLabelGBConstraints(1, nrFields));
+        addLabelAndFieldWithConstraints(labelId, bean, getFixedSizeFieldConstraints());
     }
 
-    /**
-     * Adds a component. Use this method to add components for which the general
-     * models (StringModel, DateModel etc.) cannot be used.
-     * @param labelId the id of the label that is put in front of the component
-     * @param component the component
-     */
-    public void addField(String labelId, JComponent component) {
-    	addFieldWithConstraints(labelId, component, SwingUtils.createTextFieldGBConstraints(1, nrFields));
-    }
-
-    private void addFieldWithConstraints(String labelId, JComponent component, GridBagConstraints constraints) {
+    protected void addLabelAndFieldWithConstraints(String labelId, JComponent component, GridBagConstraints constraints) {
         JLabel label = Factory.getInstance(WidgetFactory.class).createLabel(labelId, component);
-        add(label, SwingUtils.createLabelGBConstraints(0, nrFields));
+        add(label, getLabelConstraints());
         add(component, constraints);
-        nrFields++;
-
         components.add(component);
     }
+
+	protected abstract GridBagConstraints getLabelConstraints();
+	protected abstract GridBagConstraints getFixedSizeFieldConstraints();
+	protected abstract GridBagConstraints getVariableSizeFieldConstraints();
 
     @Override
     public void requestFocus() {
