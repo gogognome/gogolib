@@ -17,23 +17,28 @@ package nl.gogognome.lib.swing.models;
 
 import java.io.File;
 
+import javax.swing.filechooser.FileFilter;
+
 import nl.gogognome.lib.util.ComparatorUtil;
 
 /**
  * This class implements a model to select a file.
+ * A button id and file filter can be set. These are used
+ * by the FileSelectionBean when the file chooser dialog is shown.
  *
  * @author Sander Kooijmans
  */
-public class FileSelectionModel extends AbstractModel {
+public class FileModel extends AbstractModel {
 
 	private File file;
+	private String buttonId = "gen.choose";
+	private FileFilter fileFilter;
 
-
-	public FileSelectionModel() {
+	public FileModel() {
 		this(null);
 	}
 
-	public FileSelectionModel(File file) {
+	public FileModel(File file) {
 		super();
 		this.file = file;
 	}
@@ -54,5 +59,21 @@ public class FileSelectionModel extends AbstractModel {
             this.file = newFile;
             notifyListeners(source);
         }
+	}
+
+	public String getButtonId() {
+		return buttonId;
+	}
+
+	public void setButtonId(String buttonId) {
+		this.buttonId = buttonId;
+	}
+
+	public FileFilter getFileFilter() {
+		return fileFilter;
+	}
+
+	public void setFileFilter(FileFilter fileFilter) {
+		this.fileFilter = fileFilter;
 	}
 }

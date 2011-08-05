@@ -18,7 +18,7 @@ package nl.gogognome.lib.gui.beans;
 import nl.gogognome.lib.swing.models.BooleanModel;
 import nl.gogognome.lib.swing.models.DateModel;
 import nl.gogognome.lib.swing.models.DoubleModel;
-import nl.gogognome.lib.swing.models.FileSelectionModel;
+import nl.gogognome.lib.swing.models.FileModel;
 import nl.gogognome.lib.swing.models.ListModel;
 import nl.gogognome.lib.swing.models.StringModel;
 
@@ -47,7 +47,7 @@ public class BeanFactory {
      * @param model the model
      * @return the file selection bean
      */
-    public FileSelectionBean createFileSelectionBean(FileSelectionModel model) {
+    public FileSelectionBean createFileSelectionBean(FileModel model) {
     	FileSelectionBean bean = new FileSelectionBean(model);
     	bean.initBean();
     	return bean;

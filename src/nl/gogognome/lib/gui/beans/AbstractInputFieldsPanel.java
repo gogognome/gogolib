@@ -30,7 +30,7 @@ import nl.gogognome.lib.swing.WidgetFactory;
 import nl.gogognome.lib.swing.models.BooleanModel;
 import nl.gogognome.lib.swing.models.DateModel;
 import nl.gogognome.lib.swing.models.DoubleModel;
-import nl.gogognome.lib.swing.models.FileSelectionModel;
+import nl.gogognome.lib.swing.models.FileModel;
 import nl.gogognome.lib.swing.models.ListModel;
 import nl.gogognome.lib.swing.models.StringModel;
 import nl.gogognome.lib.util.Factory;
@@ -130,7 +130,7 @@ public abstract class AbstractInputFieldsPanel extends JPanel implements Closeab
      * @param labelId the id of the label that is put in front of the file selection bean.
      * @param model the model controlling the file seleciton bean
      */
-    public void addField(String labelId, FileSelectionModel model) {
+    public void addField(String labelId, FileModel model) {
         addVariableSizeField(labelId, beanFactory.createFileSelectionBean(model));
     }
 

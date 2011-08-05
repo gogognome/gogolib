@@ -30,13 +30,14 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileFilter;
 
 import nl.gogognome.lib.swing.SwingUtils;
 import nl.gogognome.lib.swing.WidgetFactory;
 import nl.gogognome.lib.swing.models.AbstractModel;
-import nl.gogognome.lib.swing.models.FileSelectionModel;
+import nl.gogognome.lib.swing.models.FileModel;
 import nl.gogognome.lib.swing.models.ModelChangeListener;
+import nl.gogognome.lib.text.TextResource;
 import nl.gogognome.lib.util.Factory;
 
 /**
@@ -46,20 +47,14 @@ import nl.gogognome.lib.util.Factory;
  */
 public class FileSelectionBean extends JPanel implements Bean {
 
-    /** The model that stores the selected file. */
-    private FileSelectionModel fileSelectionModel;
+    private static final long serialVersionUID = 1L;
 
-    /** The text field in which the user can enter the string. */
+    private FileModel fileModel;
+
     private JTextField textfield;
 
-    /** The model change listener for the file selection model. */
     private ModelChangeListener fileSelectionModelChangeListener;
-
-    /** The document listener for the text field. */
     private DocumentListener documentListener;
-
-    /** File name extension filter used when a file is selected using the dialog. */
-    private FileNameExtensionFilter filter;
 
     private JButton openFileChooserButton;
 
@@ -67,8 +62,8 @@ public class FileSelectionBean extends JPanel implements Bean {
      * Constructor.
      * @param fileSelectionModel the file selection model that will reflect the content of the bean
      */
-    public FileSelectionBean(FileSelectionModel fileSelectionModel) {
-        this.fileSelectionModel = fileSelectionModel;
+    public FileSelectionBean(FileModel fileSelectionModel) {
+        this.fileModel = fileSelectionModel;
     }
 
     @Override
@@ -77,7 +72,7 @@ public class FileSelectionBean extends JPanel implements Bean {
 
         setLayout(new GridBagLayout());
 
-        textfield = new JTextField();
+        textfield = new JTextField(30);
 
         fileSelectionModelChangeListener = new ModelChangeListener() {
 
@@ -87,7 +82,7 @@ public class FileSelectionBean extends JPanel implements Bean {
             }
 
         };
-        fileSelectionModel.addModelChangeListener(fileSelectionModelChangeListener);
+        fileModel.addModelChangeListener(fileSelectionModelChangeListener);
 
         documentListener = new DocumentListener() {
 
@@ -131,11 +126,11 @@ public class FileSelectionBean extends JPanel implements Bean {
      */
     @Override
 	public void close() {
-        fileSelectionModel.removeModelChangeListener(fileSelectionModelChangeListener);
+        fileModel.removeModelChangeListener(fileSelectionModelChangeListener);
         textfield.getDocument().removeDocumentListener(documentListener);
         fileSelectionModelChangeListener = null;
         documentListener = null;
-        fileSelectionModel = null;
+        fileModel = null;
         textfield = null;
     }
 
@@ -159,11 +154,11 @@ public class FileSelectionBean extends JPanel implements Bean {
      * Upstrings the text field with the value of the string model.
      */
     private void updateTextField() {
-    	File f = fileSelectionModel.getFile();
+    	File f = fileModel.getFile();
         String string = f != null ? f.getAbsolutePath() : "";
         textfield.setText(string);
-        textfield.setEnabled(fileSelectionModel.isEnabled());
-        openFileChooserButton.setEnabled(fileSelectionModel.isEnabled());
+        textfield.setEnabled(fileModel.isEnabled());
+        openFileChooserButton.setEnabled(fileModel.isEnabled());
     }
 
     /**
@@ -172,21 +167,24 @@ public class FileSelectionBean extends JPanel implements Bean {
      */
     private void parseUserInput() {
         String string = textfield.getText();
-        fileSelectionModel.setFile(new File(string), fileSelectionModelChangeListener);
+        fileModel.setFile(new File(string), fileSelectionModelChangeListener);
     }
 
     /**
      * Lets the user select a file using a file chooser dialog.
      */
     private void handleSelectFileWithDialog() {
-        JFileChooser chooser = new JFileChooser(fileSelectionModel.getFile());
-        if (filter != null) {
-        	chooser.setFileFilter(filter);
+        JFileChooser chooser = new JFileChooser(fileModel.getFile());
+        FileFilter fileFilter = fileModel.getFileFilter();
+        if (fileFilter != null) {
+        	chooser.setFileFilter(fileFilter);
         }
 
-        int returnVal = chooser.showOpenDialog(getTopLevelAncestor());
+        TextResource tr = Factory.getInstance(TextResource.class);
+        String buttonText = tr.getString(fileModel.getButtonId());
+        int returnVal = chooser.showDialog(getTopLevelAncestor(), buttonText);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-        	fileSelectionModel.setFile(chooser.getSelectedFile(), null);
+        	fileModel.setFile(chooser.getSelectedFile(), null);
         }
     }
 }
