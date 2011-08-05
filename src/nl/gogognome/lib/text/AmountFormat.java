@@ -177,8 +177,9 @@ public class AmountFormat
      * @throws ParseException if the string does not contain a valid amount
      */
     public Amount parse(String amountString, Currency currency) throws ParseException {
-        StringBuilder sb = new StringBuilder(amountString);
+        StringBuilder sb;
         try {
+        	sb = new StringBuilder(amountString);
 	        int index = 0;
 	        if (amountString.startsWith("-/- ")) {
 	            sb.replace(0, 4, "-");
@@ -187,14 +188,10 @@ public class AmountFormat
 
 	        return new Amount(sb.toString(), currency, locale);
         }
-        catch (Exception e)
-        {
-            if (e instanceof ParseException)
-            {
+        catch (Exception e) {
+            if (e instanceof ParseException) {
                 throw (ParseException)e;
-            }
-            else
-            {
+            } else {
                 throw new ParseException(e.toString(), 0);
             }
         }

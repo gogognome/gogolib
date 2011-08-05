@@ -27,9 +27,13 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
+import javax.swing.Action;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+
+import nl.gogognome.lib.util.Factory;
 
 /**
  * This class implements a panel that can hold a number of buttons.
@@ -38,7 +42,9 @@ import javax.swing.SwingConstants;
  */
 public class ButtonPanel extends JPanel {
 
-    /** The location of the buttons within the panel. */
+	private static final long serialVersionUID = 1L;
+
+	/** The location of the buttons within the panel. */
     private int location;
 
     /** Indicates whether the buttons are laid out horizontally or vertically. */
@@ -129,11 +135,24 @@ public class ButtonPanel extends JPanel {
 
     /**
      * Adds a button to this panel.
-     * @param button the button to be added
-     * @return the button
+	 * @param id the id of the button's description in the resources.
+	 * @param the action to be performed when the button is pressed
+	 * @return the button.
+     */
+    public JButton addButton(String id, Action action) {
+    	WidgetFactory wf = Factory.getInstance(WidgetFactory.class);
+    	JButton button = wf.createButton(id, action);
+    	add(button);
+    	return button;
+    }
+
+    /**
+     * Adds a component to this panel.
+     * @param component the component to be added
+     * @return the component
      */
     @Override
-    public Component add(Component button) {
+    public Component add(Component component) {
         boolean firstButton = getComponentCount() == 1;
     	int leftTopInset = (location == LEFT || location == TOP) && firstButton ? 0 : 5;
     	int rightBottomInset = (location == RIGHT || location == BOTTOM) && firstButton ? 0 : 5;
@@ -145,12 +164,12 @@ public class ButtonPanel extends JPanel {
             // Remove the label, add the button and add the label as right-most element in the row
             remove(label);
             if (orientation == SwingConstants.HORIZONTAL) {
-                add(button, SwingUtils.createGBConstraints(getComponentCount(), 0, 1, 1, 0.0, 0.0,
+                add(component, SwingUtils.createGBConstraints(getComponentCount(), 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.NONE, 5, leftTopInset, 5, rightBottomInset));
                 add(label, SwingUtils.createGBConstraints(getComponentCount(), 0, 1, 1, 1.0, 1.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 0, 0, 0, 0));
             } else {
-                add(button, SwingUtils.createGBConstraints(0, getComponentCount(), 1, 1, 0.0, 0.0,
+                add(component, SwingUtils.createGBConstraints(0, getComponentCount(), 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, leftTopInset, 5, rightBottomInset, 5));
                 add(label, SwingUtils.createGBConstraints(0, getComponentCount(), 1, 1, 1.0, 1.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 0, 0, 0, 0));
@@ -158,15 +177,15 @@ public class ButtonPanel extends JPanel {
             break;
 
         case RIGHT:
-            add(button, SwingUtils.createGBConstraints(getComponentCount(), 0, 1, 1, 0.0, 0.0,
+            add(component, SwingUtils.createGBConstraints(getComponentCount(), 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.NONE, 5, 5, 5, rightBottomInset));
             break;
         case BOTTOM:
-            add(button, SwingUtils.createGBConstraints(0, getComponentCount(), 1, 1, 0.0, 0.0,
+            add(component, SwingUtils.createGBConstraints(0, getComponentCount(), 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.NONE, 5, 5, 5, rightBottomInset));
             break;
         }
-        return button;
+        return component;
     }
 
 }

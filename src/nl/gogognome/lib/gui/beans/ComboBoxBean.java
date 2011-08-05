@@ -20,6 +20,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.List;
 
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
@@ -90,7 +91,11 @@ public class ComboBoxBean<T> extends JComboBoxWithKeyboardInput implements Bean 
 
 	public void setItemFormatter(ObjectFormatter<T> itemFormatter) {
 		this.itemFormatter = itemFormatter;
-		setRenderer(new ItemFormatterRenderer<T>(itemFormatter));
+		if (itemFormatter != null) {
+			setRenderer(new ItemFormatterRenderer<T>(itemFormatter));
+		} else {
+			setRenderer(new DefaultListCellRenderer());
+		}
 		updateItems();
 	}
 

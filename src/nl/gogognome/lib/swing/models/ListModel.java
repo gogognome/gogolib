@@ -61,6 +61,16 @@ public class ListModel<T> extends AbstractModel {
 	}
 
 	/**
+	 * Sets the selected index.
+	 * @param selectedIndex the selected index
+	 * @param source the model change listener that sets the items.  It will not
+     *        get notified. It may be <code>null</code>.
+	 */
+	public void setSelectedIndex(int selectedIndex, ModelChangeListener source) {
+		setSelectedIndices(new int[] { selectedIndex }, source);
+	}
+
+	/**
 	 * Sets the selected indices.
 	 * @param selectedIndices the selected indices
 	 * @param source the model change listener that sets the items.  It will not
