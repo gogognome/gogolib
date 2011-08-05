@@ -15,12 +15,16 @@
 */
 package nl.gogognome.lib.gui.beans;
 
+import javax.swing.Action;
+
+import nl.gogognome.lib.swing.WidgetFactory;
 import nl.gogognome.lib.swing.models.BooleanModel;
 import nl.gogognome.lib.swing.models.DateModel;
 import nl.gogognome.lib.swing.models.DoubleModel;
 import nl.gogognome.lib.swing.models.FileModel;
 import nl.gogognome.lib.swing.models.ListModel;
 import nl.gogognome.lib.swing.models.StringModel;
+import nl.gogognome.lib.util.Factory;
 
 /**
  * This class is a factory for creating beans.
@@ -38,6 +42,21 @@ public class BeanFactory {
      */
     public CheckBoxBean createCheckBoxBean(BooleanModel model) {
     	CheckBoxBean bean = new CheckBoxBean(model);
+    	bean.initBean();
+    	return bean;
+    }
+
+    /**
+     * Creates a radio button bean for the specified model.
+     * @param id the id of the text
+     * @param model the model
+     * @return the radio button bean
+     */
+    public RadioButtonBean createRadioButtonBean(String id, BooleanModel model) {
+    	RadioButtonBean bean = new RadioButtonBean(model);
+    	WidgetFactory wf = Factory.getInstance(WidgetFactory.class);
+    	Action action = wf.createAction(id);
+    	bean.setAction(action);
     	bean.initBean();
     	return bean;
     }

@@ -201,7 +201,7 @@ public class WidgetFactory {
 	 * @param columns the number of columns of the text field.
 	 * @return the text field.
 	 */
-	public JTextField createTextField( int columns )
+	public JTextField createTextField(int columns)
 	{
 		JTextField textField = new JTextField(columns);
         textField.setFocusable(true);
@@ -215,7 +215,7 @@ public class WidgetFactory {
 	 * @param text the initial text of the text field.
 	 * @return the text field.
 	 */
-	public JTextField createTextField( String text )
+	public JTextField createTextField(String text)
 	{
 		JTextField textField = new JTextField(text);
 		return textField;
@@ -228,10 +228,9 @@ public class WidgetFactory {
      * @param checked the initial state of the check box.
      * @return the check box.
      */
-    public JCheckBox createCheckBox( String textId, boolean checked )
-    {
+    public JCheckBox createCheckBox(String textId, boolean checked) {
         JCheckBox checkBox = new JCheckBox(
-            textResource.getString(textId), checked );
+            textResource.getString(textId), checked);
         return checkBox;
     }
 
@@ -241,9 +240,9 @@ public class WidgetFactory {
 	 * @param keyEvent the key event assoicated with the mnemonic.
 	 * @return the menu.
 	 */
-	public JMenu createMenu( String id )
+	public JMenu createMenu(String id)
 	{
-		JMenu result = new JMenu( textResource.getString(id) );
+		JMenu result = new JMenu(textResource.getString(id));
 		int mnemonic = getMnemonic(id);
 		if (mnemonic != -1)
 		{
@@ -259,9 +258,9 @@ public class WidgetFactory {
 	 *          <tt>null</tt> if no listener has to be added.
 	 * @return the menu item.
 	 */
-	public JMenuItem createMenuItem( String id, ActionListener l )
+	public JMenuItem createMenuItem(String id, ActionListener l)
 	{
-		JMenuItem result = new JMenuItem( textResource.getString(id) );
+		JMenuItem result = new JMenuItem(textResource.getString(id));
 		result.setActionCommand(id);
 		int mnemonic = getMnemonic(id);
 		if (mnemonic != -1)
@@ -289,7 +288,7 @@ public class WidgetFactory {
      * @param ids the ids of the values.
      * @return the <tt>JComboBox</tt>.
      */
-    public JComboBox createComboBox( String[] ids )
+    public JComboBox createComboBox(String[] ids)
     {
         JComboBox result = new JComboBox();
         for (int i = 0; i < ids.length; i++)
@@ -376,7 +375,7 @@ public class WidgetFactory {
      * @return the title border
      */
     public Border createTitleBorder(String titleId, Object... args) {
-    	return  new TitledBorder(' '  + textResource.getString(titleId, args) + ' ');
+    	return new TitledBorder(' '  + textResource.getString(titleId, args) + ' ');
     }
 
     /**

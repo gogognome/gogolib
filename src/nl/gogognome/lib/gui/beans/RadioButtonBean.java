@@ -19,7 +19,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-import javax.swing.JCheckBox;
+import javax.swing.JRadioButton;
 
 import nl.gogognome.lib.swing.models.AbstractModel;
 import nl.gogognome.lib.swing.models.BooleanModel;
@@ -30,7 +30,7 @@ import nl.gogognome.lib.swing.models.ModelChangeListener;
  *
  * @author Sander Kooijmans
  */
-public class CheckBoxBean extends JCheckBox implements Bean {
+public class RadioButtonBean extends JRadioButton implements Bean {
 
 	private static final long serialVersionUID = 1L;
 
@@ -43,21 +43,22 @@ public class CheckBoxBean extends JCheckBox implements Bean {
      * Constructor.
      * @param booleanModel the model that will reflect the content of the bean
      */
-    public CheckBoxBean(BooleanModel booleanModel) {
+    public RadioButtonBean(BooleanModel booleanModel) {
         this.booleanModel = booleanModel;
     }
 
     @Override
 	public void initBean() {
         setOpaque(false);
+
         setLayout(new GridBagLayout());
 
-        updateRadioButton();
+        updateCheckBox();
         modelChangeListener = new ModelChangeListener() {
 
             @Override
 			public void modelChanged(AbstractModel model) {
-                updateRadioButton();
+                updateCheckBox();
             }
 
         };
@@ -79,7 +80,7 @@ public class CheckBoxBean extends JCheckBox implements Bean {
     /**
      * Updates the check box with the value of the boolean model.
      */
-    private void updateRadioButton() {
+    private void updateCheckBox() {
         setSelected(booleanModel.getBoolean());
     }
 
@@ -89,5 +90,6 @@ public class CheckBoxBean extends JCheckBox implements Bean {
 		public void itemStateChanged(ItemEvent e) {
 			booleanModel.setBoolean(isSelected(), modelChangeListener);
 		}
+
     }
 }
