@@ -34,11 +34,6 @@ import nl.gogognome.lib.swing.models.ModelChangeListener;
  *
  * @author Sander Kooijmans
  */
-/**
- * This class implements a bean for selecting an item in a list of items.
- *
- * @author Sander Kooijmans
- */
 public class ComboBoxBean<T> extends JComboBoxWithKeyboardInput implements Bean {
 
 	private static final long serialVersionUID = 1L;
@@ -83,10 +78,15 @@ public class ComboBoxBean<T> extends JComboBoxWithKeyboardInput implements Bean 
 		itemListener = new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				onItemStateChanged();
+				updateSelectedItemInModel();
 			}
 		};
 		addItemListener(itemListener);
+		updateSelectionInCombobox();
+	}
+
+	private void updateSelectionInCombobox() {
+		setSelectedIndex(listModel.getSingleSelectedIndex());
 	}
 
 	public void setItemFormatter(ObjectFormatter<T> itemFormatter) {
@@ -100,6 +100,7 @@ public class ComboBoxBean<T> extends JComboBoxWithKeyboardInput implements Bean 
 	}
 
 	private void updateItems() {
+		int prevSelIndex = getSelectedIndex();
 		removeAllItems();
 		items = listModel.getItems();
 		for (T item : listModel.getItems()) {
@@ -109,6 +110,7 @@ public class ComboBoxBean<T> extends JComboBoxWithKeyboardInput implements Bean 
 				addItem(item);
 			}
 		}
+		setSelectedIndex(prevSelIndex);
 	}
 
 	private void onModelChanged() {
@@ -117,13 +119,13 @@ public class ComboBoxBean<T> extends JComboBoxWithKeyboardInput implements Bean 
 		}
 
 		if (getSelectedIndex() != listModel.getSingleSelectedIndex()) {
-			setSelectedIndex(listModel.getSingleSelectedIndex());
+			updateSelectionInCombobox();
 		}
 
 		setEnabled(listModel.isEnabled());
 	}
 
-	private void onItemStateChanged() {
+	private void updateSelectedItemInModel() {
 		if (getSelectedIndex() != listModel.getSingleSelectedIndex()) {
 			listModel.setSelectedIndices(new int[] { getSelectedIndex() }, modelChangeListener);
 		}
