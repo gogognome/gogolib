@@ -120,7 +120,7 @@ public class SwingUtils {
 	 */
 	public static Point getCoordinatesRelativeToTopLevelContainer(Component c) {
 		Point p = c.getLocation();
-		while (c.getParent() != null && !(c.getParent() instanceof Dialog)) {
+		while (c.getParent() != null && !(c.getParent() instanceof Window)) {
 			c = c.getParent();
 			Point parentLocation = c.getLocation();
 			p.translate(parentLocation.x, parentLocation.y);
