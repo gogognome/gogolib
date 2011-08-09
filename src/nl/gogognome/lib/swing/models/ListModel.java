@@ -62,12 +62,18 @@ public class ListModel<T> extends AbstractModel {
 
 	/**
 	 * Sets the selected index.
-	 * @param selectedIndex the selected index
+	 * @param selectedIndex the selected index. -1 indicates that no item is selected
 	 * @param source the model change listener that sets the items.  It will not
      *        get notified. It may be <code>null</code>.
 	 */
 	public void setSelectedIndex(int selectedIndex, ModelChangeListener source) {
-		setSelectedIndices(new int[] { selectedIndex }, source);
+		int[] indices;
+		if (selectedIndex == -1) {
+			indices = new int[0];
+		} else {
+			indices = new int[] { selectedIndex };
+		}
+		setSelectedIndices(indices, source);
 	}
 
 	/**

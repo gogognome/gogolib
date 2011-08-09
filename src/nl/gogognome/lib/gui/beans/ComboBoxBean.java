@@ -127,7 +127,7 @@ public class ComboBoxBean<T> extends JComboBoxWithKeyboardInput implements Bean 
 
 	private void updateSelectedItemInModel() {
 		if (getSelectedIndex() != listModel.getSingleSelectedIndex()) {
-			listModel.setSelectedIndices(new int[] { getSelectedIndex() }, modelChangeListener);
+			listModel.setSelectedIndex(getSelectedIndex(), modelChangeListener);
 		}
 	}
 
