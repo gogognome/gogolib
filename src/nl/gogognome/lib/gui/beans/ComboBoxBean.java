@@ -61,7 +61,7 @@ public class ComboBoxBean<T> extends JComboBoxWithKeyboardInput implements Bean 
 	public void initBean() {
 		updateItems();
 
-		int index = listModel.getSingleSelectedIndex();
+		int index = listModel.getSelectedIndex();
 		if (0 <= index && index < getItemCount()) {
 			setSelectedIndex(index);
 		}
@@ -86,7 +86,7 @@ public class ComboBoxBean<T> extends JComboBoxWithKeyboardInput implements Bean 
 	}
 
 	private void updateSelectionInCombobox() {
-		setSelectedIndex(listModel.getSingleSelectedIndex());
+		setSelectedIndex(listModel.getSelectedIndex());
 	}
 
 	public void setItemFormatter(ObjectFormatter<T> itemFormatter) {
@@ -118,7 +118,7 @@ public class ComboBoxBean<T> extends JComboBoxWithKeyboardInput implements Bean 
 			updateItems();
 		}
 
-		if (getSelectedIndex() != listModel.getSingleSelectedIndex()) {
+		if (getSelectedIndex() != listModel.getSelectedIndex()) {
 			updateSelectionInCombobox();
 		}
 
@@ -126,7 +126,7 @@ public class ComboBoxBean<T> extends JComboBoxWithKeyboardInput implements Bean 
 	}
 
 	private void updateSelectedItemInModel() {
-		if (getSelectedIndex() != listModel.getSingleSelectedIndex()) {
+		if (getSelectedIndex() != listModel.getSelectedIndex()) {
 			listModel.setSelectedIndex(getSelectedIndex(), modelChangeListener);
 		}
 	}

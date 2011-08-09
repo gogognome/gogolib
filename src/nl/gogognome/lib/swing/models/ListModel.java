@@ -94,7 +94,7 @@ public class ListModel<T> extends AbstractModel {
 	 * Otherwise -1 is returned.
 	 * @return the index of the selected item or -1
 	 */
-	public int getSingleSelectedIndex() {
+	public int getSelectedIndex() {
 		if (selectedIndices.length == 1) {
 			return selectedIndices[0];
 		} else {
@@ -111,7 +111,7 @@ public class ListModel<T> extends AbstractModel {
 	 * Otherwise null is returned.
 	 * @return the selected item or null
 	 */
-	public T getSingleSelectedItem() {
+	public T getSelectedItem() {
 		if (selectedIndices.length == 1) {
 			return items.get(selectedIndices[0]);
 		} else {

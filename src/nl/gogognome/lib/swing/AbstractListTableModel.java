@@ -16,6 +16,7 @@
 package nl.gogognome.lib.swing;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -109,4 +110,12 @@ public abstract class AbstractListTableModel<T> extends AbstractTableModel {
 		return rows.get(index);
 	}
 
+	/**
+	 * Gets the rows of the table.
+	 *
+	 * @return an unmodifiable list of rows
+	 */
+	public List<T> getRows() {
+		return Collections.unmodifiableList(rows);
+	}
 }
