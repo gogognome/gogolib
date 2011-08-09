@@ -32,7 +32,7 @@ import nl.gogognome.lib.text.TextResource;
 import nl.gogognome.lib.util.Factory;
 
 /**
- * This class implements a bean for selecting a <code>Date</code>.
+ * This class implements a bean for selecting a Date.
  *
  * @author Sander Kooijmans
  */
