@@ -31,11 +31,11 @@ public class Tuple<S,T> {
 		this.t = t;
 	}
 
-	private S getFirst() {
+	public S getFirst() {
 		return s;
 	}
 
-	private T getSecond() {
+	public T getSecond() {
 		return t;
 	}
 
