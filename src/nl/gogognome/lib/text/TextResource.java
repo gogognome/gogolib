@@ -166,11 +166,15 @@ public class TextResource {
 	 * Formats a date.
 	 * @param formatId the id of the string resource that describes the format of the date
 	 * @param date the date to be formatted
-	 * @return the formatted date
+	 * @return the formatted date or the empty string if date == null
 	 */
 	public String formatDate(String formatId, Date date) {
-	    DateFormat df = getDateFormat(formatId);
-	    return df.format(date);
+		if (date == null) {
+			return "";
+		} else {
+		    DateFormat df = getDateFormat(formatId);
+		    return df.format(date);
+		}
 	}
 
 	/**

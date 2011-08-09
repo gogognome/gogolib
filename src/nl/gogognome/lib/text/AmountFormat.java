@@ -75,6 +75,10 @@ public class AmountFormat
 	 * @return the formatted amount
 	 */
 	public String formatAmount(Amount amount, String currencySymbol) {
+		if (amount == null) {
+			return "";
+		}
+
         StringBuilder sb = new StringBuilder(amount.toString());
         int firstDigitIndex = 0;
         if (sb.charAt(0) == '-')
