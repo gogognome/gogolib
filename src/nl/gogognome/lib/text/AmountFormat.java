@@ -65,6 +65,10 @@ public class AmountFormat
 	 * @return the formatted amount
 	 */
 	public String formatAmount(Amount amount) {
+		if (amount == null) {
+			return "";
+		}
+
         return formatAmount(amount, amount.getCurrency().getSymbol(locale));
 	}
 
