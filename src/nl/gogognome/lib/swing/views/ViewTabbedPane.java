@@ -31,7 +31,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import nl.gogognome.lib.swing.WidgetFactory;
-import nl.gogognome.lib.swing.plaf.DefaultLookAndFeel;
 import nl.gogognome.lib.util.Factory;
 
 /**
@@ -72,20 +71,13 @@ public class ViewTabbedPane extends JTabbedPane {
     public void openView(final View view) {
     	changeInProgress = true;
     	try {
-	        Action closeAction = new AbstractAction() {
-	            @Override
-				public void actionPerformed(ActionEvent event) {
-	                remove(view);
-	            }
-	        };
+	        Action closeAction = new CloseAction(view);
 
 	        view.setCloseAction(closeAction);
 	        view.setParentWindow(parentFrame);
 	        view.doInit();
 	        addTab(view.getTitle(), view);
-	        if (DefaultLookAndFeel.isSupportsTabComponents()) {
-	    		setTabComponentAt(getTabCount() - 1, new CloseableTab(view, closeAction));
-	        }
+    		setTabComponentAt(getTabCount() - 1, new CloseableTab(view, closeAction));
 	        views.add(view);
     	} finally {
     		changeInProgress = false;
@@ -212,7 +204,20 @@ public class ViewTabbedPane extends JTabbedPane {
     	}
     }
 
-    private class CloseableTab extends JPanel {
+    private final class CloseAction extends AbstractAction {
+		private final View view;
+
+		private CloseAction(View view) {
+			this.view = view;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent event) {
+		    remove(view);
+		}
+	}
+
+	private class CloseableTab extends JPanel {
 
     	CloseableTab(View view, Action closeAction) {
     		setOpaque(false);

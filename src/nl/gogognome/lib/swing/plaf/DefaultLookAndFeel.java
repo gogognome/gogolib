@@ -15,13 +15,13 @@
 */
 package nl.gogognome.lib.swing.plaf;
 
-import java.awt.Component;
-
-import javax.swing.JTabbedPane;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.metal.MetalLookAndFeel;
+
+import nl.gogognome.lib.text.TextResource;
+import nl.gogognome.lib.util.Factory;
 
 /**
  * This class implements the default look and feel for the
@@ -40,41 +40,26 @@ public class DefaultLookAndFeel extends MetalLookAndFeel {
         }
     }
 
-    /* (non-Javadoc)
-     * @see javax.swing.LookAndFeel#getDescription()
-     */
     @Override
 	public String getDescription() {
         return "The gogolib look and feel";
     }
 
-    /* (non-Javadoc)
-     * @see javax.swing.LookAndFeel#getID()
-     */
     @Override
 	public String getID() {
         return "gogolib";
     }
 
-    /* (non-Javadoc)
-     * @see javax.swing.LookAndFeel#getName()
-     */
     @Override
 	public String getName() {
         return "The gogolib look and feel";
     }
 
-    /* (non-Javadoc)
-     * @see javax.swing.LookAndFeel#isNativeLookAndFeel()
-     */
     @Override
 	public boolean isNativeLookAndFeel() {
         return false;
     }
 
-    /* (non-Javadoc)
-     * @see javax.swing.LookAndFeel#isSupportedLookAndFeel()
-     */
     @Override
 	public boolean isSupportedLookAndFeel() {
         return true;
@@ -89,26 +74,14 @@ public class DefaultLookAndFeel extends MetalLookAndFeel {
 	public UIDefaults getDefaults() {
         UIDefaults defaults = super.getDefaults();
         defaults.put("TextFieldUI", DefaultTextFieldUI.class.getName());
-        if (!isSupportsTabComponents()) {
-        	defaults.put("TabbedPaneUI", DefaultTabbedPaneUI.class.getName());
-        }
         defaults.put("TableUI", DefaultTableUI.class.getName());
+
+        TextResource tr = Factory.getInstance(TextResource.class);
+        defaults.put("OptionPane.yesButtonText", tr.getString("gen.yes"));
+        defaults.put("OptionPane.noButtonText", tr.getString("gen.no"));
+        defaults.put("OptionPane.okButtonText", tr.getString("gen.ok"));
+        defaults.put("OptionPane.cancelButtonText", tr.getString("gen.cancel"));
+
         return defaults;
     }
-
-    /**
-     * Checks whether the class JTabbedPane has the method setTabComponentAt(int, Component).
-     * This method is present since Java 6.
-     * @return true if the method is present; false otherwise
-     */
-	public static boolean isSupportsTabComponents() {
-		try {
-			JTabbedPane.class.getMethod("setTabComponentAt", int.class, Component.class);
-			return true;
-		} catch (SecurityException e) {
-			return false;
-		} catch (NoSuchMethodException e) {
-			return false;
-		}
-	}
 }
