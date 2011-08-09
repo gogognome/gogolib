@@ -16,6 +16,7 @@
 package nl.gogognome.lib.swing;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -66,6 +67,20 @@ public abstract class AbstractListTableModel<T> extends AbstractTableModel {
 	public void removeRow(int index) {
 		rows.remove(index);
 		fireTableRowsDeleted(index, index);
+	}
+
+	/**
+	 * Removes a number of rows from the table model.
+	 * Notifies all listeners about the change in the table.
+	 * This method must be called from the AWT event thread.
+	 * @param index the index of the row
+	 */
+	public void removeRows(int[] indices) {
+        Arrays.sort(indices);
+        for (int i=indices.length-1; i >= 0; i--) {
+        	rows.remove(i);
+        }
+        fireTableDataChanged();
 	}
 
 	/**

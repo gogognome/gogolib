@@ -481,7 +481,7 @@ public class WidgetFactory {
 	 * @param arguments the arguments
      * @return the scroll pane
      */
-    public JScrollPane createScrollPane(JTable component, String titleId, Object... args) {
+    public JScrollPane createScrollPane(Component component, String titleId, Object... args) {
         JScrollPane scrollPane = createScrollPane(component);
         scrollPane.setBorder(createTitleBorder(titleId, args));
         return scrollPane;

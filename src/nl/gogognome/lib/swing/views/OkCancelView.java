@@ -16,11 +16,11 @@
 package nl.gogognome.lib.swing.views;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 
@@ -46,8 +46,9 @@ public abstract class OkCancelView extends View {
 		JPanel buttonPanel = createButtonPanel();
 		buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 
-		Component comp = createNorthComponent();
+		JComponent comp = createNorthComponent();
 		if (comp != null) {
+			comp.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 			add(comp, BorderLayout.NORTH);
 		}
 
@@ -69,7 +70,7 @@ public abstract class OkCancelView extends View {
 	 * at the top of the view.
 	 * @return the component
 	 */
-	protected Component createNorthComponent() {
+	protected JComponent createNorthComponent() {
 		return null;
 	}
 
@@ -78,7 +79,7 @@ public abstract class OkCancelView extends View {
 	 * above the ok and cancel buttons (in the center of the view).
 	 * @return the component
 	 */
-	protected abstract Component createCenterComponent();
+	protected abstract JComponent createCenterComponent();
 
 	/**
 	 * This method is called when the user presses the ok button.
