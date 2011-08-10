@@ -29,7 +29,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class represents a text resource. It offers functionality to
@@ -45,11 +47,11 @@ public class TextResource {
 
 	private final Set<String> optionalIdSuffixes = new HashSet<String>();
 
-	private final static Logger LOGGER = Logger.getLogger(TextResource.class.getName());
+	private final static Logger LOGGER = LoggerFactory.getLogger(TextResource.class);
 
 	/**
 	 * Constructs a text resource for the specified locale.
-	 * @param locale the localse
+	 * @param locale the locale
 	 */
 	public TextResource(Locale locale) {
 		this.locale = locale;
@@ -75,14 +77,14 @@ public class TextResource {
     public void loadResourceBundle(String resourceBundle) {
         ResourceBundle b = ResourceBundle.getBundle(resourceBundle, locale);
         stringResources.add(0, b);
+        LOGGER.debug("Loaded resource bundle " + resourceBundle + " for locale " + locale);
     }
 
 	/**
 	 * Gets the locale for the string resources.
 	 * @return the locale for the string resources
 	 */
-	public Locale getLocale()
-	{
+	public Locale getLocale() {
 	    return locale;
 	}
 
@@ -115,7 +117,7 @@ public class TextResource {
         	}
         }
         if (result == null && !isOptionalId(id)) {
-        	LOGGER.warning("String resource " + id + " was not found. Have all resource bundles been loaded?");
+        	LOGGER.warn("String resource " + id + " was not found. Have all resource bundles been loaded?");
         }
         return result;
 	}

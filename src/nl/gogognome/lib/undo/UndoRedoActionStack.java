@@ -18,7 +18,9 @@ package nl.gogognome.lib.undo;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class keeps track of actions that can be undone and redone.
@@ -32,7 +34,7 @@ import java.util.logging.Logger;
  */
 public class UndoRedoActionStack {
 
-	private final static Logger LOGGER = Logger.getLogger(UndoRedoActionStack.class.getName());
+	private final static Logger LOGGER = LoggerFactory.getLogger(UndoRedoActionStack.class);
 
 	private LinkedList<UndoableAction> undoActions = new LinkedList<UndoableAction>();
 
@@ -58,7 +60,7 @@ public class UndoRedoActionStack {
 	 * @param action the action to be executed
 	 */
 	public void doAction(UndoableAction action) {
-		LOGGER.fine("Executing action " + action.getDescription());
+		LOGGER.debug("Executing action " + action.getDescription());
 		action.doAction();
 		undoActions.addLast(action);
 		redoActions.clear();
@@ -71,7 +73,7 @@ public class UndoRedoActionStack {
 	public void undoAction() {
 		if (!undoActions.isEmpty()) {
 			UndoableAction action = undoActions.removeLast();
-			LOGGER.fine("Undoing action " + action.getDescription());
+			LOGGER.debug("Undoing action " + action.getDescription());
 			action.undoAction();
 			redoActions.add(action);
 			notifyListeners();
@@ -84,7 +86,7 @@ public class UndoRedoActionStack {
 	public void redoAction() {
 		if (!redoActions.isEmpty()) {
 			UndoableAction action = redoActions.removeLast();
-			LOGGER.fine("Redoing action " + action.getDescription());
+			LOGGER.debug("Redoing action " + action.getDescription());
 			action.doAction();
 			undoActions.add(action);
 			notifyListeners();

@@ -26,8 +26,6 @@ import java.net.URL;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 import javax.swing.Action;
@@ -57,6 +55,9 @@ import javax.swing.table.TableRowSorter;
 import nl.gogognome.lib.text.TextResource;
 import nl.gogognome.lib.util.Factory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This class is a factory for buttons, menus, menu items, text fields and
  * check boxes.
@@ -65,7 +66,7 @@ import nl.gogognome.lib.util.Factory;
  */
 public class WidgetFactory {
 
-	private final static Logger LOGGER = Logger.getLogger(WidgetFactory.class.getName());
+	private final static Logger LOGGER = LoggerFactory.getLogger(WidgetFactory.class);
 
 	/** The <code>TextResource</code> used to obtain string resources. */
 	private TextResource textResource;
@@ -344,7 +345,7 @@ public class WidgetFactory {
             try {
 				image = ImageIO.read(imageUrl);
 			} catch (IOException e) {
-				LOGGER.log(Level.WARNING, "Failed to load image " + imageUrl + ": " + e.getMessage(), e);
+				LOGGER.warn("Failed to load image " + imageUrl + ": " + e.getMessage(), e);
 			}
             imageCache.put(id, image);
     	}

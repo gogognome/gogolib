@@ -18,12 +18,14 @@ package nl.gogognome.lib.swing;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.util.logging.Logger;
 
 import javax.swing.Icon;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class implements a table cell renderer for icons.
@@ -32,7 +34,7 @@ import javax.swing.table.TableCellRenderer;
  */
 public class IconTableCellRenderer extends DefaultTableCellRenderer implements TableCellRenderer {
 
-	private final static Logger LOGGER = Logger.getLogger(IconTableCellRenderer.class.getName());
+	private final static Logger LOGGER = LoggerFactory.getLogger(IconTableCellRenderer.class);
 
 	private Icon icon;
 
@@ -44,7 +46,7 @@ public class IconTableCellRenderer extends DefaultTableCellRenderer implements T
 		} else {
 			icon = null;
 			if (icon != null) {
-				LOGGER.warning("IconTableCellRenderer used to render instance of " + value.getClass()
+				LOGGER.warn("IconTableCellRenderer used to render instance of " + value.getClass()
 						+ " instead of an icon");
 			}
 		}

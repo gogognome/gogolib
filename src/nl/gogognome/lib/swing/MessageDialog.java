@@ -21,8 +21,6 @@ import java.awt.Frame;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -30,6 +28,9 @@ import javax.swing.JPanel;
 
 import nl.gogognome.lib.text.TextResource;
 import nl.gogognome.lib.util.Factory;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -52,7 +53,7 @@ public class MessageDialog extends DialogWithButtons {
      * <code>CANCEL_OPTION</code> or <code>NO_OPTION</code>. */
     public static final int CLOSED_OPTION = JOptionPane.CLOSED_OPTION;
 
-	private final static Logger LOGGER = Logger.getLogger(MessageDialog.class.getName());
+	private final static Logger LOGGER = LoggerFactory.getLogger(MessageDialog.class);
 
 	/**
 	 * Constructor.
@@ -193,7 +194,7 @@ public class MessageDialog extends DialogWithButtons {
     public static void showErrorMessage(Component parentComponent, String messageId, Object... args) {
     	TextResource tr = Factory.getInstance(TextResource.class);
     	String message = tr.getString(messageId, args);
-    	LOGGER.log(Level.WARNING, message);
+    	LOGGER.warn(message);
     	showFormattedMessage(parentComponent, message, JOptionPane.ERROR_MESSAGE);
     }
 
@@ -213,7 +214,7 @@ public class MessageDialog extends DialogWithButtons {
     	String message = tr.getString(messageId, args);
     	lines.add(message);
 
-    	LOGGER.log(Level.WARNING, message, t);
+    	LOGGER.warn(message, t);
 
     	addStackTraceToLines(lines, t);
 
