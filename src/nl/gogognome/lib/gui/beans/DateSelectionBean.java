@@ -20,7 +20,6 @@ import java.text.ParseException;
 import java.util.Date;
 
 import javax.swing.AbstractAction;
-import javax.swing.Action;
 import javax.swing.JButton;
 
 import nl.gogognome.lib.swing.SwingUtils;
@@ -52,7 +51,7 @@ public class DateSelectionBean extends AbstractTextFieldBean<DateModel> {
     public void initBean() {
     	super.initBean();
     	WidgetFactory wf = Factory.getInstance(WidgetFactory.class);
-    	JButton button = wf.createIconButton("gen.btnCalendar", createCalendarAction(), 21);
+    	JButton button = wf.createIconButton("gen.btnCalendar", new ShowCalendarPopupAction(), 21);
     	add(button);
     }
 
@@ -85,14 +84,10 @@ public class DateSelectionBean extends AbstractTextFieldBean<DateModel> {
 		viewPopup.show(this, SwingUtils.getCoordinatesRelativeToTopLevelContainer(this));
 	}
 
-    private Action createCalendarAction() {
-		return new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				showCalendarPopup();
-			}
-		};
+	private final class ShowCalendarPopupAction extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			showCalendarPopup();
+		}
 	}
-
-
 }

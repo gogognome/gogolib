@@ -78,41 +78,17 @@ public abstract class AbstractTextFieldBean<M extends AbstractModel> extends JPa
     @Override
 	public void initBean() {
         setOpaque(false);
-
         setLayout(new GridBagLayout());
 
         textfield = createTextField(nrColumns);
 
         updateTextField();
-        modelChangeListener = new ModelChangeListener() {
-
-            @Override
-			public void modelChanged(AbstractModel model) {
-                updateTextField();
-            }
-
-        };
+        modelChangeListener = new UpdateTextFieldOnModelChangeListener();
         model.addModelChangeListener(modelChangeListener);
 
-        documentListener = new DocumentListener() {
-
-            @Override
-			public void changedUpdate(DocumentEvent evt) {
-                parseUserInput();
-            }
-
-            @Override
-			public void insertUpdate(DocumentEvent evt) {
-                parseUserInput();
-            }
-
-            @Override
-			public void removeUpdate(DocumentEvent evt) {
-                parseUserInput();
-            }
-        };
-
+        documentListener = new ParseUserInputOnDocumentChangeListener();
         textfield.getDocument().addDocumentListener(documentListener);
+
         add(textfield, SwingUtils.createGBConstraints(0,0, 1, 1, 1.0, 0.0,
             GridBagConstraints.WEST, nrColumns == 0 ? GridBagConstraints.HORIZONTAL : GridBagConstraints.NONE,
             0, 0, 0, 0));
@@ -203,5 +179,29 @@ public abstract class AbstractTextFieldBean<M extends AbstractModel> extends JPa
     @Override
     public boolean requestFocusInWindow() {
     	return textfield.requestFocusInWindow();
+    }
+
+    private final class UpdateTextFieldOnModelChangeListener implements ModelChangeListener {
+    	@Override
+    	public void modelChanged(AbstractModel model) {
+    		updateTextField();
+    	}
+    }
+
+    private final class ParseUserInputOnDocumentChangeListener implements DocumentListener {
+    	@Override
+    	public void changedUpdate(DocumentEvent evt) {
+    		parseUserInput();
+    	}
+
+    	@Override
+    	public void insertUpdate(DocumentEvent evt) {
+    		parseUserInput();
+    	}
+
+    	@Override
+    	public void removeUpdate(DocumentEvent evt) {
+    		parseUserInput();
+    	}
     }
 }
