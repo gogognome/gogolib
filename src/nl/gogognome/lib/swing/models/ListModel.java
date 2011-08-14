@@ -49,10 +49,21 @@ public class ListModel<T> extends AbstractModel {
 	 * Sets the items for the list model.
 	 * @param items the items
 	 * @param source the model change listener that sets the items.  It will not
-     *        get notified. It may be <code>null</code>.
+     *        get notified. It may be null.
 	 */
 	public void setItems(List<T> items, ModelChangeListener source) {
 		this.items = new ArrayList<T>(items);
+		notifyListeners(source);
+	}
+
+	/**
+	 * Adds an item to the list model.
+	 * @param item the item
+	 * @param source the model change listener that sets the items.  It will not
+     *        get notified. It may be null.
+	 */
+	public void addItem(T item, ModelChangeListener source) {
+		items.add(item);
 		notifyListeners(source);
 	}
 
