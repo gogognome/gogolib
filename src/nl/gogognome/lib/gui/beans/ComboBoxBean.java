@@ -18,6 +18,8 @@ package nl.gogognome.lib.gui.beans;
 import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.DefaultListCellRenderer;
@@ -102,7 +104,7 @@ public class ComboBoxBean<T> extends JComboBoxWithKeyboardInput implements Bean 
 	private void updateItems() {
 		int prevSelIndex = getSelectedIndex();
 		removeAllItems();
-		items = listModel.getItems();
+		items = new ArrayList<T>(listModel.getItems());
 		for (T item : listModel.getItems()) {
 			if (itemFormatter != null) {
 				addItemWithStringRepresentation(item, itemFormatter.format(item));
@@ -114,7 +116,7 @@ public class ComboBoxBean<T> extends JComboBoxWithKeyboardInput implements Bean 
 	}
 
 	private void onModelChanged() {
-		if (listModel.getItems() != items) {
+		if (!Arrays.equals(listModel.getItems().toArray(), items.toArray())) {
 			updateItems();
 		}
 
