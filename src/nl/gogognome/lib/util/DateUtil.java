@@ -197,11 +197,15 @@ public class DateUtil {
     /**
      * Formats a date in the format YYYYMMDD.
      * @param date the date
-     * @return the formatted date
+     * @return the formatted date or the empty string if date == null.
      */
     public static String formatDateYYYYMMDD(Date date) {
-    	synchronized (YYYYMMDD) {
-    		return YYYYMMDD.format(date);
+    	if (date != null) {
+	    	synchronized (YYYYMMDD) {
+	    		return YYYYMMDD.format(date);
+	    	}
+    	} else {
+    		return "";
     	}
     }
 
