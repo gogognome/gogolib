@@ -16,14 +16,17 @@
 */
 package nl.gogognome.lib.test.text;
 
-import junit.framework.TestCase;
+import static junit.framework.Assert.assertEquals;
 import nl.gogognome.lib.text.StringMatcher;
+
+import org.junit.Test;
 
 /**
  * Tests the class {@link StringMatcher}.
  */
-public class TestStringMatcher extends TestCase {
+public class TestStringMatcher {
 
+	@Test
 	public void testCaseSensitiveMatch() {
 		StringMatcher stringMatcher = new StringMatcher("abcabc");
 		assertEquals(-1, stringMatcher.match(""));
@@ -34,6 +37,7 @@ public class TestStringMatcher extends TestCase {
 		assertEquals(21, stringMatcher.match("abcdbcddfgasabcabsdasabcabc"));
 	}
 
+	@Test
 	public void testCaseInsensitiveMatch() {
 		StringMatcher stringMatcher = new StringMatcher("abcabc", true);
 		assertEquals(-1, stringMatcher.match(""));
@@ -44,6 +48,7 @@ public class TestStringMatcher extends TestCase {
 		assertEquals(21, stringMatcher.match("abcdbcddfgasabcabsdasabCAbc"));
 	}
 
+	@Test
 	public void testMatcherForEmptyString() {
 		StringMatcher stringMatcher = new StringMatcher("", true);
 		assertEquals(0, stringMatcher.match(""));

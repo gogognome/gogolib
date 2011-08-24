@@ -16,21 +16,27 @@
 */
 package nl.gogognome.lib.test.util;
 
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.fail;
+
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import junit.framework.TestCase;
 import nl.gogognome.lib.util.DateUtil;
+
+import org.junit.Test;
 
 /**
  * This class tests the <code>DateUtil</code> class.
  *
  * @author Sander Kooijmans
  */
-public class TestDateUtil extends TestCase {
+public class TestDateUtil {
 
+	@Test
     public void testComparasion() {
         Calendar cal = Calendar.getInstance();
         cal.set(2007, 1, 4);
@@ -62,6 +68,7 @@ public class TestDateUtil extends TestCase {
         assertEquals(1, DateUtil.compareDayOfYear(date2, date1));
     }
 
+	@Test
     public void testThreadSafety() {
         TestThread[] threads = new TestThread[10];
         for (int i = 0; i < threads.length; i++) {
@@ -79,11 +86,13 @@ public class TestDateUtil extends TestCase {
         }
     }
 
+	@Test
     public void testFormatYYYYMMDD() {
     	assertEquals("20110520",
     			DateUtil.formatDateYYYYMMDD(DateUtil.createDate(2011, 5, 20, 16, 25, 24)));
     }
 
+	@Test
     public void testParseYYYYMMDD() throws ParseException {
     	assertEquals(DateUtil.createDate(2011, 5, 20),
     			DateUtil.parseDateYYYYMMDD("20110520"));
