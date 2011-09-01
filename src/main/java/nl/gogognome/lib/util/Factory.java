@@ -16,6 +16,8 @@
 */
 package nl.gogognome.lib.util;
 
+import java.lang.reflect.Constructor;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +29,7 @@ import java.util.Map;
  */
 public class Factory {
 
-	private final Map<Class<?>, Class<?>> defaultConstructorClasses
+	private final Map<Class<?>, Class<?>> boundClasses
 		= new HashMap<Class<?>, Class<?>>();
 
 	private final Map<Class<?>, Object> singletonClasses
@@ -45,7 +47,7 @@ public class Factory {
 	}
 
 	private <T> void bindClassImpl(Class<T> interfaceType, Class<? extends T> implementationType) {
-		defaultConstructorClasses.put(interfaceType, implementationType);
+		boundClasses.put(interfaceType, implementationType);
 	}
 
 	/**
@@ -59,14 +61,48 @@ public class Factory {
 		return instance.createInstanceImpl(interfaceType);
 	}
 
+	/**
+	 * Creates an instance for the specified interface type.
+	 * @param <T> the interface type
+	 * @param interfaceType
+	 * @param args constructor arguments
+	 * @return the instance; never null
+	 * @throws RuntimeException if no implementation type was registered
+	 */
+	public static <T> T createInstance(Class<T> interfaceType, Object... args) {
+		return instance.createInstanceImpl(interfaceType, args);
+	}
+
 	private <T> T createInstanceImpl(Class<T> interfaceType) {
-		Class<T> implType = (Class<T>) defaultConstructorClasses.get(interfaceType);
+		Class<T> implType = (Class<T>) boundClasses.get(interfaceType);
 		if (implType == null) {
 			throw new RuntimeException("No implementation registered for interface "
 					+ interfaceType.getName());
 		}
 		try {
 			return implType.newInstance();
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to create instance of " + implType.getName(), e);
+		}
+	}
+
+	private <T> T createInstanceImpl(Class<T> interfaceType, Object... args) {
+		Class<T> implType = (Class<T>) boundClasses.get(interfaceType);
+		if (implType == null) {
+			throw new RuntimeException("No implementation registered for interface "
+					+ interfaceType.getName());
+		}
+		try {
+			for (Constructor<?> constructor : implType.getConstructors()) {
+				if (constructor.getParameterTypes().length == args.length) {
+					try {
+						return (T) constructor.newInstance(args);
+					} catch (Exception e) {
+						// probably wrong constructor. Try next constructor. 
+					}
+				}
+			}
+			throw new Exception("No constructor found for arguments " + Arrays.toString(args));
 		} catch (Exception e) {
 			throw new RuntimeException("Failed to create instance of " + implType.getName(), e);
 		}
