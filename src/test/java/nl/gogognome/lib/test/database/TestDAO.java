@@ -43,10 +43,9 @@ public class TestDAO extends AbstractBusinessObjectDAO<TestPK, TestBO> {
 	}
 
 	@Override
-	protected TestBO updateCreatedBO(TestBO bo, Record record)
-			throws SQLException {
-		bo.setPK(new TestPK(record.getInt(TestTable.ID)));
-		return super.updateCreatedBO(bo, record);
+	protected TestBO updateCreatedBO(TestBO bo, ColumnValuePairs cvp) throws SQLException {
+		bo.setPK(new TestPK(cvp.getIntValue(TestTable.ID)));
+		return bo;
 	}
 
 	@Override

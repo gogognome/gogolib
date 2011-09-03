@@ -17,6 +17,7 @@ package nl.gogognome.lib.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
 
@@ -141,4 +142,32 @@ public class HsqlDbDAOPlugin extends AbstractDAO implements DBMSSpecificDAOPlugi
         }
     }
 
+    @Override
+    public ColumnValuePairs getGeneratedValues(PreparedStatement ignored) throws SQLException {
+    	ColumnValuePairs cvp = new ColumnValuePairs();
+    	PreparedStatement statement = null;
+    	ResultSet result = null;
+    	try {
+	    	statement = prepareStatement("CALL IDENTITY()");
+	        result = statement.executeQuery();
+	    	if (result.next()) {
+	    		for (TableColumn column : table.getColumns()) {
+	    			if (column.isAutoIncrement()) {
+	    				// HSQLDB can handle at most 1 generated value per row
+	    				Object o = result.getObject(1);
+
+	    				if (column.getType() == TableColumn.INTEGER) {
+	    					o = ((Number) o).intValue();
+	    				}
+
+	    				cvp.add(column, o);
+	    			}
+	    		}
+	    	}
+    	} finally {
+    		closeResultSet(result);
+    		closeStatement(statement);
+    	}
+    	return cvp;
+    }
 }

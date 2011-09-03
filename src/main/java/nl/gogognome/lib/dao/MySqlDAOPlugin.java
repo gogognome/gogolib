@@ -17,8 +17,8 @@ package nl.gogognome.lib.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Iterator;
 
 /**
@@ -143,13 +143,16 @@ public class MySqlDAOPlugin extends AbstractDAO implements DBMSSpecificDAOPlugin
     }
 
     @Override
-	protected void closeStatement(Statement statement) {
-        if (statement != null) {
-            try {
-                statement.close();
-            } catch (SQLException e) {
-                logger.warn("Ignored exception while closing statement: " +e.getMessage(), e);
-            }
-        }
+    public ColumnValuePairs getGeneratedValues(PreparedStatement statement) throws SQLException {
+    	ColumnValuePairs cvp = new ColumnValuePairs();
+        ResultSet result = statement.getGeneratedKeys();
+    	if (result.next()) {
+    		for (TableColumn column : table.getColumns()) {
+    			if (column.isAutoIncrement()) {
+    				cvp.add(column, result.getObject(column.getName()));
+    			}
+    		}
+    	}
+    	return cvp;
     }
 }

@@ -122,4 +122,30 @@ public class ColumnValuePairs implements Iterable<ColumnValuePair> {
 		}
 
 	}
+
+	public boolean isEmpty() {
+		return columnValuePairs.isEmpty();
+	}
+
+	public Object getValue(TableColumn column) throws SQLException {
+		ColumnValuePair cvp = getColumnValuePair(column);
+		if (cvp == null) {
+			throw new SQLException("No value set for column " + column);
+		}
+		return cvp.getValue();
+	}
+
+	public int getIntValue(TableColumn column) throws SQLException {
+		if (column.getType() != TableColumn.INTEGER) {
+			throw new SQLException("Cannot get integer value for column with type " + column.getType());
+		}
+
+		Object o = getValue(column);
+		if (o == null) {
+			throw new SQLException("Column " + column + " is null");
+		}
+		return ((Integer)o).intValue();
+	}
+
+
 }

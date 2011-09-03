@@ -20,7 +20,7 @@ package nl.gogognome.lib.dao;
  *
  * @author Sander Kooijmans
  */
-class ColumnValuePair {
+public class ColumnValuePair {
 	private final TableColumn column;
 	private final Object value;
 

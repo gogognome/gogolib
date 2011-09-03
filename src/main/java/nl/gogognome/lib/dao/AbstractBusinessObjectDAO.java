@@ -63,7 +63,7 @@ public abstract class AbstractBusinessObjectDAO<P extends PrimaryKey, T extends 
         try {
 	        T result = null;
 	        ColumnValuePairs pkNamesAndValues = getPKColumnsAndValues(pk);
-	        statement = connection.prepareStatement("SELECT * FROM " + table.getName()
+	        statement = prepareStatement("SELECT * FROM " + table.getName()
 	        		+ ' ' + createWhereClause(pkNamesAndValues));
 	        setParameters(statement, 1, pkNamesAndValues);
 	        logger.debug("findByPk(): statement = " + statement.toString());
@@ -93,7 +93,7 @@ public abstract class AbstractBusinessObjectDAO<P extends PrimaryKey, T extends 
         ResultSet resultSet = null;
         try {
             ColumnValuePairs pkNamesAndValues = getPKColumnsAndValues(pk);
-            statement = connection.prepareStatement("SELECT * FROM " + table.getName() + ' '
+            statement = prepareStatement("SELECT * FROM " + table.getName() + ' '
             		+ createWhereClause(pkNamesAndValues));
             setParameters(statement, 1, pkNamesAndValues);
             logger.debug("exists(): statement = " + statement.toString());
@@ -127,7 +127,7 @@ public abstract class AbstractBusinessObjectDAO<P extends PrimaryKey, T extends 
         ResultSet resultSet = null;
         try {
             T result = null;
-            statement = connection.prepareStatement(sqlQuery);
+            statement = prepareStatement(sqlQuery);
             if (value instanceof String) {
                 statement.setString(1, (String) value);
             } else if (value instanceof Integer) {
@@ -190,7 +190,7 @@ public abstract class AbstractBusinessObjectDAO<P extends PrimaryKey, T extends 
             if (orderBy != null) {
                 query += ' ' + orderBy;
             }
-            statement = con.prepareStatement(query);
+            statement = prepareStatement(query);
             logger.debug("findAll(): statement = " + statement.toString());
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -241,7 +241,7 @@ public abstract class AbstractBusinessObjectDAO<P extends PrimaryKey, T extends 
         if (orderBy != null) {
             whereClause += ' ' + orderBy;
         }
-        statement = connection.prepareStatement(whereClause);
+        statement = prepareStatement(whereClause);
         setParameters(statement, 1, columnNamesAndValues);
         return executeSelectStatement(statement);
     }
@@ -287,6 +287,7 @@ public abstract class AbstractBusinessObjectDAO<P extends PrimaryKey, T extends 
             StringBuilder query = new StringBuilder(200);
             query.append("INSERT INTO ").append(table.getName()).append(" (");
             ColumnValuePairs colValues = convert(bo);
+            replaceNullValueForAutoIncrementColumns(colValues);
             for (Iterator<ColumnValuePair> iter = colValues.iterator(); iter.hasNext(); ) {
                 ColumnValuePair ColumnValuePair = iter.next();
                 query.append(ColumnValuePair.getColumn().getName());
@@ -307,7 +308,7 @@ public abstract class AbstractBusinessObjectDAO<P extends PrimaryKey, T extends 
                 }
             }
             query.append(')');
-            statement = con.prepareStatement(query.toString());
+            statement = prepareStatement(query.toString());
             int index = 1;
             for (ColumnValuePair cvp : colValues) {
             	if (!(cvp.getValue() instanceof Literal)) {
@@ -322,9 +323,9 @@ public abstract class AbstractBusinessObjectDAO<P extends PrimaryKey, T extends 
             }
 
             // If values are automatically created, then the BO can be updated with these values.
-            keysResultSet = statement.getGeneratedKeys();
-            if (keysResultSet.next()) {
-                result = updateCreatedBO(bo, new Record(table, keysResultSet));
+            colValues = plugin.getGeneratedValues(statement);
+            if (!colValues.isEmpty()) {
+            	result = updateCreatedBO(bo, colValues);
             }
             return result;
         } finally {
@@ -333,15 +334,30 @@ public abstract class AbstractBusinessObjectDAO<P extends PrimaryKey, T extends 
         }
     }
 
-    /**
+    private void replaceNullValueForAutoIncrementColumns(ColumnValuePairs colValues) {
+    	List<TableColumn> columnsToBeReplaced = new ArrayList<TableColumn>();
+
+		for (ColumnValuePair cvp : colValues) {
+			if (cvp.getColumn().isAutoIncrement() && cvp.getValue() == null) {
+				columnsToBeReplaced.add(cvp.getColumn());
+			}
+		}
+
+		for (TableColumn column : columnsToBeReplaced) {
+			colValues.remove(column);
+			colValues.add(column, new Literal("default"));
+		}
+	}
+
+	/**
      * Override this method to update a business object after it has been created.
      * This can be used to fill in automatically created values.
      * @param bo the business object
-     * @param record the record containing the automatically generated values only
+     * @param columnValuePairs contains the generated value for the primary key
      * @return the updated business object
      * @throws SQLException if a problem occurs while updating the business object
      */
-    protected T updateCreatedBO(T bo, Record record) throws SQLException {
+    protected T updateCreatedBO(T bo, ColumnValuePairs columnValuePairs) throws SQLException {
         return bo;
     }
 
@@ -367,7 +383,7 @@ public abstract class AbstractBusinessObjectDAO<P extends PrimaryKey, T extends 
             }
             ColumnValuePairs pkNamesAndValues = getPKColumnsAndValues(bo.getPK());
             query.append(' ').append(createWhereClause(pkNamesAndValues));
-            statement = con.prepareStatement(query.toString());
+            statement = prepareStatement(query.toString());
             int index = 1;
             for (ColumnValuePair ColumnValuePair : colValues) {
                 setParameter(statement, index, ColumnValuePair);
@@ -407,7 +423,7 @@ public abstract class AbstractBusinessObjectDAO<P extends PrimaryKey, T extends 
         ResultSet resultSet = null;
         try {
             ColumnValuePairs pkNamesAndValues = getPKColumnsAndValues(pk);
-            statement = connection.prepareStatement("DELETE FROM " + table.getName() + ' ' + createWhereClause(pkNamesAndValues));
+            statement = prepareStatement("DELETE FROM " + table.getName() + ' ' + createWhereClause(pkNamesAndValues));
             setParameters(statement, 1, pkNamesAndValues);
             logger.debug("delete(): statement = " + statement.toString());
             int count = statement.executeUpdate();
