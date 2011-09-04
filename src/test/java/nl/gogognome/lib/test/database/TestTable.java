@@ -29,12 +29,12 @@ import nl.gogognome.lib.dao.TableColumn;
 public class TestTable extends Table {
 
 	public final static TableColumn ID = TableColumn.createIntegerColumn("ID", 10, true);
-	public final static TableColumn INT = TableColumn.createIntegerColumn("INT", 5, false);
-	public final static TableColumn BOOL = TableColumn.createBooleanColumn("BOOL");
-	public final static TableColumn DATE = TableColumn.createDateColumn("DATE", false);
-	public final static TableColumn LONG = TableColumn.createLongColumn("LONG", 20, false);
+	public final static TableColumn INT = TableColumn.createIntegerColumn("INT_COL", 5, false);
+	public final static TableColumn BOOL = TableColumn.createBooleanColumn("BOOL_COL");
+	public final static TableColumn DATE = TableColumn.createDateColumn("DATE_COL", false);
+	public final static TableColumn LONG = TableColumn.createLongColumn("LONG_COL", 20, false);
 	public final static TableColumn STRING_NOT_NULL =
-			TableColumn.createStringColumn("STRING", 10, true);
+			TableColumn.createStringColumn("STRING_NOT_NULL", 10, true);
 
 	private final static List<TableColumn> COLUMNS = Arrays.asList(
 			ID, INT, BOOL, DATE, LONG, STRING_NOT_NULL);

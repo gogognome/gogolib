@@ -15,10 +15,12 @@
 */
 package nl.gogognome.lib.test.database;
 
+import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import nl.gogognome.lib.dao.DBMSSpecificDAOPlugin;
 import nl.gogognome.lib.dao.HsqlDbDAOPlugin;
+import nl.gogognome.lib.dao.MySqlDAOPlugin;
 import nl.gogognome.lib.dbconnection.ConnectionPool;
 import nl.gogognome.lib.service.BusinessObjectService;
 import nl.gogognome.lib.util.Factory;
@@ -38,26 +40,41 @@ public class AbstractDatabaseTest {
 	private final static AtomicInteger DATABASE_NR = new AtomicInteger();
 
 	protected BusinessObjectService boService;
+	protected TestService testService;
 
 	@Before
 	public void initDatabaseAndServices() throws Exception {
 		try {
 			ConnectionPool connectionPool = new ConnectionPool();
 			Factory.bindSingleton(ConnectionPool.class, connectionPool);
-			Factory.bindClass(DBMSSpecificDAOPlugin.class, HsqlDbDAOPlugin.class);
-
-			int databaseNr = DATABASE_NR.incrementAndGet();
-			connectionPool.setJdbcConnectionParameters(
-					"jdbc:hsqldb:mem:test" + databaseNr + ";shutdown=true", "SA", "");
-
+			initForHsqlDb(connectionPool);
 
 			BusinessObjectService.registerBO(TestBO.class, TestPK.class, TestDAO.class);
 			boService = new BusinessObjectService();
+			testService = new TestService();
+
 			boService.createRegisteredTables();
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 			e.printStackTrace(System.err);
 		}
+	}
+
+	private void initForHsqlDb(ConnectionPool connectionPool) throws SQLException {
+		Factory.bindClass(DBMSSpecificDAOPlugin.class, HsqlDbDAOPlugin.class);
+
+		int databaseNr = DATABASE_NR.incrementAndGet();
+		connectionPool.setJdbcConnectionParameters(
+				"jdbc:hsqldb:mem:test" + databaseNr + ";shutdown=true", "SA", "");
+	}
+
+	private void initForMySql(ConnectionPool connectionPool) throws Exception {
+		Class.forName("com.mysql.jdbc.Driver"); // init driver for MySQL
+
+		Factory.bindClass(DBMSSpecificDAOPlugin.class, MySqlDAOPlugin.class);
+
+		connectionPool.setJdbcConnectionParameters(
+				"jdbc:mysql://localhost:3306/test", "testuser", "testuser");
 	}
 
 	@After

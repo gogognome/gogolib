@@ -26,6 +26,7 @@ import java.util.List;
 
 import nl.gogognome.lib.businessobject.BusinessObject;
 import nl.gogognome.lib.businessobject.PrimaryKey;
+import nl.gogognome.lib.dao.OrderByClause.TableColumnAndDirection;
 import nl.gogognome.lib.util.Factory;
 
 
@@ -176,21 +177,31 @@ public abstract class AbstractBusinessObjectDAO<P extends PrimaryKey, T extends 
 
     /**
      * Gets a list of all business objects.
-     * @param orderBy an optional order-by clause. Can be <code>null</code>.
+     * @param orderByClause an optional order-by clause. Can be <code>null</code>.
      * @return the list of all business objects
      * @throws SQLException if a problem occurs reading a business object
      */
-    protected List<T> findAllBOs(String orderBy) throws SQLException {
+    protected List<T> findAllBOs(OrderByClause orderByClause) throws SQLException {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
             List<T> result = new LinkedList<T>();
             Connection con = connection;
-            String query = "SELECT * FROM " + table.getName();
-            if (orderBy != null) {
-                query += ' ' + orderBy;
+            StringBuilder query = new StringBuilder();
+            query.append("SELECT * FROM ").append(table.getName());
+            if (orderByClause != null) {
+                query.append(" order by ");
+                List<TableColumnAndDirection> colDirs = orderByClause.getColumnAndDirections();
+                for (Iterator<TableColumnAndDirection> iter = colDirs.iterator(); iter.hasNext();) {
+                	TableColumnAndDirection colDir = iter.next();
+                	query.append(colDir.getColumn().getName()).append(' ');
+                	query.append(colDir.isAscending() ? "ASC" : "DESC");
+                	if (iter.hasNext()) {
+                		query.append(", ");
+                	}
+                }
             }
-            statement = prepareStatement(query);
+            statement = prepareStatement(query.toString());
             logger.debug("findAll(): statement = " + statement.toString());
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -287,7 +298,7 @@ public abstract class AbstractBusinessObjectDAO<P extends PrimaryKey, T extends 
             StringBuilder query = new StringBuilder(200);
             query.append("INSERT INTO ").append(table.getName()).append(" (");
             ColumnValuePairs colValues = convert(bo);
-            replaceNullValueForAutoIncrementColumns(colValues);
+            plugin.replaceNullValueForAutoIncrementColumns(colValues);
             for (Iterator<ColumnValuePair> iter = colValues.iterator(); iter.hasNext(); ) {
                 ColumnValuePair ColumnValuePair = iter.next();
                 query.append(ColumnValuePair.getColumn().getName());
@@ -333,21 +344,6 @@ public abstract class AbstractBusinessObjectDAO<P extends PrimaryKey, T extends 
         	closeResultSet(keysResultSet);
         }
     }
-
-    private void replaceNullValueForAutoIncrementColumns(ColumnValuePairs colValues) {
-    	List<TableColumn> columnsToBeReplaced = new ArrayList<TableColumn>();
-
-		for (ColumnValuePair cvp : colValues) {
-			if (cvp.getColumn().isAutoIncrement() && cvp.getValue() == null) {
-				columnsToBeReplaced.add(cvp.getColumn());
-			}
-		}
-
-		for (TableColumn column : columnsToBeReplaced) {
-			colValues.remove(column);
-			colValues.add(column, new Literal("default"));
-		}
-	}
 
 	/**
      * Override this method to update a business object after it has been created.

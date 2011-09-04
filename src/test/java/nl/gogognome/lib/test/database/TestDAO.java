@@ -17,9 +17,11 @@ package nl.gogognome.lib.test.database;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 import nl.gogognome.lib.dao.AbstractBusinessObjectDAO;
 import nl.gogognome.lib.dao.ColumnValuePairs;
+import nl.gogognome.lib.dao.OrderByClause;
 import nl.gogognome.lib.dao.Record;
 
 /**
@@ -46,6 +48,11 @@ public class TestDAO extends AbstractBusinessObjectDAO<TestPK, TestBO> {
 	protected TestBO updateCreatedBO(TestBO bo, ColumnValuePairs cvp) throws SQLException {
 		bo.setPK(new TestPK(cvp.getIntValue(TestTable.ID)));
 		return bo;
+	}
+
+	@Override
+	public List<TestBO> findAllBOs() throws SQLException {
+		return findAllBOs(OrderByClause.ascending(TestTable.INT));
 	}
 
 	@Override

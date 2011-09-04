@@ -17,6 +17,9 @@ package nl.gogognome.lib.test.database;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
+
+import java.util.List;
+
 import nl.gogognome.lib.util.DateUtil;
 
 import org.junit.Test;
@@ -47,5 +50,24 @@ public class TestDatabase extends AbstractDatabaseTest {
 		assertEquals(bo.getIntValue(), actualBO.getIntValue());
 		assertEquals(bo.getLongValue(), actualBO.getLongValue());
 		assertEquals(bo.getStringValue(), actualBO.getStringValue());
+	}
+
+	@Test
+	public void createAndGetListOfBOs() throws Exception {
+		for (int i=0; i<10; i++) {
+			TestBO bo = new TestBO(null);
+			bo.setDateValue(DateUtil.createDate(2011, 10, 5));
+			bo.setIntValue(i);
+			bo.setStringValue("Test" + i);
+
+			bo = boService.createBO(bo);
+			assertNotNull(bo.getPK());
+		}
+
+		List<TestBO> testBOs = testService.findAllTestBOs();
+		assertEquals(10, testBOs.size());
+		for (int i=0; i<10; i++) {
+			assertEquals(i, testBOs.get(i).getIntValue());
+		}
 	}
 }

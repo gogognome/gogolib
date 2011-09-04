@@ -19,7 +19,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * DAO for MySQL specific issues.
@@ -38,7 +40,8 @@ public class MySqlDAOPlugin extends AbstractDAO implements DBMSSpecificDAOPlugin
         try {
             StringBuilder sb = new StringBuilder(1000);
             sb.append("CREATE TABLE ").append(table.getName()).append(" (\n");
-            for (TableColumn column : table.getColumns()) {
+            for (Iterator<TableColumn> iter = table.getColumns().iterator(); iter.hasNext(); ) {
+            	TableColumn column = iter.next();
                 sb.append("    `").append(column.getName()).append("` ");
                 switch (column.getType()) {
                 case TableColumn.STRING:
@@ -73,7 +76,7 @@ public class MySqlDAOPlugin extends AbstractDAO implements DBMSSpecificDAOPlugin
                     break;
 
                 case TableColumn.DATE:
-                    sb.append("DATE() ");
+                    sb.append("DATE ");
                     break;
 
                 case TableColumn.DOUBLE:
@@ -95,6 +98,10 @@ public class MySqlDAOPlugin extends AbstractDAO implements DBMSSpecificDAOPlugin
 
                 if (column.isAutoIncrement()) {
                     sb.append("AUTO_INCREMENT ");
+                }
+
+                if (iter.hasNext()) {
+                	sb.append(",\n");
                 }
             }
 
@@ -121,7 +128,7 @@ public class MySqlDAOPlugin extends AbstractDAO implements DBMSSpecificDAOPlugin
             }
 
             sb.append(") ENGINE = MyISAM");
-            statement = connection.prepareStatement(sb.toString());
+            statement = prepareStatement(sb.toString());
 
             logger.debug("createTable(): statement = " + statement.toString());
             statement.executeUpdate();
@@ -134,7 +141,7 @@ public class MySqlDAOPlugin extends AbstractDAO implements DBMSSpecificDAOPlugin
 	public void dropTable() throws SQLException {
         PreparedStatement statement = null;
         try {
-            statement = connection.prepareStatement("DROP TABLE " + table.getName());
+            statement = prepareStatement("DROP TABLE " + table.getName());
             logger.debug("dropTable(): statement = " + statement.toString());
             statement.executeUpdate();
         } finally {
@@ -147,12 +154,34 @@ public class MySqlDAOPlugin extends AbstractDAO implements DBMSSpecificDAOPlugin
     	ColumnValuePairs cvp = new ColumnValuePairs();
         ResultSet result = statement.getGeneratedKeys();
     	if (result.next()) {
+    		int index = 1;
     		for (TableColumn column : table.getColumns()) {
     			if (column.isAutoIncrement()) {
-    				cvp.add(column, result.getObject(column.getName()));
+    				Object o = result.getObject(index++);
+
+    				if (column.getType() == TableColumn.INTEGER) {
+    					o = ((Number) o).intValue();
+    				}
+
+    				cvp.add(column, o);
     			}
     		}
     	}
     	return cvp;
     }
+
+	@Override
+	public void replaceNullValueForAutoIncrementColumns(ColumnValuePairs colValues) {
+    	List<TableColumn> columnsToBeRemoved = new ArrayList<TableColumn>();
+
+		for (ColumnValuePair cvp : colValues) {
+			if (cvp.getColumn().isAutoIncrement() && cvp.getValue() == null) {
+				columnsToBeRemoved.add(cvp.getColumn());
+			}
+		}
+
+		for (TableColumn column : columnsToBeRemoved) {
+			colValues.remove(column);
+		}
+	}
 }

@@ -19,7 +19,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * DAO for HSQLDB specific issues.
@@ -142,6 +144,22 @@ public class HsqlDbDAOPlugin extends AbstractDAO implements DBMSSpecificDAOPlugi
         }
     }
 
+    public void replaceNullValueForAutoIncrementColumns(ColumnValuePairs colValues) {
+    	List<TableColumn> columnsToBeReplaced = new ArrayList<TableColumn>();
+
+		for (ColumnValuePair cvp : colValues) {
+			if (cvp.getColumn().isAutoIncrement() && cvp.getValue() == null) {
+				columnsToBeReplaced.add(cvp.getColumn());
+			}
+		}
+
+		for (TableColumn column : columnsToBeReplaced) {
+			colValues.remove(column);
+			colValues.add(column, new Literal("default"));
+		}
+	}
+
+
     @Override
     public ColumnValuePairs getGeneratedValues(PreparedStatement ignored) throws SQLException {
     	ColumnValuePairs cvp = new ColumnValuePairs();
@@ -151,10 +169,10 @@ public class HsqlDbDAOPlugin extends AbstractDAO implements DBMSSpecificDAOPlugi
 	    	statement = prepareStatement("CALL IDENTITY()");
 	        result = statement.executeQuery();
 	    	if (result.next()) {
+		        int index = 1;
 	    		for (TableColumn column : table.getColumns()) {
 	    			if (column.isAutoIncrement()) {
-	    				// HSQLDB can handle at most 1 generated value per row
-	    				Object o = result.getObject(1);
+	    				Object o = result.getObject(index++);
 
 	    				if (column.getType() == TableColumn.INTEGER) {
 	    					o = ((Number) o).intValue();
@@ -170,4 +188,5 @@ public class HsqlDbDAOPlugin extends AbstractDAO implements DBMSSpecificDAOPlugi
     	}
     	return cvp;
     }
+
 }
