@@ -171,7 +171,7 @@ public class MySqlDAOPlugin extends AbstractDAO implements DBMSSpecificDAOPlugin
     }
 
 	@Override
-	public void replaceNullValueForAutoIncrementColumns(ColumnValuePairs colValues) {
+	public void prepareColumnValuesForAutoIncrementColumns(ColumnValuePairs colValues) {
     	List<TableColumn> columnsToBeRemoved = new ArrayList<TableColumn>();
 
 		for (ColumnValuePair cvp : colValues) {

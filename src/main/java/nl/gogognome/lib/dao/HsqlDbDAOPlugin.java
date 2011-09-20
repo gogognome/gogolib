@@ -144,7 +144,7 @@ public class HsqlDbDAOPlugin extends AbstractDAO implements DBMSSpecificDAOPlugi
         }
     }
 
-    public void replaceNullValueForAutoIncrementColumns(ColumnValuePairs colValues) {
+    public void prepareColumnValuesForAutoIncrementColumns(ColumnValuePairs colValues) {
     	List<TableColumn> columnsToBeReplaced = new ArrayList<TableColumn>();
 
 		for (ColumnValuePair cvp : colValues) {

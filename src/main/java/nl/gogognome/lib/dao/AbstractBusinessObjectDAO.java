@@ -298,7 +298,7 @@ public abstract class AbstractBusinessObjectDAO<P extends PrimaryKey, T extends 
             StringBuilder query = new StringBuilder(200);
             query.append("INSERT INTO ").append(table.getName()).append(" (");
             ColumnValuePairs colValues = convert(bo);
-            plugin.replaceNullValueForAutoIncrementColumns(colValues);
+            plugin.prepareColumnValuesForAutoIncrementColumns(colValues);
             for (Iterator<ColumnValuePair> iter = colValues.iterator(); iter.hasNext(); ) {
                 ColumnValuePair ColumnValuePair = iter.next();
                 query.append(ColumnValuePair.getColumn().getName());
