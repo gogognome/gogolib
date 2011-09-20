@@ -37,7 +37,7 @@ import org.junit.Test;
 public class TestDateUtil {
 
 	@Test
-    public void testComparasion() {
+    public void testComparison() {
         Calendar cal = Calendar.getInstance();
         cal.set(2007, 1, 4);
         Date date1 = cal.getTime();
