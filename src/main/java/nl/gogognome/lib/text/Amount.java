@@ -47,7 +47,7 @@ public class Amount
      * @param amount a string representation of the amount
      * @param currency the currency of the amount
      */
-    protected Amount(String amount, Currency currency, Locale locale)
+    public Amount(String amount, Currency currency, Locale locale)
     {
         this.currency = currency;
 
@@ -78,7 +78,7 @@ public class Amount
         this.amount = new BigInteger(amount);
     }
 
-    private Amount(BigInteger amount, Currency currency)
+    public Amount(BigInteger amount, Currency currency)
     {
         this.amount = amount;
         this.currency = currency;
@@ -204,4 +204,38 @@ public class Amount
 	public int hashCode() {
         return currency.hashCode() + amount.hashCode();
     }
+
+    /**
+     * Adds to amounts. Null is allowed for the parameters
+     * @param a an amount, null allowed
+     * @param b an amount, null allowed
+     * @return the sum of a and b or null if both a and b are null
+     */
+    public static Amount add(Amount a, Amount b) {
+        if (a == null) {
+            return b;
+        } else if (b == null) {
+            return a;
+        } else {
+            return a.add(b);
+        }
+    }
+
+    /**
+     * Checks whether a and b are equal amounts.
+     * @param a an amount, null allowed
+     * @param b an amount, null allowed
+     * @return true if a and b are both null or if a and b are both not null then a and b are equal; false otherwise
+     */
+    public static boolean areEqual(Amount a, Amount b) {
+        if (a == null && b == null) {
+            return true;
+        } else if (a != null && b != null) {
+            return a.equals(b);
+        } else {
+            return false;
+        }
+    }
+
+
 }
