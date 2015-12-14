@@ -2,14 +2,14 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>nl.gogognome.gogolib</groupId>
+  <groupId>nl.gogognome</groupId>
   <artifactId>gogolib</artifactId>
-  <version>2.1</version>
+  <version>3.0</version>
   <packaging>jar</packaging>
 
-  <name>gogolib</name>
+  <name>Gogo Lib</name>
   <url>http://www.gogognome.nl/en</url>
-  <description>Gogolib is a library that simplifies building Java Swing applications.</description>
+  <description>Gogo Lib is a library with various utils and helper classes.</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
