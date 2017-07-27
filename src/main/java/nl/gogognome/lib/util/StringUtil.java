@@ -48,15 +48,25 @@ public class StringUtil {
     }
 
     /**
-     * Fills a string to the specificied size.
+     * Replaces a substring in <code>s</code> by <code>replacement</code>
+     * @param s a string
+     * @param startIndex the start index of the substring that is to be replaced
+     * @param endIndex the end index of the substring that is to be replaced
+     * @param replacement the replacement
+     * @return the string after replacement
+     */
+    public static String replace(String s, int startIndex, int endIndex, String replacement) {
+        return s.substring(0, startIndex) + replacement + s.substring(endIndex);
+    }
+
+    /**
+     * Fills a string to the specified size by prepending the string with the specified character.
      * @param s the string
      * @param size the size of the returned string
-     * @param c the character used to pad the string if needed
-     * @param append <code>true</code> if the string is padded at the end;
-     *        <code>false</code> if the string is padded at the front.
+     * @param c the character used to prepend the string if needed
      * @return a string of exactly the specified size
      */
-    public static String fillToSize(String s, int size, char c, boolean append) {
+    public static String prependToSize(String s, int size, char c) {
         int sizePadding = size - s.length();
         if (sizePadding == 0) {
             return s;
@@ -65,14 +75,32 @@ public class StringUtil {
             return s.substring(0, size);
         }
         StringBuilder sb = new StringBuilder(size);
-        if (append) {
-            sb.append(s);
-        }
         for (int i=0; i<sizePadding; i++) {
             sb.append(c);
         }
-        if (!append) {
-            sb.append(s);
+        sb.append(s);
+        return sb.toString();
+    }
+
+    /**
+     * Fills a string to the specified size by appending the string with the specified character.
+     * @param s the string
+     * @param size the size of the returned string
+     * @param c the character used to append the string if needed
+     * @return a string of exactly the specified size
+     */
+    public static String appendToSize(String s, int size, char c) {
+        int sizePadding = size - s.length();
+        if (sizePadding == 0) {
+            return s;
+        }
+        if (sizePadding < 0) {
+            return s.substring(0, size);
+        }
+        StringBuilder sb = new StringBuilder(size);
+        sb.append(s);
+        for (int i=0; i<sizePadding; i++) {
+            sb.append(c);
         }
         return sb.toString();
     }
