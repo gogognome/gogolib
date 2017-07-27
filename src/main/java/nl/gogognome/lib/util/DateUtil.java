@@ -30,8 +30,28 @@ public class DateUtil {
 
 	private final static DateFormat YYYYMMDD = new SimpleDateFormat("yyyyMMdd");
 
+    private static DateFactory dateFactory = () -> new Date();
+
+    /**
+     * Sets the date factory for the date util. This method is typically only used by test code.
+     *
+     * @param dateFactory
+     *            the date factory
+     */
+    public static void setDateFactory(DateFactory dateFactory) {
+        if (dateFactory == null) {
+            throw new IllegalArgumentException("Date factory must not be null");
+        }
+        DateUtil.dateFactory = dateFactory;
+    }
+
     /** Calendar used to perform conversions. */
     private final static Calendar CALENDAR = Calendar.getInstance();
+
+    /** @return a {@link Date} that represents the current time */
+    public static Date createNow() {
+        return dateFactory.createNow();
+    }
 
     /**
      * Creates a date with the time set to midnight of the date.
