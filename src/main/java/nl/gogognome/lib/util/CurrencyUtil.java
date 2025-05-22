@@ -25,8 +25,13 @@ public class CurrencyUtil {
 	}
 
 	public static List<Currency> getAllCurrencies() {
+		List<Locale> locales = List.of(Locale.getAvailableLocales());
+		return getCurrenciesForLocales(locales);
+	}
+
+	public static List<Currency> getCurrenciesForLocales(List<Locale> locales) {
 		TreeSet<String> currencyCodes = new TreeSet<String>();
-		for (Locale locale : Locale.getAvailableLocales()) {
+		for (Locale locale : locales) {
 			try {
 				if (locale.getCountry() != null && locale.getCountry().length() == 2) {
 					Currency currency = Currency.getInstance(locale);
