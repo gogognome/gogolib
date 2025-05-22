@@ -32,6 +32,8 @@ public class CurrencyUtil {
 					Currency currency = Currency.getInstance(locale);
 					currencyCodes.add(currency.getCurrencyCode());
 				}
+			} catch (IllegalArgumentException e) {
+				LOGGER.info("No currency found for locale " + locale);
 			} catch (Exception e) {
 				LOGGER.warn("Could not get currency for locale " + locale, e);
 			}
