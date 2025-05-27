@@ -8,7 +8,7 @@
     <packaging>jar</packaging>
 
     <name>Gogo Lib</name>
-    <url>http://www.gogognome.nl/en</url>
+    <url>https://www.gogognome.nl/</url>
     <description>Gogo Lib is a library with various utils and helper classes.</description>
 
     <properties>
@@ -87,19 +87,19 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.8.2</version>
+            <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
-            <version>2.3.3</version>
+            <version>2.7.3</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.6</version>
+            <version>8.0.33</version>
             <scope>test</scope>
         </dependency>
 
