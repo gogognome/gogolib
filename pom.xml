@@ -9,7 +9,7 @@
 
     <name>Gogo Lib</name>
     <url>https://www.gogognome.nl/</url>
-    <description>Gogo Lib is a library with various utils and helper classes.</description>
+    <description>A library for building Java applications.</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
