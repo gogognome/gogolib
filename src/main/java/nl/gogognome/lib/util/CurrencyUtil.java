@@ -3,11 +3,7 @@
  */
 package nl.gogognome.lib.util;
 
-import java.util.ArrayList;
-import java.util.Currency;
-import java.util.List;
-import java.util.Locale;
-import java.util.TreeSet;
+import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +21,7 @@ public class CurrencyUtil {
 	}
 
 	public static List<Currency> getAllCurrencies() {
-		List<Locale> locales = List.of(Locale.getAvailableLocales());
+		List<Locale> locales = Arrays.asList(Locale.getAvailableLocales());
 		return getCurrenciesForLocales(locales);
 	}
 

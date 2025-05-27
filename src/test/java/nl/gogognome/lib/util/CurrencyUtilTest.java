@@ -2,35 +2,36 @@ package nl.gogognome.lib.util;
 
 import static org.junit.Assert.*;
 import java.util.*;
+import java.util.stream.*;
 import org.junit.*;
 
 public class CurrencyUtilTest {
 
 	@Test
 	public void testGetCurrenciesForLocales_zeroLocales() {
-		List<Currency> currencies = CurrencyUtil.getCurrenciesForLocales(List.of());
-		assertEquals(List.of(), currencies);
+		List<Currency> currencies = CurrencyUtil.getCurrenciesForLocales(listOf());
+		assertEquals(listOf(), currencies);
 	}
 
 	@Test
 	public void testGetCurrenciesForLocales_multipleLocalesWithDifferentCurrencies() {
-		List<Currency> currencies = CurrencyUtil.getCurrenciesForLocales(List.of(Locale.US, Locale.FRANCE));
+		List<Currency> currencies = CurrencyUtil.getCurrenciesForLocales(listOf(Locale.US, Locale.FRANCE));
 		List<String> currencyCodes = getCurrencyCodes(currencies);
-		assertEquals(List.of("EUR", "USD"), currencyCodes);
+		assertEquals(listOf("EUR", "USD"), currencyCodes);
 	}
 
 	@Test
 	public void testGetCurrenciesForLocales_multipleLocalesWithSameCurrency() {
-		List<Currency> currencies = CurrencyUtil.getCurrenciesForLocales(List.of(Locale.GERMANY, Locale.FRANCE, Locale.ITALY));
+		List<Currency> currencies = CurrencyUtil.getCurrenciesForLocales(listOf(Locale.GERMANY, Locale.FRANCE, Locale.ITALY));
 		List<String> currencyCodes = getCurrencyCodes(currencies);
-		assertEquals(List.of("EUR"), currencyCodes);
+		assertEquals(listOf("EUR"), currencyCodes);
 	}
 
 	@Test
 	public void testGetCurrenciesForLocales_localeWithoutCurrency() {
-		List<Currency> currencies = CurrencyUtil.getCurrenciesForLocales(List.of(Locale.of("es", "IC")));
+		List<Currency> currencies = CurrencyUtil.getCurrenciesForLocales(listOf(new Locale("es", "IC")));
 		List<String> currencyCodes = getCurrencyCodes(currencies);
-		assertEquals(List.of(), currencyCodes);
+		assertEquals(listOf(), currencyCodes);
 	}
 
 	@Test
@@ -44,6 +45,10 @@ public class CurrencyUtilTest {
 	private List<String> getCurrencyCodes(List<Currency> currencies) {
 		return currencies.stream()
 				.map(c -> c.getCurrencyCode())
-				.toList();
+				.collect(Collectors.toList());
 	}
+	
+	private static <T> List<T> listOf(T... values) {
+		return Arrays.asList(values);
+	} 
 }
